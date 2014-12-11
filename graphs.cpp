@@ -23,6 +23,7 @@ class Graph {
     bool weighted;
     bool directed;
     list<edgeNode> *adjList; // edgeNode* adjList[nVertices+1]; or list<int> *adjList
+    stack<int> s; // stack to record the processed vertices
 
     // traversal info
     struct traversalInfo {
@@ -142,6 +143,7 @@ void processVertexEarly(int v)
 
 void processVertexLate(int v)
 {
+    s.push(v);
     return;
 }
 
@@ -277,18 +279,19 @@ void Graph::performTopologicalSort()
     // completely explored. That's the one with the max constraints and
     // reverse that to get the one with the least or zero constraints
     // The vertex will get pushed onto the stack inside processVertexLate()
-    initStack();
     for (int i = 1; i <= nVertices; i++) {
         if (info.discovered[i] == false) {
             DFS(i);
         }
     }
-    printStack();
+    while (!s.empty()) {
+        int index = s.top(); s.pop();
+        cout << index << endl;
+    }
 }
 
 // strongly connected components
 // Minimum spanning tree - Prim, Kruskal
-
 // Dijkstra's algo - shortest path
 
 
