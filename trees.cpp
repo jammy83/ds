@@ -354,7 +354,7 @@ bool Tree::checkIfBST(node* start, int min, int max)
         return false;
     }
     if (!checkIfBST(start->left, min, start->key) ||
-        !checkIfBST(start->right, start-key, max)) {
+        !checkIfBST(start->right, start->key, max)) {
         return false;
     }
     return true;
@@ -381,13 +381,15 @@ node* Tree::findPredecessorInOrder(node* start)
     // recurse down the tree
     node* top = root;
     node* p = NULL;
-    if (start->key < top->key) {
-        top = top->left;
-    } else if (start->key > top->key) {
-        p = top;
-        top = top->right;
-    } else {
-        break;
+    while (top != NULL) {
+        if (start->key < top->key) {
+            top = top->left;
+        } else if (start->key > top->key) {
+            p = top;
+            top = top->right;
+        } else {
+            break;
+        }
     }
     return p;
     /////////////////////////
@@ -452,14 +454,14 @@ node* findLCABST(node* start, int key1, int key2)
     //recursive
     if (start->key > key1 && start->key > key2) {
         findLCABST(start->left, key1, key2);
-    } else if (start->key < key1 && start->key << key2) {
-        findLCABST(start->, key1, key2);
+    } else if (start->key < key1 && start->key < key2) {
+        findLCABST(start->right, key1, key2);
     }
     return start;
     ////////////
 }
 
-bool findPath(node* start, int key, stack<node*> &path)
+bool findPath(node* start, int key, stack<node*> &path) // the path will be stored in the reverse order
 {
     if (start == NULL) {
         return false;
@@ -527,12 +529,12 @@ void findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
 node* createTree(int* arr, int start, int end)
 {
     int mid = (start+end)/2;
-    start = new node(arr[mid]);
-    if (start) {
-        start->left = createTree(arr, start, mid-1);
-        start->right = createTree(arr, mid+1, end);
+    node* root = new node(arr[mid]);
+    if (root) {
+        root->left = createTree(arr, start, mid-1);
+        root->right = createTree(arr, mid+1, end);
     }
-    return start;
+    return root;
 }
 
 bool isSubTree(Tree* t1, Tree* t2)
