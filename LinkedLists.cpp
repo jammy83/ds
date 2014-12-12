@@ -220,8 +220,8 @@ node* addLists(node* l1, node* l2, int carry)
     }
     node* result = new node(val%10);
     if (l1 != NULL || l2 != NULL) {
-        result->next = addLists((l1 ? l1 : NULL),
-                                (l1 ? l1 : NULL),
+        result->next = addLists((l1 ? l1->next : NULL),
+                                (l2 ? l2->next : NULL),
                                 (val > 10 ? 1 : 0));
     }
     return result;
@@ -238,7 +238,7 @@ node* findLoopBeginning(node* start)
             break;
         }
     }
-    if (fast == NULL || fast->next = NULL) {
+    if (fast == NULL || fast->next == NULL) {
         return NULL; // no loop
     }
     slow = start; // reset to beginning of the list
@@ -266,7 +266,7 @@ bool isPalindrome(node* start)
     if (fast != NULL) {
         slow = slow->next;
     }
-    while (slow != NULL) {
+    while (slow != NULL && !s.empty()) {
         node* item = s.top();
         s.pop();
         if (item->key != slow->key) {

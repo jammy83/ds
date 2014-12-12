@@ -15,7 +15,7 @@ class element {
     element<T> *_next;
  public:
     element(T val) : _data(val), _next(NULL) {}
-    ~element() { next = NULL; }
+    ~element() { _next = NULL; }
 };
 
 template <class T>
@@ -49,7 +49,7 @@ class MyStack {
         }
         return res;
     }
-    T min();
+    T min() const;
 };
 
 template <class T>
@@ -68,7 +68,6 @@ void MyStack<T>::push(T item)
         } else {
             // find the right position for this element
             int popped = 0;
-            queue<element<T>*> q;
             while (!_min.isEmpty() && _min.peek() > item) {
                 element<T>* first = _min.popElement();
                 popped++;
@@ -99,9 +98,10 @@ T MyStack<T>::pop()
     T res;
     if (_top) {
         res = _top->_data;
-        element* head = _top;
+        element<T>* head = _top;
         _top = _top->_next;
         delete head;
+        _count--;
     }
     return res;
 }
@@ -112,6 +112,7 @@ element<T>* MyStack::popElement()
     if (_top) {
         element<T>* res = _top;
         _top = _top->_next;
+        _count--;
         return res;
     }
     return NULL;
@@ -128,7 +129,7 @@ T MyStack<T>::min()
 }
 
 // Vector operations
-// push_back, pop_back, back(), front(), empty(), at(), capacity(), erase(index)
+// push_back(), pop_back(), back(), front(), empty(), at(), capacity(), erase(index)
 vector<MyStack> stacks = new vector<MyStack>();
 MyStack newStack = new MyStack();
 stacks.push_back(newStack);
@@ -149,7 +150,7 @@ int leftShift(int index, bool removeTop)
         if (removeTop) {
             res = topStack.pop();
         } else {
-            res = topStack.popEnd();
+            res = topStack.popEnd(); // need to maintain the head and tail of underlying linked list impl of the stack
         }
         if (topStack.empty()) {
             stacks.erase(index);
