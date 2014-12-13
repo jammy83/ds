@@ -229,7 +229,7 @@ void zeroing2DMatrix(int** matrix, int n, int m)
 void rotateByChars(int* arr, int size, int d)
 {
     int i = 0, j = d;
-    while (i < size - d%size) { // "d" elements are going to get displaced and get placed at the back
+    while (i < size - (d%size)) { // "d" elements are going to get displaced and get placed at the back
         int temp = arr[i];
         arr[i++] = a[j];
         a[j++] = temp;
@@ -444,9 +444,9 @@ int searchInSortedRotatedArray(int* arr, int start, int end, int n)
     if (arr[mid] == n) {
         return mid;
     }
-    if (arr[0] <= arr[mid-1]) {
+    if (arr[start] <= arr[mid-1]) {
         // sorted half
-        if (arr[start] >= n && n <= arr[mid]) {
+        if (arr[start] >= n && n <= arr[mid-1]) {
             // search in this half
             return binarySearch(arr, start, mid-1, n);
         } else {
@@ -468,12 +468,12 @@ int searchInSortedRotatedArray(int* arr, int start, int end, int n)
 // lps[i] represents the no. of chars in the suffix that map to a valid prefix
 void computePrefixFunction(char* pattern, int size, int* lps)
 {
-    if (pattern == NULL || size == 0) {
+    if (pattern == NULL || size == 0 || lps == NULL) {
         return;
     }
     lps[0] = 0; // no prefix to match before
     // i -- suffix pointer; starts at second char
-    // j -- prefix pointer; start at zero. It is count of no. of
+    // j -- prefix pointer; start at zero. 'lps' is count of no. of
     // prefix chars matched so far
     for (int i = 1, j = 0; i < size; ) {
         if (pattern[i] == pattern[j]) {
@@ -521,6 +521,7 @@ void KMPSearch(char* txt, char* pattern)
     }
     delete[] lps;
 }
+
 //Given an array which provides the no. of hops to the next element
 //Search if there is a path from start to destination
 //example: {1, 2, 0, 1, 0 , 1}
