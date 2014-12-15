@@ -201,7 +201,7 @@ bool heapIncreaseKey(int* arr, int size, int i, int key)
     }
     arr[i] = key;
     // push the max element up..
-    while (i > 1 && arr[i/2] < arr[i]) {
+    while (i > 1 && arr[i/2] < arr[i]) { // parent less than the updated child
         int temp = arr[i/2];
         arr[i/2] = arr[i];
         arr[i] = temp;

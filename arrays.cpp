@@ -444,6 +444,9 @@ int searchInSortedRotatedArray(int* arr, int start, int end, int n)
     if (arr[mid] == n) {
         return mid;
     }
+    if (end < start) {
+        return -1;
+    }
     if (arr[start] <= arr[mid-1]) {
         // sorted half
         if (arr[start] >= n && n <= arr[mid-1]) {
@@ -459,7 +462,23 @@ int searchInSortedRotatedArray(int* arr, int start, int end, int n)
         } else {
             return searchInSortedRotatedArray(arr, start, mid-1, n);
         }
+    } else if (arr[start] == arr[mid]) { // handles duplicates with the left half containing the same elements
+        if (arr[mid] != arr[end]) { // the second half is different
+            // search in the second half since we can discard the first as
+            // "n" has already been compared with mid
+            // e.g {2, 2, 2, 3, 4, 2}
+            //duplicates will make this more of a O(n) solution than O(lgn)
+            return searchInSortedRotatedArray(arr, mid+1, end, n);
+        } else {
+            // search both the halves
+            int result = searchInSortedRotatedArray(arr, start, mid-1, n);
+            if (result == -1) {
+                return searchInSortedRotatedArray(arr, mid+1, end, n);
+            }
+            return result;
+        }
     }
+    return -1;
 }
 
 //KMP - pattern matching
