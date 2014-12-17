@@ -18,8 +18,9 @@ class node {
     node* left;
     node* right;
     node* parent;
+    int rank;
  public:
-    node(int val) : key(val), left(NULL), right(NULL), parent(NULL) {}
+    node(int val) : key(val), left(NULL), right(NULL), parent(NULL), rank(0) {}
     ~node() {
         left = right = parent = NULL;
     }
@@ -33,6 +34,7 @@ class Tree {
 
     void destroyTree(node* start);
     bool insertBST(node* n);
+    bool isFoldableUtil(node* n1, node* n2);
 
  public:
     tree() : root(NULL), items(0) {}
@@ -76,8 +78,12 @@ class Tree {
     node* createTree(int* arr, int start, int end);
     bool isSubTree(node* t1, node* t2);
     bool matchTree(node* t1, node* t2);
-    void inOrderTraversalWithoutStack(node* start); // threaded binary tree
+    void inOrderTraversalWithoutStack(node* start); // threaded binary tree // not imeplemented
     void convertTreeToSumTree();
+    int getRank(int key);
+    int kthSmallestElement(int n);
+    nodeDLL* convertTreeToDLL();
+    bool isFoldable();
 };
 
 void Tree::destroyTree(node* start)
@@ -115,6 +121,7 @@ bool Tree::insertBST(node* n)
         last = start;
         if (n->key <= start->key) {
             start = start->left;
+            n->rank++;
         } else {
             start = start->right;
         }
@@ -582,7 +589,90 @@ int Tree::convertTreeToSumTree()
     return prev+start->key;
 }
 
+int getRank(int key)
+{
+    node* target = searchBST(key);
+    return ((target != NULL) ? target->rank : 0);
+}
+
+int kthSmallestElement(int n)
+{
+    node* start = root;
+    if (start == NULL) {
+        return -1;
+    }
+    while (start != NULL) {
+        if (start->rank+1 == n) {
+            return start->key;
+        } else if (start->rank < n) {
+            start = start->right;
+            n -= (start->rank+1);
+        } else {
+            start = start->left;
+        }
+    }
+}
+
+struct {
+    int key;
+    nodeDLL* prev;
+    nodeDLL* next;
+} nodeDLL;
+
+nodeDLL* convertTreeToDLL()
+{
+    node* start = root;
+    if (start == NULL) {
+        return NULL;
+    }
+    nodeDLL *head = NULL, *prev = NULL;
+    stack<node*> s;
+    while (!s.empty() || start != NULL) {
+        if (start) {
+            s.push(start);
+            start = start->left;
+        } else {
+            node* top = s.top(); s.pop();
+            nodeDLL* item = new nodeDLL(top->key);
+            if (item == NULL) {
+                return NULL;
+            }
+            if (head == NULL) {
+                head = item;
+            }
+            if (prev != NULL) {
+                prev->next = item;
+            }
+            item->prev = prev;
+            prev = item;
+            start = top->right;
+        }
+    }
+    return head;
+}
+
+bool isFoldable()
+{
+    if (root == NULL) {
+        return NULL;
+    }
+    return isFoldableUtil(root->left, root->right);
+}
+
+bool isFoldableUtil(node* n1, node* n2)
+{
+    if (!n1 && !n2) {
+        return true;
+    }
+    if (!n1 || !n2) {
+        return false;
+    }
+    return (isFoldableUtil(n1->left, n2->right) &&
+           isFoldableUtil(n1->right, n2->left));
+}
+
 int main()
 {
     return 0;
 }
+

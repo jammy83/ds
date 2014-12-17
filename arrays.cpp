@@ -562,6 +562,133 @@ bool hopArray(int* arr, int size, int start, int end)
     return false;
 }
 
+//Given an array of strings that is sorted which contains some empty strings as well,
+//serach for a given string
+int searchStrings(std::string* arr, int start, int end, string pattern)
+{
+    if (arr == NULL || size == 0 || pattern.empty()) {
+        return -1;
+    }
+    int mid = (start+end)/2;
+    if (arr[mid].empty()) {
+        // try to find a non-empty element
+        for (int i = mid-1, j = mid+1; i >= start && j <= end; i--, j++) {
+            if (!arr[i].empty()) {
+                mid = i;
+                break;
+            } else if (!arr[j].empty()) {
+                mid = j;
+                break;
+            }
+        }
+    }
+    if (arr[mid].compare(pattern) == 0) {
+        return mid;
+    } else if (arr[mid].compare(pattern) < 0) {
+        return searchStrings(arr, mid+1, end, pattern);
+    } else {
+        return searchStrings(arr, start, mid-1, pattern);
+    }
+}
+
+//Group strings that are anagrams: given an array of strings
+//Sort every string and put it in a hash table. Since the string is sorted,
+//anagrams will hash to the same value and will be chained together.
+
+//How to sort a given string. if assuming only ascii chars are involved, keep a char count walking the string.
+//Then walk the count array adding chars in order
+
+//How to check if one string is a anagram of another - check one is a permutation of the other - solved already
+
+//longest increasing subsequence
+int LIS(int* arr, int size)
+{
+    int lis[size] = {};
+    //initialize to 1
+    for (int i = 0; i < size; i++) {
+        lis[i] = 1;
+    }
+    //lis will store the length of the longest increasing subsequence ending at 'i'
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < i; j++) {
+            if (arr[i] > arr[j] && lis[i] < lis[j]+1) {
+                lis[i] = lis[j] + 1;
+            }
+        }
+    }
+    // find the max
+    int max = 0;
+    for (int i = 0; i < size; i++) {
+        if (max < lis[i]) {
+            max = lis[i];
+        }
+    }
+    return max;
+}
+
+int gcd(int a, int b)
+{
+    if (a==0) {
+        return b;
+    }
+    return gcd(b%a, a);
+}
+
+int fibonacci(int n)
+{
+    if (n == 1) {
+        return 0;
+    } else if (n == 2) {
+        return 1;
+    } else {
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
+    //iterative
+    int n1 = 0, n2 = 1;
+    if (n >= 1) {
+        cout << n1 << endl;
+    }
+    if (n >= 2) {
+        cout << n2 << endl;
+    }
+    for (int i = 0; i < n-2; i++) {
+        next = n1 + n2;
+        cout << next << endl;
+        n1 = n2;
+        n2 = next;
+    }
+    cout << endl;
+}
+
+int factorial(int n)
+{
+    if (n == 0) {
+        return 1;
+    }
+    return factorial(n-1)*n;
+    
+    //iterative
+    int result = 1;
+    while (n >=1) {
+        result *= n;
+        n--;
+    }
+    return result;
+}
+
+//check if a number is a palindrome
+bool isNumPalindrome(int x)
+{
+    //reverse the no and find the diff between the original no and reveresed
+    int rev = 0;
+    int num = x;
+    while (num > 0) {
+        rev = rev*10 + num%10;
+        num = num/10;
+    }
+    return ((x-rev) == 0) ? true : false;
+}
+
 int main(int argc, char* argv[])
 {
     char test[] = "healo$erd$@";

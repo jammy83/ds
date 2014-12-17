@@ -20,6 +20,19 @@ class node {
     }
 };
 
+class nodeDLL {
+ private:
+    int key;
+    nodeDLL* prev;
+    nodeDLL* next;
+
+ public:
+    nodeDLL(int val) : key(val), prev(NULL), next(NULL) {}
+    ~nodeDLL() {
+        prev = next = NULL;
+    }
+};
+
 class LinkedList {
  private:
     node* head;
@@ -275,5 +288,48 @@ bool isPalindrome(node* start)
         slow = slow->next;
     }
     return true;
+}
+
+// delete item from a doubly linked list
+nodeDLL* removeFromDLL(nodeDLL* item)
+{
+    if (head == NULL) {
+        return NULL;
+    }
+    if (head == item) {
+        head = item->next;
+        head->prev = NULL;
+        item->prev = NULL;
+        item->next = NULL;
+        return item;
+    }
+    nodeDLL* start = head;
+    while (start->next != NULL) {
+        if (start->next == item) {
+            start->next = item->next;
+            (item->next)->prev = start;
+            item->prev = NULL;
+            item->next = NULL;
+            return item;
+        }
+        start = start->next;
+    }
+    return NULL;
+}
+
+//swap item in a DLL
+void swapPairwise(nodeDLL* head)
+{
+    nodeDLL* first = head;
+    while (first != NULL && first->next != NULL) {
+        nodeDLL* two = first->next;
+        nodeDLL* third = two->next;
+        node* prev = first->prev;
+        first->next = third;
+        first->prev = two;
+        two->next = first;
+        two->prev = prev;
+        first = third;
+    }
 }
 
