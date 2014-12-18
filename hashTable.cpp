@@ -11,10 +11,11 @@
 template<class t_key, class t_record, unsigned long t_val>
 class hashTableRecord {
  public:
-    t_key key;
-    t_val value;
+    t_key _key;
+    t_val _value;
     t_record* _next; // for chaining keys with the same hash
     //virtual const t_key& giveKey() const = 0;
+    t_key giveKey() const { return _key; }
 };
 
 template<class t_key, class t_record, unsigned long t_size>
@@ -46,7 +47,7 @@ class hashMap {
 };
 
 template<class t_key, class t_record, unsigned long t_size>
-void hashMap::insert(t_record* rec)
+void hashMap<t_key,t_record,t_size>::insert(t_record* rec)
 {
     const unsigned long hash = ((unsigned long)rec->giveKey())%t_size;
     rec->_next = _table[hash];
@@ -57,7 +58,7 @@ void hashMap::insert(t_record* rec)
 }
 
 template<class t_key, class t_record, unsigned long t_size>
-t_record* lookup(const t_key& key)
+t_record* hashMap<t_key,t_record,t_size>::lookup(const t_key& key)
 {
     const unsigned long hash = ((unsigned long)key)%t_size;
     for (t_record* rec = _table[hash]; rec != NULL; rec = rec->_next) {
@@ -69,14 +70,14 @@ t_record* lookup(const t_key& key)
 }
 
 template<class t_key, class t_record, unsigned long t_size>
-bool remove(t_record* rec)
+bool hashMap<t_key,t_record,t_size>::remove(t_record* rec)
 {
     const unsigned long hash = ((unsigned long)rec->giveKey())%t_size;
     remove(rec, hash);
 }
 
 template<class t_key, class t_record, unsigned long t_size>
-bool remove(t_record* rec, unsigned long bkt)
+bool hashMap<t_key,t_record,t_size>::remove(t_record* rec, unsigned long bkt)
 {
     if (_table[bkt] == NULL) {
         return false;

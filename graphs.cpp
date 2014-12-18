@@ -205,7 +205,7 @@ bool Graph::bipartite()
     for (int i = 1; i <= nVertices; i++) {
         if (info.discovered[i] == false) {
             info.color[i] = white;
-            bfs(i);
+            BFS(i);
         }
     }
     return true;
@@ -266,7 +266,8 @@ void Graph::findCycles()
     initTraversalInfo();
     for (int i = 1; i <= nVertices; i++) {
         if (info.discovered[i] == false) {
-            DFS(i);
+            int time = 0;
+            DFSUtil(i, time);
         }
     }
     // if edge classification returned back edge, then there is a cycle
@@ -281,7 +282,8 @@ void Graph::performTopologicalSort()
     // The vertex will get pushed onto the stack inside processVertexLate()
     for (int i = 1; i <= nVertices; i++) {
         if (info.discovered[i] == false) {
-            DFS(i);
+            int time = 0;
+            DFSUtil(i, time);
         }
     }
     while (!s.empty()) {
@@ -290,6 +292,10 @@ void Graph::performTopologicalSort()
     }
 }
 
+int main()
+{
+    return 0;
+}
 // strongly connected components
 // Minimum spanning tree - Prim, Kruskal
 // Dijkstra's algo - shortest path

@@ -278,6 +278,7 @@ int mergedMedian(int* arr1, int* arr2, int n)
         return m1; // m1 == m2
     }
 }
+//http://aleph.nu/blog/kth-smallest-in-sorted-union.html
 
 //maximum subarray sum
 int maxSubArraySum(int* arr, int size)
@@ -687,6 +688,49 @@ bool isNumPalindrome(int x)
         num = num/10;
     }
     return ((x-rev) == 0) ? true : false;
+}
+
+// Given a unsorted array of intergers an a range of (1...n), how will you find the
+// missing element and a duplicate? What if its sorted?
+// Solution: sorted - use BS and unsorted find the sum and the original expected sum.
+// The difference is the missing element. Find abs diff and that will tell you the duplicate element.
+
+int strToInt(char* arr, int size)
+{
+    bool isNeg = false;
+    if (arr[0] == '-') {
+        isNeg = true;
+    }
+    int num = 0;
+    for (int i = 1; i < size; i++) {
+        num = num*10;
+        num += (arr[i]-'0');
+    }
+    if (isNeg) {
+        num = num * -1;
+    }
+    return num;
+}
+
+void intToStr(int num, char* str)
+{
+    bool isNeg = false;
+    if (num < 0) {
+        num *= -1;
+        isNeg = true;
+    }
+    char temp[64+2];
+    do {
+        temp[i++] = (num%10) + '0';
+        num = num/10;
+    } while (num);
+    if (isNeg) temp[i++] = '-';
+    
+    int j = 0;
+    while (i > 0) {
+        str[j++] = temp[--i];
+    }
+    str[j] = '\0';
 }
 
 int main(int argc, char* argv[])

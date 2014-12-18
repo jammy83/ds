@@ -10,10 +10,10 @@
 
 template <class T>
 class element {
- private:
+ public:
     T _data;
     element<T> *_next;
- public:
+
     element(T val) : _data(val), _next(NULL) {}
     ~element() { _next = NULL; }
 };
@@ -112,6 +112,7 @@ element<T>* MyStack::popElement()
     if (_top) {
         element<T>* res = _top;
         _top = _top->_next;
+        res->_next = NULL; //unlink it
         _count--;
         return res;
     }
@@ -144,7 +145,7 @@ popAtIndex(int index)
 
 int leftShift(int index, bool removeTop)
 {
-    int res;
+    int res = 0;
     if (!stacks.empty()) {
         Mystack topStack = stacks.at(index);
         if (removeTop) {

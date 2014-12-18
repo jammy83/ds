@@ -13,14 +13,14 @@
 
 // Define a tree node
 class node {
- private:
+ public:
     int key;
     node* left;
     node* right;
     node* parent;
-    int rank;
- public:
-    node(int val) : key(val), left(NULL), right(NULL), parent(NULL), rank(0) {}
+    int rank; // no. of items <= this node's val
+
+    node(int val) : key(val), left(NULL), right(NULL), parent(NULL), rank(1) {}
     ~node() {
         left = right = parent = NULL;
     }
@@ -121,7 +121,7 @@ bool Tree::insertBST(node* n)
         last = start;
         if (n->key <= start->key) {
             start = start->left;
-            n->rank++;
+            start->rank++;
         } else {
             start = start->right;
         }
@@ -132,6 +132,7 @@ bool Tree::insertBST(node* n)
     } else {
         if (n->key <= last->key) {
             last->left = n;
+            last->rank++;
         } else {
             last->right = n;
         }
@@ -318,14 +319,10 @@ int Tree::checkIfHeightBalanced(node* start)
     }
     int left = checkIfHeightBalanced(start->left);
     int right = checkIfHeightBalanced(start->right);
-    if (left == -1 || right == -1) {
+    if (left == -1 || right == -1 || (abs(left - right) > 1)) {
         return -1;
     }
-    if (abs(left - right) > 1) {
-        return -1;
-    } else {
-        return (((left > right) ? left : right) + 1);
-    }
+    return (((left > right) ? left : right) + 1);
 }
 
 bool Tree::checkIfBalanced(node* start)

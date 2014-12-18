@@ -9,11 +9,10 @@
 #include <iostream>
 
 class node {
- private:
+ public:
     int key;
     node* next;
 
- public:
     node(int val) : key(val), next(NULL) {}
     ~node() {
         next = NULL;
@@ -140,7 +139,7 @@ void findKtoLastElement(int k)
 
 void deleteNode(node* item)
 {
-    // don't have access to the node
+    // don't have access to the prev node
     if (item == NULL || item->next == NULL) {
         return;
     }
@@ -216,6 +215,7 @@ node* reverseList(node* start)
         prev = curr;
         curr = nextNode;
     }
+    return prev;
 }
 
 // the lists are numbers represented in reverse
