@@ -47,6 +47,7 @@ void computePrefixFunction(char* pattern, int size, int* lps)
         }
     }
 }
+
 //search for the pattern
 void KMPSearch(char* txt, char* pattern)
 {
