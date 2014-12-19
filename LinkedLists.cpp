@@ -127,7 +127,7 @@ void LinkedList::remove(node** head, node* item)
     }
 }
 
-void removeDups()
+void LinkedList::removeDups()
 {
     if (head == NULL) {
         return;
@@ -149,7 +149,7 @@ void removeDups()
     }
 }
 
-void findKtoLastElement(int k)
+void LinkedList::findKtoLastElement(int k)
 {
     node* start = head;
     node* knode = NULL;
@@ -166,7 +166,7 @@ void findKtoLastElement(int k)
     return knode;
 }
 
-void deleteNode(node* item)
+void LinkedList::deleteNode(node* item)
 {
     // don't have access to the prev node
     if (item == NULL || item->next == NULL) {
@@ -178,7 +178,7 @@ void deleteNode(node* item)
     delete nextNode;
 }
 
-node* partitionList(node* start, int val)
+node* LinkedList::partitionList(node* start, int val)
 {
     if (head == NULL) {
         return;
@@ -228,7 +228,7 @@ node* partitionList(node* start, int val)
     return start;
 }
 
-node* reverseList(node* start)
+node* LinkedList::reverseList(node* start)
 {
     if (start == NULL) {
         return NULL;
@@ -248,7 +248,7 @@ node* reverseList(node* start)
 }
 
 // the lists are numbers represented in reverse
-node* addLists(node* l1, node* l2, int carry)
+node* LinkedList::addLists(node* l1, node* l2, int carry)
 {
     if (l1 == NULL && l2 == NULL && carry == 0) {
         return NULL;
@@ -269,7 +269,7 @@ node* addLists(node* l1, node* l2, int carry)
     return result;
 }
 
-node* findLoopBeginning(node* start)
+node* LinkedList::findLoopBeginning(node* start)
 {
     node* fast, *slow;
     fast = slow = start;
@@ -291,7 +291,7 @@ node* findLoopBeginning(node* start)
     return slow;
 }
 
-bool isPalindrome(node* start)
+bool LinkedList::isPalindrome(node* start)
 {
     //find the middle and reverse the linked list until middle point using a stack
     //Now compare the rest of the list with the reversed items from the stack
@@ -362,3 +362,7 @@ void swapPairwise(nodeDLL* head)
     }
 }
 
+int main()
+{
+    return 0;
+}
