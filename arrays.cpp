@@ -109,7 +109,7 @@ void replaceSpaces(char* str, int size)
         cout << "Can't replace spaces. Insufficient space\n";
         return;
     }
-    str[j] = '\0';
+    str[--j] = '\0'; //--j is the new index
     for (int i = strlen(str); i >= 0; i--, j--) {
         if (i == j) {
             break;
@@ -130,10 +130,9 @@ int computeCompressedLength(char* str)
     if (str == NULL) {
         return 0;
     }
-    char last;
+    char last = str[0];
     int count = 1;
     int size = 0;
-    last = str[0];
     for (int i = 1; i < strlen(str); i++) {
         if (str[i] == last) {
             count++;
@@ -261,21 +260,21 @@ int mergedMedian(int* arr1, int* arr2, int n)
         return (arr1[0]+arr2[0])/2;
     }
     if (n == 2) {
-        return max(arr1[0], arr2[0]) + min(arr1[1], arr2[1]);
+        return (max(arr1[0], arr2[0]) + min(arr1[1], arr2[1]))/2;
     }
     int m1 = getMedian(arr1, n);
     int m2 = getMedian(arr2, n);
-
+    if (m1 == m2) {
+        return m1;
+    }
     // have even no. of elements. Median is the avg of middle and the next element.
     bool even = (n%2 == 0) ? true : false;
     int size = even ? n-n/2+1 : n-n/2;
     int offset = even ? n/2-1 : n/2;
     if (m1 > m2) {
         return mergedMedian(arr1, arr2+offset, size);
-    } else if (m2 > m1) {
-        return mergedMedian(arr2, arr1+offset, size);
     } else {
-        return m1; // m1 == m2
+        return mergedMedian(arr2, arr1+offset, size);
     }
 }
 //http://aleph.nu/blog/kth-smallest-in-sorted-union.html
@@ -303,7 +302,7 @@ void closestPair(int* arr, int size, int val)
     if (arr == NULL) {
         return;
     }
-    if (size <= 2) {
+    if (size < 2) {
         return;
     }
     // assuming this is a sorted array
@@ -440,13 +439,13 @@ int searchInSortedRotatedArray(int* arr, int start, int end, int n)
     //Note: if the array is sorted around the middle element, the subarrays on either
     //side of it will be sorted as well. So return middle element which is the beginning
     //of the sorted array.
-
+    if (end < start) {
+        return -1;
+    }
+    
     int mid = start+end/2;
     if (arr[mid] == n) {
         return mid;
-    }
-    if (end < start) {
-        return -1;
     }
     if (arr[start] <= arr[mid-1]) {
         // sorted half
@@ -585,10 +584,11 @@ int searchStrings(std::string* arr, int start, int end, string pattern)
     }
     if (arr[mid].compare(pattern) == 0) {
         return mid;
-    } else if (arr[mid].compare(pattern) < 0) {
-        return searchStrings(arr, mid+1, end, pattern);
-    } else {
+    } else if (arr[mid].compare(pattern) < 0) { //arr[mid] - compared str and pattern is comparing str
+        // pattern has a smaller char compared to mid point
         return searchStrings(arr, start, mid-1, pattern);
+    } else {
+        return searchStrings(arr, mid+1, end, pattern);
     }
 }
 
@@ -610,7 +610,7 @@ int LIS(int* arr, int size)
         lis[i] = 1;
     }
     //lis will store the length of the longest increasing subsequence ending at 'i'
-    for (int i = 0; i < size; i++) {
+    for (int i = 1; i < size; i++) {
         for (int j = 0; j < i; j++) {
             if (arr[i] > arr[j] && lis[i] < lis[j]+1) {
                 lis[i] = lis[j] + 1;

@@ -79,7 +79,7 @@ class Graph {
 };
 
 Graph::Graph(int v) : nVertices(v), nEdges(0), weighted(false), directed(false) {
-    adjList = new list<edgeNode>[v];
+    adjList = new list<edgeNode>[nVertices+1];
     info.discovered = new bool[nVertices+1];
     info.processed = new bool[nVertices+1];
     info.parent = new int[nVertices+1];

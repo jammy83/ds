@@ -1,16 +1,17 @@
 //
-//  hashTable.cpp
+//  hashTable.h
 //  
 //
-//  Created by Janani Natarajan on 12/14/14.
+//  Created by Janani Natarajan on 12/19/14.
 //
 //
 
-#include <iostream>
+#ifndef _hashTable_h
+#define _hashTable_h
 
 template<class t_key, class t_record, unsigned long t_val>
 class hashTableRecord {
- public:
+public:
     t_key _key;
     t_val _value;
     t_record* _next; // for chaining keys with the same hash
@@ -20,12 +21,12 @@ class hashTableRecord {
 
 template<class t_key, class t_record, unsigned long t_size>
 class hashMap {
- private:
+private:
     t_record* _table[t_size];
     unsigned long _recCount;
     bool remove(t_record* rec, unsigned long bkt);
-
- public:
+    
+public:
     hashMap() {
         for (unsigned long i = 0; i < t_size; i++) {
             _table[i] = NULL;
@@ -102,8 +103,4 @@ bool hashMap<t_key,t_record,t_size>::remove(t_record* rec, unsigned long bkt)
     return false;
 }
 
-int main()
-{
-    return 0;
-}
-
+#endif

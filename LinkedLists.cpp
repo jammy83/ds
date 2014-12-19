@@ -20,12 +20,11 @@ class node {
 };
 
 class nodeDLL {
- private:
+ public:
     int key;
     nodeDLL* prev;
     nodeDLL* next;
 
- public:
     nodeDLL(int val) : key(val), prev(NULL), next(NULL) {}
     ~nodeDLL() {
         prev = next = NULL;
@@ -51,6 +50,7 @@ class LinkedList {
     node* findKtoLastElement(int k);
     void removeDups();
     void deleteNode(node* item);
+    bool insertInOrder(int val);
 };
 
 LinkedList::~LinkedList()
@@ -61,6 +61,35 @@ LinkedList::~LinkedList()
         start = start->next;
         delete temp;
     }
+}
+
+bool LinkedList::insertInOrder(int val)
+{
+    node* item = new node(val);
+    if (item == NULL) {
+        return false;
+    }
+    if (head == NULL) {
+        head = item;
+        return true;
+    }
+    node* prev = NULL;
+    node* start = head;
+    while (start != NULL) {
+        if (val < start->key) {
+            item->next = start;
+            if (prev != NULL) {
+                prev->next = item;
+            } else {
+                head = item;
+            }
+            return true;
+        }
+        prev = start;
+        start = start->next;
+    }
+    prev->next = item;
+    return true;
 }
 
 void LinkedList::insert(int val)

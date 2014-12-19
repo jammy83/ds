@@ -423,7 +423,7 @@ node* Tree::findSuccessorInOrder(node* start)
     while (top != NULL) {
         if (start->key > top->key) {
             top = top->right;
-        } else if (start->key < root->key) {
+        } else if (start->key < top->key) {
             // may or may not be in the left; could be just the root
             s = top;
             top = top->left;
