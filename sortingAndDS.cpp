@@ -150,9 +150,10 @@ void maxHeapify(iint* arr, int len, int i)
     int l = 2*i;
     int r = (2*i)+1;
     int maxIndex = i;
-    if (l <= len && r <= len) {
-        maxIndex = (arr[l] > arr[r]) ? l : r;
+    if (l < len || r > len) {
+        return;
     }
+    maxIndex = (arr[l] > arr[r]) ? l : r;
     if (arr[maxIndex] > arr[i]) { //one of the children is > parent
         int temp = arr[i];
         arr[i] = arr[maxIndex];
@@ -213,6 +214,156 @@ void maxHeapInsert(int* arr, int size, int key)
 {
     arr[size+1] = -1;
     heapIncreaseKey(arr, size, size+1, key);
+}
+
+
+//min PQ
+//Similar to max, just reverse the order of comparisons
+//implement heapDecreaseKey() instead of heapIncreaseKey() for maxPQ
+//Heapsort - min element is the arr[1]; return that and move arr[size] to arr[1]
+//and call minHeapify()
+
+
+//Indexed min PQ
+class IndexedMinPQ {
+ private:
+    int* pq;
+    int* qp;
+    int* keys;
+    int size; // max size of the queue
+    int len; // current length of the queue
+
+    void minHeapify(int i); // bubble down
+    void swap(int i, int j);
+    void bubbleUp(int i);
+
+ public:
+    IndexedMinPQ(int val) {
+        size = val;
+        pq = new int[size+1];
+        qp = new int[size+1];
+        for (int i = 1; i <= size; i++) {
+            qp[i] = -1;
+        }
+        keys = new int[size+1];
+        len = size;
+    }
+    ~IndexedMinPQ() {
+        if (pq) { delete[] pq; pq = NULL; }
+        if (qp) { delete[] qp; qp= NULL; }
+        if (keys) { delete[] keys; keys = NULL; }
+    }
+    bool insert(int i, int key);
+    void decreaseKey(int i, int key);
+    void increaseKey(int i, int key);
+    void delete(int i);
+    int deleteMin();
+    bool empty() { return (len == 0); }
+    bool contains(int i) {
+        if (i < 0 || i > size) {
+            return false;
+        }
+        return (qp[i] != -1);
+    }
+    int minIndex() {
+        if (len == 0) {
+            return -1;
+        }
+        return pq[1];
+    }
+    int minKey() {
+        if (len == 0) {
+            return -1;
+        }
+        return keys[pq[1]];
+    }
+};
+
+void IndexedMinPQ::insert(int i, int key)
+{
+    if (i < 0 || i > size) {
+        return;
+    }
+    keys[i] = key;
+    qp[i] = ++len;
+    pq[len] = i;
+    return bubbleUp(i);
+}
+
+void IndexedMinPQ::swap(int i, int j)
+{
+    int temp = pq[i];
+    pq[i] = pq[j];
+    pq[j] = temp;
+    
+    //update the inverse mapping
+    qp[pq[i]] = i;
+    qp[pq[j]] = j;
+}
+
+void IndexedMinPQ::minHeapify(int i) // bubble down
+{
+    int l = 2*i;
+    int r = 2*i + 1;
+    if (l > len || r > len) {
+        return;
+    }
+    int minIndex = (keys[l] < keys[r]) ? l : r;
+    if (pq[i] > pq[minIndex]) {
+        swap(i, minIndex);
+        return minHeapify(minIndex);
+    }
+}
+
+bool IndexedMinPQ::bubbleUp(int i)
+{
+    while (i > 1 && keys[i/2] > keys[i]) {
+        swap(i, i/2);
+        i = i/2;
+    }
+}
+
+void IndexedMinPQ::decreaseKey(int i, int key)
+{
+    if (i < 0 || i > size || keys[i] < key) {
+        return;
+    }
+    keys[i] = key;
+    bubbleUp(qp[i]);
+}
+
+void IndexedMinPQ::increaseKey(int i, int key)
+{
+    if (i < 0 || i > size || keys[i] > key) {
+        return;
+    }
+    keys[i] = key;
+    minHeapify(qp[i]);
+}
+
+int IndexedMinPQ::deleteMin()
+{
+    if (len == 0) {
+        return -1;
+    }
+    int min = pq[1];
+    qp[min] = -1;
+    keys[min] = -1;
+    swap(1, len--);
+    pq[len+1] = -1; // one element less with the last one moved to 1 and heapified
+    minHeapify(1);
+    return min;
+}
+
+void IndexedMinPQ::delete(int i)
+{
+    int heapIndex = qp[i];
+    qp[i] = -1;
+    keys[i] = -1;
+    swap(heapIndex, len--);
+    minHeapify(heapIndex);
+    bubbleUp(heapIndex);
+    pq[len+1] = -1;
 }
 
 int main()

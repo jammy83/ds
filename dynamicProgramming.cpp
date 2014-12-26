@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include iostream
+#include <iostream>
 
 //longest increasing subsequence
 int LIS(int* arr, int size)
@@ -54,6 +54,51 @@ bool hopArray(int* arr, int size, int start, int end)
         }
     }
     return false;
+}
+
+//maximum sum subarray
+int maxSumSubarray(int* arr, int size)
+{
+    int maxSum = 0;
+    int runningSum = 0;
+    for (int i = 0; i < size; i++) {
+        runningSum += a[i];
+        if (runningSum < a[i]) {
+            runningSum = a[i];
+        }
+        if (maxSum < runningSum) {
+            maxSum = runningSum;
+        }
+    }
+    return maxSum;
+}
+
+//given an array of + and -ve integers, find the subarray
+//with the maximum product {12, 2, -3, 7, -5, 8, -6, 2}
+int maxProductSubarray(int* arr, int size)
+{
+    if (arr == NULL || size == 0) {
+        return 0;
+    }
+    int max = 1, min = 1, maxProduct = 1;
+    // idea is to maintain the positive and negative product since
+    // 2 -ves turn positive.
+    for (int i = 0; i < size; i++) {
+        if (arr[i] > 0) {
+            max = max * arr[i];
+            min = (min > 0) ? 1 : min * arr[i];
+        } else if (arr[i] == 0) {
+            min = max = 1;
+        } else {
+            int prevMax = max;
+            max = (min < 0) ? min * arr[i] : 1;
+            min = prevMax * arr[i];
+        }
+        if (maxProduct < max) {
+            maxProduct = max;
+        }
+    }
+    return maxProduct;
 }
 
 int main()

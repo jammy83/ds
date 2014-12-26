@@ -8,7 +8,8 @@ using namespace std;
 // Node
 typedef struct {
     int index;
-    int weight;
+    int weight; // edge weight
+    //edgeNode* next if explicitly using linked lists
 } edgeNode;
 
 // Graph
@@ -24,6 +25,7 @@ class Graph {
     bool directed;
     list<edgeNode> *adjList; // edgeNode* adjList[nVertices+1]; or list<int> *adjList
     stack<int> s; // stack to record the processed vertices
+    int *outDegree; // out degree of each of the vertices
 
     // traversal info
     struct traversalInfo {
@@ -80,6 +82,7 @@ class Graph {
 
 Graph::Graph(int v) : nVertices(v), nEdges(0), weighted(false), directed(false) {
     adjList = new list<edgeNode>[nVertices+1];
+    outDegree = new int[nVertices+1];
     info.discovered = new bool[nVertices+1];
     info.processed = new bool[nVertices+1];
     info.parent = new int[nVertices+1];
@@ -292,6 +295,39 @@ void Graph::performTopologicalSort()
     }
 }
 
+void PrimMST(Graph& g, int start)
+{
+    bool inTree[g.nVertices+1] = {};  // is the vertex in the tree
+    int distance[g.nVertices+1]; // cost of adding to the tree
+    for (int i = 1; i <= g.nVertices; i++) {
+        distance[i] = INT_MAX;
+    }
+    IndexedMinPQ pq(g.nVertices);
+
+    distance[start] = 0;
+    pq.insert(start, distance[start]);
+    while (!pq.empty()) {
+        int v = pq.delMin();
+        inTree[v] = true;
+        for (list<edgeNode>::iterator itr=adjList[v].begin(); itr != adjList[v].end(); itr++) {
+            edgeNode curr = *itr;
+            int w = curr.index;
+            if (inTree[w] == true) {
+                continue;
+            }
+            if (curr.weight < distance[w]) {
+                distance[w] = curr.weight;
+                if (pq.contains(w)) {
+                    pq.decreaseKey(w, distance[w]);
+                } else {
+                    pq.insert(w, distance[w]);
+                }
+            }
+        }
+    }
+}
+
+void 
 int main()
 {
     return 0;

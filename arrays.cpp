@@ -279,23 +279,6 @@ int mergedMedian(int* arr1, int* arr2, int n)
 }
 //http://aleph.nu/blog/kth-smallest-in-sorted-union.html
 
-//maximum subarray sum
-int maxSubArraySum(int* arr, int size)
-{
-    int maxSum = 0;
-    int runningSum = 0;
-    for (int i = 0; i < size; i++) {
-        runningSum += a[i];
-        if (runningSum < a[i]) {
-            runningSum = a[i];
-        }
-        if (maxSum < runningSum) {
-            maxSum = runningSum;
-        }
-    }
-    return maxSum;
-}
-
 // Gn a sorted array and value X, find a pair whose sum is closest to X
 void closestPair(int* arr, int size, int val)
 {
@@ -586,6 +569,55 @@ void intToStr(int num, char* str)
     }
     str[j] = '\0';
 }
+
+bool isNumber(char* str)
+{
+    
+}
+
+//time complexity: O(n log k): k sorted lists with n items in total
+void mergeKSortedArrays(vector<int>* arr, int k)
+{
+    vector<int>::iterator* itr = new vector<int>::iterator[k]; //array of vector iterators
+    IndexedMinPQ pq(k);
+    
+    //insert the first element from all of the arrays into the priority queue
+    for (int i = 0, itr[i] = arr[i].begin(); i < k; i++) {
+        if (itr[i] != arr[i].end()) {
+            pq.insert(i, *itr[i]);
+            itr[i]++;
+        }
+    }
+    
+    while (!pq.empty()) {
+        cout << pq.minKey();
+        int index = pq.delMin();
+        if (itr[index] != arr[index].end()) {
+            pq.insert(index, *itr[index]);
+            itr[index]++;
+        }
+    }
+}
+
+/**
+ * Implement a method which takes an integer array and returns an integer array (of equal size) in
+ * which each element is the product of every number in the input array with the exception of the
+ * number at that index.
+ *
+ * Example:
+ *   [3, 1, 4, 2] => [8, 24, 6, 12]
+ */
+int* selfExcludingProduct(int* arr, int size)
+{
+    
+}
+
+double powerOf(double b, int a)
+{
+    
+}
+
+//Find the most repeated value in an array
 
 int main(int argc, char* argv[])
 {
