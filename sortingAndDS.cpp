@@ -366,6 +366,68 @@ void IndexedMinPQ::delete(int i)
     pq[len+1] = -1;
 }
 
+//Union find data structure
+class UnionFind {
+ private:
+    int* parent;
+    int* rank;
+    int count; // no. of connected components
+    int items; // no. of elements
+
+ public:
+    UnionFind(int val) : count(val), items(val) {
+        parent = new parent(val);
+        rank = new rank(val);
+        for (int i = 0; i < val; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+    ~UnionFind() {
+        if (parent) { delete[] parent; parent = NULL; }
+        if (rank) { delete[] rank; rank = NULL; }
+    }
+    // find the root of the tree walking up the parent pointers
+    // the idea is that all the connected components are from the
+    // same subtree and hence share the parent which is marked as
+    // the root of the tree -- which connected component am I a part of?
+    int find(int v);
+    bool connected(int v, int w) {
+        return (find(v) == find(w)); // are the two items connected
+    }
+    void union(int v, int w); // merges the 2 components
+    int getCount() const { return count; }
+};
+
+int UnionFind::find(int v)
+{
+    if (v < 0 || v > items) {
+        return -1;
+    }
+    while (parent[v] != v) {
+        parent[v] = parent[parent[v]]; // path compression by halving
+        v = parent[v];
+    }
+    return v;
+}
+
+void UnionFind::union(int v, int w)
+{
+    int i = find(v);
+    int j = find(w);
+    if (i == j) return;
+    
+    if (rank[i] < rank[j]) {
+        parent[i] = j;
+    } else if (rank[j] < rank[i]) {
+        parent[j] = i;
+    } else {
+        parent[j] = i;
+        rank[i]++;
+    }
+    count--;
+}
+
 int main()
 {
     return 0;

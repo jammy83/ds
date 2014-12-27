@@ -299,10 +299,13 @@ void PrimMST(Graph& g, int start)
 {
     bool inTree[g.nVertices+1] = {};  // is the vertex in the tree
     int distance[g.nVertices+1]; // cost of adding to the tree
+    IndexedMinPQ pq(g.nVertices);
+    int parent[g.nVertices+1];
+
     for (int i = 1; i <= g.nVertices; i++) {
         distance[i] = INT_MAX;
+        parent[i] = -1;
     }
-    IndexedMinPQ pq(g.nVertices);
 
     distance[start] = 0;
     pq.insert(start, distance[start]);
@@ -317,6 +320,7 @@ void PrimMST(Graph& g, int start)
             }
             if (curr.weight < distance[w]) {
                 distance[w] = curr.weight;
+                parent[v] = w;
                 if (pq.contains(w)) {
                     pq.decreaseKey(w, distance[w]);
                 } else {
@@ -327,13 +331,73 @@ void PrimMST(Graph& g, int start)
     }
 }
 
-void 
+struct {
+    int x;
+    int y;
+    int weight;
+} edge;
+
+void KruskalMST(Graph& g)
+{
+    minPQ<edge> pq = new minPQ<edge>();
+    for (int v = 1, list<edge>::iterator itr=adjList[v].begin();
+         itr != adjList[v].end(), v <= g.nVertices; itr++) {
+        pq.insert(*itr);
+    }
+    UnionFind uf(g.nVertices);
+    int weight = 0;
+    queue<edge> mst;
+    while (!pq.empty() && mst.size() < g.nVertices-1) {
+        edge e = pq.delMin(); // PQ odered by weights
+        int v = e.either();
+        int w = e.other(v);
+        if (!uf.connected(v, w)) { // v-w does not create a cycle
+            uf.union(v, w);  // merge v and w components
+            mst.push(e);  // add edge e to mst
+            weight += e.weight(); // weight of the MST
+        }
+    }
+}
+
+//finds the shortest path on directed graphs with positive edge weights
+void dijkstraSP(Graph& g, int s, int t)
+{
+    bool inTree[g.nVertices+1] = {};
+    int distance[g.nVertices+1];
+    int parent[g.nVertices+1];
+    IndexedMinPQ pq = new IndexedMinPQ(g.nVertices);
+
+    for (int i = 1; i <= g.nVertices; i++) {
+        distance[i] = INT_MAX;
+        parent[i] = -1;
+    }
+
+    distance[s] = 0;
+    pq.insert(s, distance[s]);
+    while (!pq.empty()) {
+        int v = pq.deleteMin();
+        inTree[v] = true;
+        for (list<edgeNode>::iterator itr = adjList[v].begin(); itr != adjList[v].end(); itr++) {
+            edgeNode curr = *itr;
+            int w = curr.index;
+            if (inTree[w] == true) {
+                continue;
+            }
+            if (distance(v) + curr.weight < distance(w)) {
+                distance(w) = distance(v) + curr.weight;
+                if (pq.contains(w)) {
+                    pq.decreaseKey(w, distance(w));
+                } else {
+                    pq.insert(w, distance(w));
+                }
+            }
+        }
+    }
+}
+
 int main()
 {
     return 0;
 }
-// strongly connected components
-// Minimum spanning tree - Prim, Kruskal
-// Dijkstra's algo - shortest path
 
 
