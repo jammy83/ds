@@ -320,7 +320,7 @@ void PrimMST(Graph& g, int start)
             }
             if (curr.weight < distance[w]) {
                 distance[w] = curr.weight;
-                parent[v] = w;
+                parent[w] = v;
                 if (pq.contains(w)) {
                     pq.decreaseKey(w, distance[w]);
                 } else {
@@ -385,6 +385,7 @@ void dijkstraSP(Graph& g, int s, int t)
             }
             if (distance(v) + curr.weight < distance(w)) {
                 distance(w) = distance(v) + curr.weight;
+                parent[w] = v;
                 if (pq.contains(w)) {
                     pq.decreaseKey(w, distance(w));
                 } else {
