@@ -527,11 +527,6 @@ bool isNumPalindrome(int x)
     return ((x-rev) == 0) ? true : false;
 }
 
-// Given a unsorted array of intergers an a range of (1...n), how will you find the
-// missing element and a duplicate? What if its sorted?
-// Solution: sorted - use BS and unsorted find the sum and the original expected sum.
-// The difference is the missing element. Find abs diff and that will tell you the duplicate element.
-
 int strToInt(char* arr, int size)
 {
     bool isNeg = false;
@@ -607,9 +602,16 @@ void mergeKSortedArrays(vector<int>* arr, int k)
  * Example:
  *   [3, 1, 4, 2] => [8, 24, 6, 12]
  */
-int* selfExcludingProduct(int* arr, int size)
+
+void selfExcludingProduct(int* arr, int size)
 {
-    
+    int product = 1;
+    for (int i = 0; i < n; i++) {
+        product *= arr[i];
+    }
+    for (int i = 0; i < n; i++) {
+        arr[i] = product/i;
+    }
 }
 
 double powerOf(double b, int a)
@@ -617,7 +619,22 @@ double powerOf(double b, int a)
     
 }
 
-//Find the most repeated value in an array
+//finding the most repeated element in an array given the size of the array (n) and the range of elements
+//{0...k} k <= n
+
+//Solution 1: sort the elements and duplicates will get moved close by. Just count
+//the repeats and the return the one with the maximum
+//Solution 2: Maintain a indexed max priority queue of size "k+1" and insert all the elements (element, count)
+// if contains(i) returns true, invoke increaseKey() or just insert the element
+//Call delMax() - returns the index of the element with the max repeats
+//Count arr[k] for count[arr[i]]++ - O(k) space
+//arr[arr[i]%k] += k, the index with the max value is the most repeated element
+
+// Given a unsorted array of intergers an a range of (1...n), how will you find the
+// missing element and a duplicate? What if its sorted?
+// Solution: sorted - use BS and unsorted find the sum and the original expected sum.
+// The difference is the missing element. Find abs diff and that will tell you the duplicate element.
+
 
 int main(int argc, char* argv[])
 {

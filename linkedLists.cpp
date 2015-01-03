@@ -45,7 +45,8 @@ class LinkedList {
     node* findLoopBeginning(node* start);
     // the lists are numbers represented in reverse
     node* addLists(node* l1, node* l2, int carry);
-    node* reverseList(node* start);
+    node* reverseListPairwise(node* start);
+    void reverseList(node** head);
     node* partitionList(node* start, int val);
     node* findKtoLastElement(int k);
     void removeDups();
@@ -228,7 +229,8 @@ node* LinkedList::partitionList(node* start, int val)
     return start;
 }
 
-node* LinkedList::reverseList(node* start)
+//reversing linked lists pair-wise
+node* LinkedList::reverseListPairwise(node* start)
 {
     if (start == NULL) {
         return NULL;
@@ -245,6 +247,22 @@ node* LinkedList::reverseList(node* start)
         curr = nextNode;
     }
     return prev;
+}
+
+//reverse the linked list
+//keep moving the elements to the head
+void reverseList(node** head)
+{
+    if (head == NULL) {
+        return NULL:
+    }
+    node* curr = head->next;
+    while (curr != NULL) {
+        node* nextNode = curr->next;
+        curr->next = *head;
+        *head = curr;
+        curr = nextNode;
+    }
 }
 
 // the lists are numbers represented in reverse
@@ -317,6 +335,23 @@ bool LinkedList::isPalindrome(node* start)
         slow = slow->next;
     }
     return true;
+}
+
+//intersection point of singly linked lists
+//reverse both the linked list and walk until the fork
+node* reverse(node* head)
+{
+    if (head == NULL) {
+        return NULL;
+    }
+    node *curr = head->next;
+    while (curr != NULL) {
+        node* nextNode = curr->next;
+        curr->next = head;
+        head = curr;
+        curr = nextNode;
+    }
+    return head;
 }
 
 // delete item from a doubly linked list

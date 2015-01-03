@@ -10,6 +10,7 @@
 #include <iostream>
 
 //longest increasing subsequence
+//subsequence means the values need not be consecutive but maintain the relative order
 int LIS(int* arr, int size)
 {
     int lis[size] = {};
@@ -99,6 +100,44 @@ int maxProductSubarray(int* arr, int size)
         }
     }
     return maxProduct;
+}
+
+void lcs()
+{
+    
+}
+
+// hops 1/2/3 in a staircase
+int computeHops(int n, int* arr, int size)
+{
+    if ( n < 0) {
+        return 0;
+    } else if (n == 0) {
+        return 1;
+    } else if (arr[n] != -1) { // in the initial caller of computeHops() init arr to -1
+        return arr[n];
+    } else {
+        arr[n] = computeHops(n-1, arr, size) +
+                 computeHops(n-2, arr, size) +
+                 computeHops(n-3, arr, size);
+        return arr[n];
+    }
+}
+
+int magicIndex(int* arr, int start, int end)
+{
+    if (end < start || start < 0) {
+        return -1;
+    }
+    int mid = (start+end)/2;
+    if (arr[mid] == mid) {
+        return mid;
+    } else if (arr[mid] < mid) {
+        //search right of mid
+        magicIndex(arr, mid+1, end);
+    } else {
+        magicIndex(arr, start, mid-1);
+    }
 }
 
 int main()

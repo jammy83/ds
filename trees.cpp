@@ -616,6 +616,7 @@ struct {
     nodeDLL* next;
 } nodeDLL;
 
+// do inorder traversal of a binary tree to convert it to a DLL
 nodeDLL* convertTreeToDLL()
 {
     node* start = root;
@@ -634,11 +635,10 @@ nodeDLL* convertTreeToDLL()
             if (item == NULL) {
                 return NULL;
             }
-            if (head == NULL) {
-                head = item;
-            }
             if (prev != NULL) {
                 prev->next = item;
+            } else {
+                head = item;
             }
             item->prev = prev;
             prev = item;
@@ -666,6 +666,33 @@ bool isFoldableUtil(node* n1, node* n2)
     }
     return (isFoldableUtil(n1->left, n2->right) &&
            isFoldableUtil(n1->right, n2->left));
+}
+
+//changes the tree to its mirror image
+void mirror(node* root)
+{
+    if (root == NULL) {
+        return;
+    }
+    mirror(root->left);
+    mirror(root->right);
+    if (root->left || root->right) {
+        node* temp = root->left;
+        root->left = root->right;
+        root->right = temp;
+    }
+}
+
+void doubleTree(node* root)
+{
+    if (root == NULL) {
+        return;
+    }
+    doubleTree(root->left);
+    doubleTree(root->right);
+    node* newNode = dupNode(root);
+    newNode->left = root->left;
+    root->left = newNode;
 }
 
 int main()
