@@ -142,6 +142,10 @@ void quicksort(int* arr, int start, int end)
     }
 }
 
+
+//https://www.cs.berkeley.edu/~jrs/61b/lec/25
+
+
 // heap represented by an array:
 // for a given 'i', left = 2i and right = 2i+1 and parent = floor(i/2)
 // len - heap size not the size of the array

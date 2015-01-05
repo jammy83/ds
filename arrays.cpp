@@ -6,6 +6,8 @@
 //
 //
 
+//http://kartikkukreja.wordpress.com
+
 #include <iostream>
 #include <string.h>
 
