@@ -84,6 +84,11 @@ class Tree {
     int kthSmallestElement(int n);
     nodeDLL* convertTreeToDLL();
     bool isFoldable();
+    void mirror();
+    void doubleTree();
+    void serializeBinaryTree(node* root, FILE* fp);
+    void deserializeBinaryTree(node** root, FILE* fp);
+    node* deserializeBSTIterative(int* pre, int size);
 };
 
 void Tree::destroyTree(node* start)
@@ -693,6 +698,67 @@ void doubleTree(node* root)
     node* newNode = dupNode(root);
     newNode->left = root->left;
     root->left = newNode;
+}
+
+void serializeBinaryTree(node* root, FILE *fp)
+{
+    if (root == NULL) {
+        fprintf(fp, "%d ", -1);
+        return;
+    }
+    fprintf(fp, "%d ", root->key);
+    serializeBinaryTree(root->left, fp);
+    serializeBinaryTree(root->right, fp);
+}
+
+void deserializeBinaryTree(node** root, FILE *fp)
+{
+    int val = 0;
+    if (!fscanf(fp, "%d ", &val) || val == -1) {
+        return;
+    }
+    root = new node(val);
+    if (!root) {
+        return;
+    }
+    deserializeBinaryTree(root->left, fp);
+    deserializeBinaryTree(root->righ, fp);
+}
+
+//de-serialize a BST from a pre-order traversal output
+node* deserializeBSTIterative(int* pre, int size)
+{
+    if (size < 0) {
+        return NULL;
+    }
+    stack<node*> s;
+    node* root = new node(pre[0]);
+    if (!root) {
+        return NULL;
+    }
+    s.push(root);
+
+    for (int i = 1, node* temp = NULL, *last = NULL; i < size; i++) {
+        while (!s.empty() && pre[i] > (temp = s.top())) {
+            s.pop();
+            last = temp;
+        }
+        if (last == NULL) {
+            node* top = s.top();
+            top->left = new node(pre[i]);
+            if (!top->left) {
+                return NULL:
+            }
+            s.push(top->left);
+        } else {
+            last->right = new node(pre[i]);
+            if (!last->right) {
+                return NULL;
+            }
+            s.push(last->right);
+        }
+    }
+    return root;
 }
 
 int main()

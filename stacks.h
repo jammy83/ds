@@ -112,8 +112,8 @@ element<T>* MyStack::popElement()
 {
     if (_top) {
         element<T>* res = _top;
-        _top = _top->_next;
         res->_next = NULL; //unlink it
+        _top = _top->_next;
         _count--;
         return res;
     }

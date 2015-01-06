@@ -110,6 +110,9 @@ void lcs()
 // hops 1/2/3 in a staircase
 int computeHops(int n, int* arr, int size)
 {
+    for (int i = 0; i < size; i++) {
+        arr[i] = -1;
+    }
     if ( n < 0) {
         return 0;
     } else if (n == 0) {
@@ -132,7 +135,7 @@ int magicIndex(int* arr, int start, int end)
     int mid = (start+end)/2;
     if (arr[mid] == mid) {
         return mid;
-    } else if (arr[mid] < mid) {
+    } else if (arr[mid] < mid) {       //another idea was arr[mid] > end+1 or 'n', discard everything to the right
         //search right of mid
         magicIndex(arr, mid+1, end);
     } else {
