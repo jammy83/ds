@@ -18,6 +18,7 @@ int LIS(int* arr, int size)
     for (int i = 0; i < size; i++) {
         lis[i] = 1;
     }
+    int max = 1;
     //lis will store the length of the longest increasing subsequence ending at 'i'
     for (int i = 1; i < size; i++) {
         for (int j = 0; j < i; j++) {
@@ -25,10 +26,6 @@ int LIS(int* arr, int size)
                 lis[i] = lis[j] + 1;
             }
         }
-    }
-    // find the max
-    int max = 0;
-    for (int i = 0; i < size; i++) {
         if (max < lis[i]) {
             max = lis[i];
         }
@@ -110,10 +107,12 @@ void lcs()
 // hops 1/2/3 in a staircase
 int computeHops(int n, int* arr, int size)
 {
+    /* The caller should initialize the array elements to -1
     for (int i = 0; i < size; i++) {
         arr[i] = -1;
     }
-    if ( n < 0) {
+     */
+    if (n < 0 || n > size) {
         return 0;
     } else if (n == 0) {
         return 1;

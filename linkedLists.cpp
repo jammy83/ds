@@ -253,8 +253,8 @@ node* LinkedList::reverseListPairwise(node* start)
 //keep moving the elements to the head
 void reverseList(node** head)
 {
-    if (head == NULL) {
-        return NULL:
+    if (*head == NULL) {
+        return NULL;
     }
     node* curr = head->next;
     while (curr != NULL) {
@@ -317,7 +317,7 @@ bool LinkedList::isPalindrome(node* start)
     fast = slow = start;
     stack<node*> s;
 
-    while (fast != NULL && fast->next != NUll) {
+    while (fast != NULL && fast->next != NULL) {
         s.push(slow);
         slow = slow->next;
         fast = fast->next->next;
@@ -334,25 +334,14 @@ bool LinkedList::isPalindrome(node* start)
         }
         slow = slow->next;
     }
+    if (slow || !s.empty()) {
+        return false;
+    }
     return true;
 }
 
-//intersection point of singly linked lists
+//intersection point of two singly linked lists
 //reverse both the linked list and walk until the fork
-node* reverse(node* head)
-{
-    if (head == NULL) {
-        return NULL;
-    }
-    node *curr = head->next;
-    while (curr != NULL) {
-        node* nextNode = curr->next;
-        curr->next = head;
-        head = curr;
-        curr = nextNode;
-    }
-    return head;
-}
 
 // delete item from a doubly linked list
 nodeDLL* removeFromDLL(nodeDLL* item)

@@ -52,3 +52,9 @@ int leftShift(int index, bool removeTop)
 //Queue implemetation using linked lists will maintain a head and tail pointer
 
 
+//Stacks implemented using doubly linked list to return the middle element in O(1) complexity
+//Support findMiddle() and delMiddle()
+// if count == 1, mid is the first element.
+// On push, count%2 == 0, even : mid = mid->prev
+// On pop, count%2 == 1, odd : mid = mid->next
+
