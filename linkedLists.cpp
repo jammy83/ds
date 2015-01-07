@@ -256,10 +256,14 @@ void reverseList(node** head)
     if (*head == NULL) {
         return NULL;
     }
+    node* start = *head; //mark the original beginning of the list
     node* curr = head->next;
     while (curr != NULL) {
         node* nextNode = curr->next;
         curr->next = *head;
+        if (*head == start) {
+            *head->next = NULL;
+        }
         *head = curr;
         curr = nextNode;
     }

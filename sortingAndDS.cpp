@@ -114,7 +114,7 @@ void selectionSort(int* arr, int start, int end)
 int partition(int* arr, int start, int end)
 {
     int pivot = arr[end];
-    int j = start;
+    int j = -1;
     for (int i = start; i < end; i++) {
         if (arr[i] <= pivot) {
             if (i > 0 && a[i-1] > pivot) {
@@ -123,7 +123,7 @@ int partition(int* arr, int start, int end)
                 arr[i] = temp;
                 j++;
             }
-        } else if (j == 0) {
+        } else if (j == -1) {
             j = i;
         }
     }
@@ -154,7 +154,7 @@ void maxHeapify(iint* arr, int len, int i)
     int l = 2*i;
     int r = (2*i)+1;
     int maxIndex = i;
-    if (l < len || r > len) {
+    if (l > len || r > len) {
         return;
     }
     maxIndex = (arr[l] > arr[r]) ? l : r;
@@ -243,14 +243,14 @@ class IndexedMinPQ {
 
  public:
     IndexedMinPQ(int val) {
-        size = val;
-        pq = new int[size+1];
-        qp = new int[size+1];
+        size = val+1;
+        pq = new int[size];
+        qp = new int[size];
         for (int i = 1; i <= size; i++) {
             qp[i] = -1;
         }
-        keys = new int[size+1];
-        len = size;
+        keys = new int[size];
+        len = 0;
     }
     ~IndexedMinPQ() {
         if (pq) { delete[] pq; pq = NULL; }

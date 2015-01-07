@@ -8,16 +8,19 @@
 
 #include <iostream>
 
+using namespace std;
+
 //Group strings that are anagrams: given an array of strings
 //Sort every string and put it in a hash table. Since the string is sorted,
 //anagrams will hash to the same value and will be chained together.
 
-//How to sort a given string. if assuming only ascii chars are involved, keep a char count walking the string.
-//Then walk the count array adding chars in order
+//How to sort a given string? if assuming only ascii chars are involved, all
+//comparisons can be performed like integers and so can use any of the sorting algos
 
-//How to check if one string is a anagram of another - check one is a permutation of the other - solved already
+//3way string quciksort is the solution -- Robert Sedgewick
 
-
+//How to check if one string is a anagram of another -
+//check one is a permutation of the other - solved already
 
 //KMP - pattern matching
 //construct the prefix function
@@ -103,11 +106,37 @@ int searchStrings(std::string* arr, int start, int end, string pattern)
     if (arr[mid].compare(pattern) == 0) {
         return mid;
     } else if (arr[mid].compare(pattern) < 0) { //arr[mid] - compared str and pattern is comparing str
-        // pattern has a smaller char compared to mid point
-        return searchStrings(arr, start, mid-1, pattern);
-    } else {
+        // arr[mid] has a smaller char compared to pattern
         return searchStrings(arr, mid+1, end, pattern);
+    } else {
+        return searchStrings(arr, start, mid-1, pattern);
     }
 }
 
+void reverseString(char* str, int start, int end)
+{
+    for (int i = start, j = end; i < j; i++, j--) {
+        char temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+    }
+}
+//Reverse words in a string
+void reverseWords(char* str)
+{
+    int len = strlen(str);
+    //reverse the entire string
+    reverseString(str, 0, len-1);
+    
+    for (int i = 0; i < len; ++i) {
+        int start, end;
+        start = end = i;
+        while (str[i] != ' ' && i < len) {
+            i++;
+        }
+        end = i - 1;
+        reverseString(str, start, end);
+    }
+}
 
+//Check if 2 strings are isomorphic
