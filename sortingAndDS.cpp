@@ -243,13 +243,13 @@ class IndexedMinPQ {
 
  public:
     IndexedMinPQ(int val) {
-        size = val+1;
-        pq = new int[size];
-        qp = new int[size];
+        size = val;
+        pq = new int[size+1];
+        qp = new int[size+1];
         for (int i = 1; i <= size; i++) {
             qp[i] = -1;
         }
-        keys = new int[size];
+        keys = new int[size+1];
         len = 0;
     }
     ~IndexedMinPQ() {
@@ -285,6 +285,16 @@ class IndexedMinPQ {
 
 void IndexedMinPQ::insert(int i, int key)
 {
+    // if allowing to insert more items than the size can accomodate,
+    // resize the array
+    // if (i >= size-1) {
+    //     resize
+    //     int* temp = new int[2*size];
+    //     for (int i = 1; i <= len; i++) {
+    //        temp[i] = keys[i];
+    //     }
+    //     keys = temp;
+    // }
     if (i < 0 || i > size) {
         return;
     }
@@ -347,6 +357,8 @@ void IndexedMinPQ::increaseKey(int i, int key)
 
 int IndexedMinPQ::deleteMin()
 {
+    // if supporting dynamic arrays, then release the extra space
+    // if (len == size/4) resize to size/2.
     if (len == 0) {
         return -1;
     }

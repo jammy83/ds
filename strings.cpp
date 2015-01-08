@@ -16,7 +16,6 @@ using namespace std;
 
 //How to sort a given string? if assuming only ascii chars are involved, all
 //comparisons can be performed like integers and so can use any of the sorting algos
-
 //3way string quciksort is the solution -- Robert Sedgewick
 
 //How to check if one string is a anagram of another -
@@ -140,3 +139,43 @@ void reverseWords(char* str)
 }
 
 //Check if 2 strings are isomorphic
+bool isomorphic(char* str1, char* str2)
+{
+    if (strlen(str1) != strlen(str2)) {
+        return false;
+    }
+    int size = 256;
+    int a1[size];
+    int a2[size];
+    int encode1[strlen(str1)];
+    int encode2[strlen(str2)];
+    int len = strlen(str1);
+
+    for (int i = 0; i < size; i++) {
+        a1[i] = a2[i] = -1;
+    }
+
+    int index = 0;
+    for (int i = 0; i < len; i++) {
+        if (a1[str1[i]] == -1) {
+            a1[str1[i]] = index++;
+        }
+        encode1[i] = a1[str1[i]];
+    }
+    index = 0;
+    for (int i = 0; i < len; i++) {
+        if (a2[str2[i]] == -1) {
+            a2[str2[i]] = index++;
+        }
+        encode2[i] = a2[str2[i]];
+    }
+    
+    for (int i = 0; i < len; i++) {
+        if (encode1[i] != encode2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
