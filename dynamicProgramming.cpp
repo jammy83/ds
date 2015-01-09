@@ -99,11 +99,6 @@ int maxProductSubarray(int* arr, int size)
     return maxProduct;
 }
 
-void lcs()
-{
-    
-}
-
 // hops 1/2/3 in a staircase
 int computeHops(int n, int* arr, int size)
 {
@@ -140,6 +135,45 @@ int magicIndex(int* arr, int start, int end)
     } else {
         magicIndex(arr, start, mid-1);
     }
+}
+
+//longest palindromic substring not *subsequence*
+//This can be easily modified to work with integers
+int longestPalindromeSubstring(char* str) // int* str, int len
+{
+    if (str == NULL) {
+        return 0;
+    }
+    int len = strlen(str);
+    bool table[len][len]; // records if str[i..j] is palindrome or not
+    memset(table, 0, sizeof(table));
+    int maxLength = 1; // length of the palindrome identified so far
+    int start = 0; // starting index where the palindrome begins
+
+    for (int i = 0; i < len; ++i) {
+        table[i][i] = true;
+        if (i < len - 1 && str[i] == str[i+1]) {
+            table[i][i+1] = true;
+            start = i;
+            maxLength = 2;
+        }
+    }
+
+    for (int k = 3; k < len; ++k) {
+        for (int i = 0; i < len-k; ++i) {
+            int j = i+k-1;
+            if (table[i+1][j-1] && str[i] == str[j]) {
+                table[i][j] = true;
+                if (k > maxLength) { // this means it will record the first occurrence of the palindrome
+                    start = i;
+                    maxLength = k;
+                }
+            }
+        }
+    }
+    //just print the starting index and walk in a for loop if working with integers
+    cout << "Palindromic Substring: " << std::string(str).substr(start, maxLength) << endl;
+    return maxLength;
 }
 
 int main()

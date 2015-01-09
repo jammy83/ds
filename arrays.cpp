@@ -567,6 +567,11 @@ void intToStr(int num, char* str)
     str[j] = '\0';
 }
 
+bool isDigit(char d)
+{
+    return (d >= '0' && d <= '9');
+}
+
 bool isNumber(char* str)
 {
     
@@ -607,18 +612,54 @@ void mergeKSortedArrays(vector<int>* arr, int k)
 
 void selfExcludingProduct(int* arr, int size)
 {
+    int count = 0; //count of no. of zeros
     int product = 1;
     for (int i = 0; i < n; i++) {
-        product *= arr[i];
+        if (arr[i] != 0) {
+            product *= arr[i];
+        } else {
+            count++;
+            if (count == 2) {
+                product = 0;
+                break;
+            }
+        }
     }
     for (int i = 0; i < n; i++) {
-        arr[i] = product/i;
+        if (count == 1) {
+            arr[i] = (arr[i] == 0) ? product : 0;
+        } else if (count == 0) {
+            arr[i] = product/i;
+        } else {
+            arr[i] = 0;
+        }
     }
 }
 
-double powerOf(double b, int a)
+double powerOfUtil(double b, int a)
 {
-    
+    if (a == 0 || b == 1) {
+        return 1;
+    }
+    if (a == 1) {
+        return b;
+    }
+    double t = powerOf(b, a/2);
+    double res = t*t;
+    return ((a%2==0) ? res : b*res);
+}
+
+double pow(double b, int a)
+{
+    if (a < 0) {
+        return 1/powerOfUtil(b,-a);
+    } else if (b < 0) {
+        if (a%2 == 0) {
+            return powerOfUtil(-b,a);
+        } else {
+            return -(powerOfUtil(-b,a));
+        }
+    }
 }
 
 //finding the most repeated element in an array given the size of the array (n) and the range of elements
