@@ -163,6 +163,9 @@ node* Tree:searchBST(int key)
 
 node* Tree::findMaxBST(node* start)
 {
+    if (start == NULL) {
+        return NULL;
+    }
     while (start->right != NULL) {
         start = start->right;
     }
@@ -171,6 +174,9 @@ node* Tree::findMaxBST(node* start)
 
 node* Tree::findMinBST(node* start)
 {
+    if (start == NULL) {
+        return NULL;
+    }
     while (start->left != NULL) {
         start = start->left;
     }
@@ -489,6 +495,20 @@ bool findPath(node* start, int key, stack<node*> &path) // the path will be stor
     return false;
 }
 
+int hasPathSum(struct node* node, int sum)
+{
+    // return true if we run out of tree and sum==0
+    if (node == NULL) {
+        return(sum == 0);
+    }
+    else {
+        // otherwise check both subtrees
+        int subSum = sum - node->data;
+        return(hasPathSum(node->left, subSum) ||
+               hasPathSum(node->right, subSum));
+    } 
+} 
+
 node* findLCA(node* start, int key1, int key2)
 {
     if (start == NULL) {
@@ -696,6 +716,9 @@ void doubleTree(node* root)
     doubleTree(root->left);
     doubleTree(root->right);
     node* newNode = dupNode(root);
+    if (newNode == NULL) {
+        return;
+    }
     newNode->left = root->left;
     root->left = newNode;
 }
@@ -717,12 +740,12 @@ void deserializeBinaryTree(node** root, FILE *fp)
     if (!fscanf(fp, "%d ", &val) || val == -1) {
         return;
     }
-    root = new node(val);
-    if (!root) {
+    *root = new node(val);
+    if (!*root) {
         return;
     }
-    deserializeBinaryTree(root->left, fp);
-    deserializeBinaryTree(root->righ, fp);
+    deserializeBinaryTree(*root->left, fp);
+    deserializeBinaryTree(*root->righ, fp);
 }
 
 //de-serialize a BST from a pre-order traversal output

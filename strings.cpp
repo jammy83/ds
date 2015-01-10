@@ -138,7 +138,7 @@ void reverseWords(char* str)
     }
 }
 
-//Check if 2 strings are isomorphic
+//Check if 2 strings are isomorphic abb --> xyy and not yxy or yyx
 bool isomorphic(char* str1, char* str2)
 {
     if (strlen(str1) != strlen(str2)) {
