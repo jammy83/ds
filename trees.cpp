@@ -49,6 +49,8 @@ class Tree {
     bool findPath(node* start, int key, stack<node*> &path);
     node* findLCA(node* start, int key1, int key2);
     node* findLCABST(node* start, int key1, int key2);
+    node* findLCAwithParent(node* p, node* q);
+    node* findLCAPerf(node* start, node* p, node* q);
     //Use parent pointers or just recuse down the tree
     // A simple inorder traversal of the nodes will tell you this as well.
     node* findPredecessorInOrder();
@@ -68,6 +70,7 @@ class Tree {
     // ------------------------------------------------
     // applies to any binary tree (including BST)
     int findHeight();
+    int findHeightWithParent(node* p);
     int findMaxDepth(node* start);
     bool checkIfBalanced(node* start);
     int checkIfHeightBalanced(node* start);
@@ -476,12 +479,12 @@ node* findLCABST(node* start, int key1, int key2)
     ////////////
 }
 
-bool findPath(node* start, int key, stack<node*> &path) // the path will be stored in the reverse order
+bool findPath(node* start, int key, vector<node*> &path) // the path will be stored in the reverse order
 {
     if (start == NULL) {
         return false;
     }
-    path.push(start);
+    path.push_back(start);
     if (start->key == key) {
         return true;
     }
@@ -491,15 +494,15 @@ bool findPath(node* start, int key, stack<node*> &path) // the path will be stor
         (start->right && findPath(start->right, key, path)) ) {
         return true;
     }
-    path.pop(start);
+    path.pop_back(start);
     return false;
 }
 
-int hasPathSum(struct node* node, int sum)
+bool hasPathSum(node* node, int sum)
 {
     // return true if we run out of tree and sum==0
     if (node == NULL) {
-        return(sum == 0);
+        return (sum == 0);
     }
     else {
         // otherwise check both subtrees
@@ -514,19 +517,73 @@ node* findLCA(node* start, int key1, int key2)
     if (start == NULL) {
         return NULL;
     }
-    stack<node*> s1;
-    stack<node*> s2;
-    if (!findPath(start, key1, s1) || !findPath(start, key2, s2)) {
+    vector<node*> v1;
+    vector<node*> v2;
+    if (!findPath(start, key1, v1) || !findPath(start, key2, v2)) {
         return NULL;
     }
-    while (!s1.empty() && !s2.empty()) {
-        node* n1 = s1.top(); s1.pop();
-        node* n2 = s2.top(); s2.pop();
-        if (n1->key == n2->key) {
-            return n1;
+    int i = 0;
+    for ( ; i < v1.capacity() && i < v2.capacity(); i++) {
+        if (v1[i] != v2[i]) {
+            break;
         }
     }
+    if (i > 0) {
+        return v1[i-1];
+    }
     return NULL;
+}
+
+node* findLCAPerf(node* start, node* p, node* q)
+{
+    if (start == NULL) {
+        return NULL;
+    }
+    if (start == p || start == q) {
+        return start;
+    }
+    node* l = findLCAPerf(start->left, p, q);
+    node* r = findLCAPerf(start->right, p, q);
+    if (l && r) {
+        return start;
+    }
+    return l ? l : r;
+}
+
+int findHeightWithParent(node* p)
+{
+    if (start == NULL) {
+        return NULL;
+    }
+    int height = 0;
+    while (p) {
+        ++height;
+        p = p->parent;
+    }
+    return height;
+}
+
+node* findLCAwithParent(node* p, node* q)
+{
+    int h1 = findHeightWithParent(p);
+    int h2 = findHeightWithParent(q);
+    
+    // swap both nodes in case p is deeper than q.
+    if (h1 > h2) {
+        int temp = h1; h1 = h2; h2 = temp;
+        node* t = p; p = q; q = p;
+    }
+    // invariant: h1 <= h2.
+    int dh = h2 - h1;
+    for (int h = 0; h < dh; h++) {
+        q = q->parent;
+    }
+    while (p && q) {
+        if (p == q) return p;
+        p = p->parent;
+        q = q->parent;
+    }
+    return NULL;  // p and q are not in the same tree
 }
 
 void findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
@@ -782,6 +839,18 @@ node* deserializeBSTIterative(int* pre, int size)
         }
     }
     return root;
+}
+
+//Do an inorder traversal. Note that the horizontal distance from the root
+// on either ends determines the order in which the nodes get printed
+void printBinaryTreeInVerticalOrder(node* root, int dist, hashTable<int,int> hT)
+{
+    if (root == NULL) {
+        return;
+    }
+    printBinaryTreeInVerticalOrder(root->left, dist-1);
+    hT.insert(dist, root->key);
+    printBinaryTreeInVerticalOrder(root->right, dist+1);
 }
 
 int main()

@@ -117,7 +117,7 @@ int partition(int* arr, int start, int end)
     int j = -1;
     for (int i = start; i < end; i++) {
         if (arr[i] <= pivot) {
-            if (i > 0 && a[i-1] > pivot) {
+            if (i > start && a[i-1] > pivot) {
                 int temp = arr[j];
                 arr[j] = arr[i];
                 arr[i] = temp;
@@ -149,7 +149,7 @@ void quicksort(int* arr, int start, int end)
 // heap represented by an array:
 // for a given 'i', left = 2i and right = 2i+1 and parent = floor(i/2)
 // len - heap size not the size of the array
-void maxHeapify(iint* arr, int len, int i)
+void maxHeapify(int* arr, int len, int i)
 {
     int l = 2*i;
     int r = (2*i)+1;
@@ -301,7 +301,7 @@ void IndexedMinPQ::insert(int i, int key)
     keys[i] = key;
     qp[i] = ++len;
     pq[len] = i;
-    return bubbleUp(i);
+    return bubbleUp(len);
 }
 
 void IndexedMinPQ::swap(int i, int j)

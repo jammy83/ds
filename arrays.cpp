@@ -227,14 +227,29 @@ void zeroing2DMatrix(int** matrix, int n, int m)
     }
 }
 
-void rotateByChars(int* arr, int size, int d)
+void reverseIntArray(int* arr, int start, int end)
 {
-    int i = 0, j = d;
-    while (i < size - (d%size)) { // "d" elements are going to get displaced and get placed at the back
+    for (int i = start, j = end; i < j, i++, j--) {
         int temp = arr[i];
-        arr[i++] = a[j];
-        a[j++] = temp;
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
+}
+
+void rotateArray(int* arr, int size, int d)
+{
+    // left rotate the array 'd' times
+    for (int i = 0; i < d; i++) {
+        int temp = arr[0];
+        for (int i = 0; i < size-1; i++) {
+            arr[i] = arr[i+1];
+        }
+    }
+    // reverse the array
+    reverseIntArray(arr, 0, d-1);
+    reverseIntArray(arr, d, size-1);
+    reverseIntArray(arr, 0, size-1);
+    // juggling .. using gcd(size, d)
 }
 
 int max(int a, int b)
@@ -362,6 +377,7 @@ void closestPair2Arrays(int* a, int* b, int n1, int n2, int val)
 }
 
 // 3SUM problem - Given a sorted array, find 3 elements whose sum equals to zero
+//What if the nos are not sorted - rem a+b = -c and you can look up for "-c" in the hash table
 set<vector<int>> 3SUM(int* arr, int size)
 {
     // assuming it is a sorted array, insert the elements in a hash table or BST
@@ -661,6 +677,23 @@ double pow(double b, int a)
         }
     }
 }
+
+//Find the self excluding sum without using the "-" operator
+void selfExcludingSum(int* arr, int size)
+{
+    //maintain 2 arrays of same size one working forward and the other working backward
+    //forward[i] = sum(0..i-1) and reverse[i] = sum(i+1..end)
+    //Update arr[i] = sum(forward[i] and reverse[i])
+    
+    //To get a negative number -- take 2's complement
+    //arr[i] = totalSum+(~arr[i]+1)
+    
+    //two's complement
+    // 8 => 0000 1000
+    // ~8 => 1111 0111
+    // add 1 => 1111 1000
+}
+
 
 //finding the most repeated element in an array given the size of the array (n) and the range of elements
 //{0...k} k <= n
