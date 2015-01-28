@@ -144,12 +144,12 @@ bool isomorphic(char* str1, char* str2)
     if (strlen(str1) != strlen(str2)) {
         return false;
     }
-    int size = 256;
+    int size = 64; // 2*26alphabets(lower and upper case)
     int a1[size];
     int a2[size];
-    int encode1[strlen(str1)];
-    int encode2[strlen(str2)];
     int len = strlen(str1);
+    int encode1[len];
+    int encode2[len];
 
     for (int i = 0; i < size; i++) {
         a1[i] = a2[i] = -1;
@@ -177,5 +177,3 @@ bool isomorphic(char* str1, char* str2)
     }
     return true;
 }
-
-

@@ -552,9 +552,6 @@ node* findLCAPerf(node* start, node* p, node* q)
 
 int findHeightWithParent(node* p)
 {
-    if (start == NULL) {
-        return NULL;
-    }
     int height = 0;
     while (p) {
         ++height;
@@ -575,7 +572,7 @@ node* findLCAwithParent(node* p, node* q)
     }
     // invariant: h1 <= h2.
     int dh = h2 - h1;
-    for (int h = 0; h < dh; h++) {
+    for (int h = 0; h < dh && q != NULL; ++h) {
         q = q->parent;
     }
     while (p && q) {

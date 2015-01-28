@@ -712,6 +712,32 @@ void selfExcludingSum(int* arr, int size)
 // The difference is the missing element. Find abs diff and that will tell you the duplicate element.
 
 
+
+
+// Given an array, find the maximum difference between two array elements given the second
+// element when finding the difference comes after the first.
+// For example: array = [1,2,3,4,5,6,7]
+// We can take the difference between 2 and 1 (2-1), but not the different between 1 and 2 (1-2).
+// Another example: [1,5,8,7,9,-5,15,21] => maxDiff = 26 {-5, 21}
+void findMaxDiff(int* arr, int size)
+{
+    if (arr == NULL || size == 0) {
+        return;
+    }
+    int maxDiff = arr[1] - arr[0];
+    int minElement = arr[0];
+    for (int i = 1; i < size; ++i) {
+        int diff = arr[i] - minElement;
+        if (diff > maxDiff) {
+            maxDiff = diff;
+        }
+        if (arr[i] < minElement) {
+            minElement = arr[i];
+        }
+    }
+    cout << "Max Diff: " << maxDiff << endl;
+}
+
 int main(int argc, char* argv[])
 {
     char test[] = "healo$erd$@";
