@@ -166,10 +166,7 @@ node* Tree:searchBST(int key)
 
 node* Tree::findMaxBST(node* start)
 {
-    if (start == NULL) {
-        return NULL;
-    }
-    while (start->right != NULL) {
+    while (start != NULL) {
         start = start->right;
     }
     return start;
@@ -177,10 +174,7 @@ node* Tree::findMaxBST(node* start)
 
 node* Tree::findMinBST(node* start)
 {
-    if (start == NULL) {
-        return NULL;
-    }
-    while (start->left != NULL) {
+    while (start != NULL) {
         start = start->left;
     }
     return start;
@@ -488,7 +482,7 @@ bool findPath(node* start, int key, vector<node*> &path) // the path will be sto
     if (start->key == key) {
         return true;
     }
-    // findPath seems to work like inorde traversal if you want
+    // findPath seems to work like inorder traversal if you want
     // to implement this iteratively
     if ((start->left && findPath(start->left, key, path)) ||
         (start->right && findPath(start->right, key, path)) ) {
@@ -503,8 +497,7 @@ bool hasPathSum(node* node, int sum)
     // return true if we run out of tree and sum==0
     if (node == NULL) {
         return (sum == 0);
-    }
-    else {
+    } else {
         // otherwise check both subtrees
         int subSum = sum - node->data;
         return(hasPathSum(node->left, subSum) ||
@@ -523,7 +516,7 @@ node* findLCA(node* start, int key1, int key2)
         return NULL;
     }
     int i = 0;
-    for ( ; i < v1.capacity() && i < v2.capacity(); i++) {
+    for ( ; i < v1.capacity() && i < v2.capacity(); ++i) {
         if (v1[i] != v2[i]) {
             break;
         }
@@ -628,9 +621,9 @@ bool isSubTree(Tree* t1, Tree* t2)
     if (t1->root == NULL || t2->root == NULL) {
         return false;
     }
-    stack<node*> s;
-    if (findPath(t1->root, t2->root->key, s)) {
-        node* head = s.top(); s.pop();
+    vector<node*> v;
+    if (findPath(t1->root, t2->root->key, v)) {
+        node* head = v.back();
         matchTree(head, t2->root);
     }
 }
@@ -838,9 +831,9 @@ node* deserializeBSTIterative(int* pre, int size)
     return root;
 }
 
-//Do an inorder traversal. Note that the horizontal distance from the root
+// Do an inorder traversal. Note that the horizontal distance from the root
 // on either ends determines the order in which the nodes get printed
-void printBinaryTreeInVerticalOrder(node* root, int dist, hashTable<int,int> hT)
+void printBinaryTreeInVerticalOrder(node* root, int dist, hashTable<int,int>& hT)
 {
     if (root == NULL) {
         return;
