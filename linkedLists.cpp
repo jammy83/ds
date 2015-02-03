@@ -347,6 +347,53 @@ bool LinkedList::isPalindrome(node* start)
 //intersection point of two singly linked lists
 //reverse both the linked list and walk until the fork
 
+//linked list with a pointer to random item in the list
+struct {
+    int data;
+    RandomListNode* next;
+    RandomListNode* random;
+} RandomListNode;
+
+RandomListNode* copyRandomList(RandomListNode* head)
+{
+    if (head == NULL) {
+        return NULL;
+    }
+    
+    RandomListNode* p = head;
+    
+    // copy every node and insert to list
+    while (p != NULL) {
+        RandomListNode* copy = new RandomListNode(p->data);
+        copy->next = p->next;
+        p->next = copy;
+        p = copy->next;
+    }
+    
+    // copy random pointer for each new node
+    p = head;
+    while (p != null) {
+        if (p->random != NULL) {
+            p->next->random = p->random->next;
+        }
+        p = p->next->next;
+    }
+
+    // break list to two
+    p = head;
+    RandomListNode* newHead = head->next;
+    while (p != NULL) {
+        RandomListNode* temp = p->next;
+        p->next = temp->next;
+        if (temp->next != NULL) {
+            temp->next = temp->next->next;
+        }
+        p = p->next;
+    }
+    
+    return newHead;
+}
+
 // delete item from a doubly linked list
 nodeDLL* removeFromDLL(nodeDLL* item)
 {

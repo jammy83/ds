@@ -7,6 +7,8 @@
 //
 
 //http://kartikkukreja.wordpress.com
+//http://noteworthyalgorithms.blogspot.com
+
 
 #include <iostream>
 #include <string.h>
@@ -244,6 +246,7 @@ void rotateArray(int* arr, int size, int d)
         for (int i = 0; i < size-1; i++) {
             arr[i] = arr[i+1];
         }
+        arr[i] = temp;
     }
     // reverse the array
     reverseIntArray(arr, 0, d-1);
@@ -284,7 +287,7 @@ int mergedMedian(int* arr1, int* arr2, int n)
     if (m1 == m2) {
         return m1;
     }
-    // have even no. of elements. Median is the avg of middle and the next element.
+    // have even no. of elements. Median is the avg of middle and the one before
     bool even = (n%2 == 0) ? true : false;
     int size = even ? n-n/2+1 : n-n/2;
     int offset = even ? n/2-1 : n/2;
@@ -514,6 +517,15 @@ int fibonacci(int n)
         n2 = next;
     }
     cout << endl;
+    //just return the "nth" fibonacci
+    int n1 = 0, n2 = 1;
+    if (n == 0) return 0;
+    for (int i = 0; i < n-2; i++) {
+        next = n1 + n2;
+        n1 = n2;
+        n2 = next;
+    }
+    return (n1+n2);
 }
 
 int factorial(int n)
@@ -552,9 +564,8 @@ int strToInt(char* arr, int size)
         isNeg = true;
     }
     int num = 0;
-    for (int i = 1; i < size; i++) {
-        num = num*10;
-        num += (arr[i]-'0');
+    for (int i = (isNeg) ? 1 : 0; i < size; i++) {
+        num = num*10 + (arr[i]-'0');
     }
     if (isNeg) {
         num = num * -1;
@@ -575,7 +586,7 @@ void intToStr(int num, char* str)
         num = num/10;
     } while (num);
     if (isNeg) temp[i++] = '-';
-    
+
     int j = 0;
     while (i > 0) {
         str[j++] = temp[--i];
@@ -737,6 +748,91 @@ void findMaxDiff(int* arr, int size)
     }
     cout << "Max Diff: " << maxDiff << endl;
 }
+
+/* Given a set of n people, find the celebrity.
+ * Celebrity is a person who:
+ * 1. Knows only himself and no one else
+ * 2. Every one else knows this person
+
+ * You are given the following helper function:
+ * bool knows(i, j);
+ * Returns:
+ * True: if i knows j
+ * False: otherwise
+ */
+// Assumption that there is only one celebrity
+int findCelebrity(int* arr, int size)
+{
+    int c = -1;
+    // Consider A, B, C
+    // if A knows B, A is not celebrity else B is not
+    for (int i = 0; i < size; ++i) {
+        if (knows(arr[c], arr[i])) {
+            if (!knows(arr[i], arr[c])) {
+                c = i;
+            } else {
+                c = ++i; // celebrity is not either A or B; set it to C
+            }
+        }
+    }
+    if (c == -1 || c >= size) {
+        cout << "No Celebrity" << endl;
+        return c;
+    }
+    // Need to confirm if anyone everyone else knows c and c does not know anyone
+    for (int i = 0; i < size; ++i) {
+        if (i == c) continue; // since knows(i, i) will be true
+        if (!knows(arr[i], arr[c]) || knows(arr[c], arr[i])) {
+            c = -1;
+            break;
+        }
+    }
+    return c;
+}
+
+/*
+ Given two strings, return boolean True/False, if they are only one edit apart.
+ Edit can be insert/delete/update of only one character in the string.
+ Eg: -True
+ xyz,xz
+ xyz, xyk
+ xy, xyz
+ -False
+ xyz, xyz
+ xyz,xzy
+ x, xyz
+ */
+bool edit(string s1, string s2)
+{
+    if (s2.size() < s1.size()) {
+        return edit(s2, s1);
+    }
+    if (s1.size() + 1 < s2.size()) {
+        return false;
+    }
+    //invariant: s1.size() (one)<= s2.size()
+    for (int i = 0; i < s1.size(); ++i) {
+        if (s1[i] != s2[i]) {
+            if (s1.size() == s2.size()) {
+                return s1.substr(i+1) == s2.substr(i+1);
+            } else {
+                return s1.substr(i) == s2.substr(i+1);
+            }
+        }
+    }
+    return s1.size() != s2.size();
+}
+
+//Input: A list of points in 2-dimensional space, and an integer k
+//Output: The k input points closest to (5, 5), using Euclidean distance
+//Solution: Compute the euclidean distance of all the points to (5,5) and insert them
+//into the Indexed MIN priority queue. delMin() will return the item with
+//the least distance to (5,5).
+
+//Given an array find an efficient way to sort the list into {high, med, low}
+//Maintain a pointer for the high and low position and keep swapping.. middle elements
+//will naturally be of mid category
+
 
 int main(int argc, char* argv[])
 {

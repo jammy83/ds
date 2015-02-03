@@ -176,6 +176,8 @@ int longestPalindromeSubstring(char* str) // int* str, int len
     return maxLength;
 }
 
+//longest common subsequence
+
 int main()
 {
     return 0;
