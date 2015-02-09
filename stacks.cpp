@@ -58,3 +58,57 @@ int leftShift(int index, bool removeTop)
 // On push, count%2 == 0, even : mid = mid->prev
 // On pop, count%2 == 1, odd : mid = mid->next
 
+//Direction of stack growth in an OS
+//http://eli.thegreenplace.net/2011/02/04/where-the-top-of-the-stack-is-on-x86/
+/*In a Linux (or other Operating System) process when a subroutine is called, the memory for local variables
+comes from stack area of the process. Any dynamically allocated memory (using malloc, new, etc.) comes from
+the heap area of the process. During recursion local memory is allocated from stack area during function
+call and get cleared when the function execution is done.
+
+The memory is being represented with lowest address being at the bottom and highest being at the top.
+Here are the steps to find the direction of stack growth in recursion using a quick C code.
+*/
+
+void test_stack_growth_direction(recursion_depth) {
+    int local_int1;
+    printf("%p\n", &local_int1);
+    if (recursion_depth < 10) {
+        test_stack_growth_direction(recursion_depth + 1);
+    }
+}
+
+int main () {
+    test_stack_growth_direction(0);
+    return 0;
+}
+
+/*
+out put on MAC
+0x7fff6e9e19ac
+0x7fff6f9e89a8
+0x7fff6f9e8988
+0x7fff6f9e8968
+0x7fff6f9e8948
+0x7fff6f9e8928
+0x7fff6f9e8908
+0x7fff6f9e88e8
+0x7fff6f9e88c8
+0x7fff6f9e88a8
+0x7fff6f9e8888
+output on ubuntu
+
+0x7ffffeec790c
+0x7ffffeec78dc
+0x7ffffeec78ac
+0x7ffffeec787c
+0x7ffffeec784c
+0x7ffffeec781c
+0x7ffffeec77ec
+0x7ffffeec77bc
+0x7ffffeec778c
+0x7ffffeec775c
+0x7ffffeec772c
+ 
+The stack is growing downwards on these specific setups as memory addresses are reducing.
+This depends on the architecture of the system and may have different behavior for other architectures.
+*/
