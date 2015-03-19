@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <cmath>
 
 class node {
  public:
@@ -39,28 +40,46 @@ class LinkedList {
     LinkedList() : head(NULL) {}
     ~LinkedList();
     void insert(int val);
-    void insert(node** head, node* newItem);
-    void remove(node** head, node* item);
+    bool insertInOrder(int val);
+    void removeAll(int val);
+    void remove(int val);
+    void printList();
+    void reverseList();
     bool isPalindrome(node* start);
     node* findLoopBeginning(node* start);
     // the lists are numbers represented in reverse
     node* addLists(node* l1, node* l2, int carry);
-    node* reverseListPairwise(node* start);
-    void reverseList(node** head);
     node* partitionList(node* start, int val);
-    node* findKtoLastElement(int k);
+    int findKtoLastElement(int k);
     void removeDups();
     void deleteNode(node* item);
-    bool insertInOrder(int val);
+    void reverseListPairwise();
+    node* getIntersectionPoint(LinkedList& l1, LinkedList& l2);
+
+ private:
+    void insert(node** head, node* newItem);
+    void removeAllUtil(node** head, int val);
+    void removeUtil(node** head, int val);
+    void reverseList(node** head);
+    void reverseListPairwise(node** head);
+    int getLength(LinkedList& l);
 };
 
 LinkedList::~LinkedList()
 {
-    node* start = head;
-    while (start != NULL) {
-        node* temp = start;
-        start = start->next;
+    while (head != NULL) {
+        node* temp = head;
+        head = head->next;
         delete temp;
+    }
+}
+
+void LinkedList::printList()
+{
+    node* curr = head;
+    while (curr) {
+        cout << curr->key << endl;
+        curr = curr->next;
     }
 }
 
@@ -75,10 +94,10 @@ bool LinkedList::insertInOrder(int val)
         return true;
     }
     node* prev = NULL;
-    node* start = head;
-    while (start != NULL) {
-        if (val < start->key) {
-            item->next = start;
+    node* curr = head;
+    while (curr != NULL) {
+        if (val < curr->key) {
+            item->next = curr;
             if (prev != NULL) {
                 prev->next = item;
             } else {
@@ -86,8 +105,8 @@ bool LinkedList::insertInOrder(int val)
             }
             return true;
         }
-        prev = start;
-        start = start->next;
+        prev = curr;
+        curr = curr->next;
     }
     prev->next = item;
     return true;
@@ -101,30 +120,73 @@ void LinkedList::insert(int val)
     }
 }
 // If you are updating what the pointer is pointing to, pass in a pointer to pointer
-// or else just the pointer object
 void LinkedList::insert(node** start, node* newItem)
 {
     newItem->next = *start;
     *start = newItem;
 }
 
-void LinkedList::remove(node** head, node* item)
+//remove all elements of a given value
+void LinkedList::removeAll(int val)
 {
-    if (*head == item) {
-        // if the element we are deleting is the head of the list
-        *head = *head->next;
-        delete item;
+    return removeAllUtil(&head, val);
+}
+void LinkedList::removeAllUtil(node**head, int val)
+{
+    if ((*head) == NULL) {
         return;
     }
+    //head is the item to be removed
+    while ((*head) != NULL && (*head)->key == val) {
+        node* nextNode = (*head)->next;
+        (*head)->next = NULL;
+        delete *head;
+        *head = nextNode;
+    }
+    //if the element to be removed is somewhere in
+    //the middle of the list
+    node* curr = *head;
+    while (curr->next != NULL) {
+        if (curr->next->key == val) {
+            node* nextNode = curr->next;
+            curr->next = nextNode->next;
+            nextNode->next = NULL;
+            delete nextNode;
+        } else {
+            curr = curr->next;
+        }
+    }
+}
 
-    node* start = *head;
-    while (start->next != NULL) {
-        if (start->next == item) {
-            start->next = item->next;
-            delete item;
+//remove an element of a given value
+void LinkedList::remove(int val)
+{
+    return removeUtil(&head, val);
+}
+void LinkedList::removeUtil(node** head, int val)
+{
+    if (*head == NULL) {
+        return;
+    }
+    //head is the item to be removed
+    if ((*head)->key == val) {
+        node* nextNode = (*head)->next;
+        (*head)->next = NULL;
+        delete *head;
+        *head = nextNode;
+        return;
+    }
+    //if the element to be removed is in the middle
+    node* curr = *head;
+    while (curr->next != NULL) {
+        if (curr->next->key == val) {
+            node* nextNode = curr->next;
+            curr->next = nextNode->next;
+            nextNode->next = NULL;
+            delete nextNode;
             return;
         }
-        start = start->next;
+        curr = curr->next;
     }
 }
 
@@ -135,7 +197,7 @@ void LinkedList::removeDups()
     }
     HashTable hashT = new HashTable();
     node* start = head;
-    node* prev = start;
+    node* prev = NULL;
     while (start) {
         if (hashT.containsKey(start->key)) {
             prev->next = start->next;
@@ -150,7 +212,7 @@ void LinkedList::removeDups()
     }
 }
 
-void LinkedList::findKtoLastElement(int k)
+int LinkedList::findKtoLastElement(int k)
 {
     node* start = head;
     node* knode = NULL;
@@ -164,7 +226,7 @@ void LinkedList::findKtoLastElement(int k)
         }
         start = start->next;
     }
-    return knode;
+    return ((knode) ? knode->key : -1);
 }
 
 void LinkedList::deleteNode(node* item)
@@ -229,43 +291,23 @@ node* LinkedList::partitionList(node* start, int val)
     return start;
 }
 
-//reversing linked lists pair-wise
-node* LinkedList::reverseListPairwise(node* start)
-{
-    if (start == NULL) {
-        return NULL;
-    }
-    node* prev = start;
-    node* curr = start->next;
-    while (curr != NULL) {
-        node* nextNode = curr->next;
-        curr->next = prev;
-        if (prev == start) {
-            prev->next = NULL;
-        }
-        prev = curr;
-        curr = nextNode;
-    }
-    return prev;
-}
-
 //reverse the linked list
 //keep moving the elements to the head
-void reverseList(node** head)
+void LinkedList::reverseList()
+{
+    return reverseList(&head);
+}
+void LinkedList::reverseList(node** head)
 {
     if (*head == NULL) {
-        return NULL;
+        return;
     }
-    node* start = *head; //mark the original beginning of the list
-    node* curr = head->next;
-    while (curr != NULL) {
+    node* curr = *head;
+    while (curr->next != NULL) {
         node* nextNode = curr->next;
-        curr->next = *head;
-        if (*head == start) {
-            *head->next = NULL;
-        }
-        *head = curr;
-        curr = nextNode;
+        curr->next = nextNode->next;
+        nextNode->next = *head;
+        *head = nextNode;
     }
 }
 
@@ -344,9 +386,6 @@ bool LinkedList::isPalindrome(node* start)
     return true;
 }
 
-//intersection point of two singly linked lists
-//reverse both the linked list and walk until the fork
-
 //linked list with a pointer to random item in the list
 struct {
     int data;
@@ -354,6 +393,11 @@ struct {
     RandomListNode* random;
 } RandomListNode;
 
+//Another solution: is to use a hashMap to store the
+//mapping between the random and random'.
+//First walk the original list and create a copy list
+//walk it again looking up the hashMap for every random
+//pointer the corresponding random' and updating the copy list
 RandomListNode* copyRandomList(RandomListNode* head)
 {
     if (head == NULL) {
@@ -375,6 +419,8 @@ RandomListNode* copyRandomList(RandomListNode* head)
     while (p != null) {
         if (p->random != NULL) {
             p->next->random = p->random->next;
+        } else {
+            p->next->random = NULL;
         }
         p = p->next->next;
     }
@@ -392,6 +438,73 @@ RandomListNode* copyRandomList(RandomListNode* head)
     }
     
     return newHead;
+}
+
+int LinkedList::getLength(LinkedList& l)
+{
+    node* p = l.head;
+    int len = 0;
+    while (p) {
+        len++;
+        p = p->next;
+    }
+    return len;
+}
+//intersection point of two singly linked lists
+//Soln: Find the length of the 2 linked list and calculate the diff
+//Move the longer list to that point and start comparing the 2 list
+//walking until you find the common element
+node* LinkedList::getIntersectionPoint(LinkedList& l1, LinkedList& l2)
+{
+    if (l1.head == NULL || l2.head == NULL) {
+        return NULL;
+    }
+    int len1 = getLength(l1);
+    int len2 = getLength(l2);
+    int d = abs(len1-len2);
+    node *p1 = l1.head, *p2 = l2.head;
+
+    if (len2 > len1) {
+        p2 = l1.head; p1 = l2.head;
+        int temp = len1; len1 = len2; len2 = temp;
+    }
+    //invariant: l1 >= l2 and p1,len1 points to the longer list
+    for (int i = 0; i < d && p1 != NULL; ++i) {
+        p1 = p1->next;
+    }
+    node* res = NULL;
+    while (p1 && p2) {
+        if (p1->key == p2->key) {
+            if (res == NULL) {
+                res = p1;
+            }
+        } else if (res) { // keep walking the list to the end to make sure the values are alinged
+            return NULL;
+        }
+        p1 = p1->next;
+        p2 = p2->next;
+    }
+    return res;
+}
+
+//reversing linked lists pair-wise
+void LinkedList::reverseListPairwise(node** head)
+{
+    node* prev = NULL;
+    node* curr = *head;
+    while (curr && curr->next != NULL) {
+        node* nextNode = curr->next;
+        node* newCurr = nextNode->next;
+        curr->next = nextNode->next;
+        nextNode->next = curr;
+        if (prev) {
+            prev->next = nextNode;
+        } else {
+            *head = nextNode;
+        }
+        prev = curr;
+        curr = newCurr;
+    }
 }
 
 // delete item from a doubly linked list
@@ -422,22 +535,62 @@ nodeDLL* removeFromDLL(nodeDLL* item)
 }
 
 //swap item in a DLL
-void swapPairwise(nodeDLL* head)
+void swapPairwise(nodeDLL** head)
 {
-    nodeDLL* first = head;
+    nodeDLL* first = *head;
+    nodeDLL* prev = first->prev;
     while (first != NULL && first->next != NULL) {
-        nodeDLL* two = first->next;
-        nodeDLL* third = two->next;
-        node* prev = first->prev;
+        nodeDLL* second = first->next;
+        nodeDLL* third = second->next;
         first->next = third;
-        first->prev = two;
-        two->next = first;
-        two->prev = prev;
+        first->prev = second;
+        second->next = first;
+        second->prev = prev;
+        if (prev) {
+            prev->next = second;
+        } else {
+            *head = second;
+        }
+        prev = first;
         first = third;
     }
 }
 
+
 int main()
 {
+    LinkedList test;
+    test.insert(2);
+    test.insert(2);
+    test.insert(8);
+    test.insert(9);
+    test.insert(7);
+    test.insert(2);
+    test.insert(2);
+    test.insert(6);
+    test.insert(2);
+    test.insert(2);
+    test.removeAll(2);
+    test.printList();
+    test.reverseList();
+    cout << endl << endl;
+    test.printList();
+    cout << test.findKtoLastElement(3) << endl;
+    /*
+     LinkedList test;
+     test.insert(8);
+     test.insert(9);
+     test.insert(7);
+     test.insert(6);
+     test.insert(2);
+     LinkedList test1;
+     test1.insert(8);
+     test1.insert(9);
+     test1.insert(3);
+     node* res = test.getIntersectionPoint(test, test1);
+     if (res) {
+        cout << res->key << endl;
+     }
+     */
     return 0;
 }

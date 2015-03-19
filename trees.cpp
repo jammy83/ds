@@ -561,7 +561,7 @@ node* findLCAwithParent(node* p, node* q)
     // swap both nodes in case p is deeper than q.
     if (h1 > h2) {
         int temp = h1; h1 = h2; h2 = temp;
-        node* t = p; p = q; q = p;
+        node* t = p; p = q; q = t;
     }
     // invariant: h1 <= h2.
     int dh = h2 - h1;

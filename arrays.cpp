@@ -311,8 +311,9 @@ void closestPair(int* arr, int size, int val)
     // assuming this is a sorted array
     int l = 0;
     int r = size - 1;
-    int last_l, last_r, last_diff;
-    last_l = last_r = last_diff = -1;
+    int last_l, last_r;
+    last_l = last_r = 0;
+    int last_diff = MAX_INT;
     while (l < r) {
         int sum = arr[l] + arr[r];
         int diff = abs(sum - val);
@@ -357,7 +358,8 @@ void closestPair2Arrays(int* a, int* b, int n1, int n2, int val)
     int l = 0;
     int r = n2 - 1;
     int last_l, last_r, last_diff;
-    last_l = last_r = last_diff = -1;
+    last_l = last_r = 0;
+    last_diff = MAX_INT;
     while (l < n1 && r >= 0) {
         int sum = a[l] + b[r];
         int diff = abs(sum - val);
@@ -451,7 +453,7 @@ int searchInSortedRotatedArray(int* arr, int start, int end, int n)
     if (arr[mid] == n) {
         return mid;
     }
-    if (arr[start] <= arr[mid-1]) {
+    if (arr[start] < arr[mid-1]) {
         // sorted half
         if (arr[start] >= n && n <= arr[mid-1]) {
             // search in this half
@@ -459,14 +461,15 @@ int searchInSortedRotatedArray(int* arr, int start, int end, int n)
         } else {
             return searchInSortedRotatedArray(arr, mid+1, end, n);
         }
-    } else if (arr[mid+1] <= arr[end]) {
+    } else if (arr[mid+1] < arr[end]) {
         // sorted half
         if (arr[mid+1] >= n && n <= arr[end]) {
             return binarySearch(arr, mid+1, end, n);
         } else {
             return searchInSortedRotatedArray(arr, start, mid-1, n);
         }
-    } else if (arr[start] == arr[mid]) { // handles duplicates with the left half containing the same elements
+    } else if (arr[start] == arr[mid]) {
+        // handles duplicates with the left half containing the same elements
         if (arr[mid] != arr[end]) { // the second half is different
             // search in the second half since we can discard the first as
             // "n" has already been compared with mid
@@ -519,8 +522,8 @@ int fibonacci(int n)
     cout << endl;
     //just return the "nth" fibonacci
     int n1 = 0, n2 = 1;
-    if (n == 0) return 0;
-    for (int i = 0; i < n-2; i++) {
+    if (n == 0) return n1;
+    for (int i = 2; i < n; i++) {
         next = n1 + n2;
         n1 = n2;
         n2 = next;
@@ -561,7 +564,7 @@ int strToInt(char* arr, int size)
 {
     bool isNeg = false;
     if (arr[0] == '-') {
-        isNeg = true;
+        isNeg = 998true;
     }
     int num = 0;
     for (int i = (isNeg) ? 1 : 0; i < size; i++) {
@@ -693,8 +696,8 @@ double pow(double b, int a)
 void selfExcludingSum(int* arr, int size)
 {
     //maintain 2 arrays of same size one working forward and the other working backward
-    //forward[i] = sum(0..i-1) and reverse[i] = sum(i+1..end)
-    //Update arr[i] = sum(forward[i] and reverse[i])
+    //forward[i] = sum(0..i) and reverse[i] = sum(end..i+1)
+    //Update arr[i] = sum(forward[i-1] and reverse[i-1])
     
     //To get a negative number -- take 2's complement
     //arr[i] = totalSum+(~arr[i]+1)
@@ -732,7 +735,7 @@ void selfExcludingSum(int* arr, int size)
 // Another example: [1,5,8,7,9,-5,15,21] => maxDiff = 26 {-5, 21}
 void findMaxDiff(int* arr, int size)
 {
-    if (arr == NULL || size == 0) {
+    if (arr == NULL || size <= 2) {
         return;
     }
     int maxDiff = arr[1] - arr[0];
@@ -763,10 +766,10 @@ void findMaxDiff(int* arr, int size)
 // Assumption that there is only one celebrity
 int findCelebrity(int* arr, int size)
 {
-    int c = -1;
+    int c = 0;
     // Consider A, B, C
     // if A knows B, A is not celebrity else B is not
-    for (int i = 0; i < size; ++i) {
+    for (int i = 1; i < size; ++i) {
         if (knows(arr[c], arr[i])) {
             if (!knows(arr[i], arr[c])) {
                 c = i;
