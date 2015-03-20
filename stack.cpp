@@ -12,7 +12,7 @@
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
-vector<MyStack<int>> stacks = new vector<MyStack<int>>();
+vector< MyStack<int> > stacks = new vector< MyStack<int> >();
 MyStack<int> newStack = new MyStack<int>();
 stacks.push_back(newStack);
 
