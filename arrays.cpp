@@ -833,6 +833,7 @@ bool edit(string s1, string s2)
 //into the Indexed MIN priority queue. delMin() will return the item with
 //the least distance to (5,5).
 
+//Category: DNF: http://en.wikipedia.org/wiki/Dutch_national_flag_problem
 //Given an array find an efficient way to sort the list into {high, med, low}
 //Maintain a pointer for the high and low position and keep swapping.. middle elements
 //will naturally be of mid category
