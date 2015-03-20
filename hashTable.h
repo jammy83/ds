@@ -32,7 +32,7 @@ class hashTableRecord {
  public:
     t_key key;
     t_val val;
-    hashTableRecord* _next; // for chaining keys with the same hash
+    hashTableRecord<t_key,t_val> *_next; // for chaining keys with the same hash
     const t_key& giveKey() { return t_key; };
 };
 

@@ -101,6 +101,7 @@ T MyStack<T>::pop()
         res = _top->_data;
         element<T>* head = _top;
         _top = _top->_next;
+        head->_next = NULL;
         delete head;
         _count--;
     }
