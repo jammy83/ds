@@ -177,3 +177,26 @@ bool isomorphic(char* str1, char* str2)
     }
     return true;
 }
+
+int strstr(char* haystack, char* needle)
+{
+    if (needle == NULL) { //null string
+        return NULL;
+    }
+    if (!*needle) { //empty string
+        return haystack;
+    }
+    char *p1 = haystack;
+    while (*p1) {
+        char *p1Begin = p1, *p2 = needle;
+        while (*p1 && *p2 && *p1 == *p2) {
+            p1++;
+            p2++;
+        }
+        if (!*p2) {
+            return p1Begin;
+        }
+        p1 = p1Begin + 1;
+    }
+    return NULL;
+}

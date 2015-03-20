@@ -9,16 +9,34 @@
 #ifndef _hashTable_h
 #define _hashTable_h
 
-template<class t_key, class t_record, unsigned long t_val>
+/*
+//someDerivedClass - SessionIndexRecord
+//UDT - CsmLogicalSessionId
+class someDerivedClass : public hashTableRecord<int,UDT>
+{
+ public:
+   UDT& const giveKey() { return _key; }
+ private:
+   UDT _key;
+};
+template<class t_key, class t_record>
 class hashTableRecord {
 public:
-    t_key _key;
-    t_val _value;
     t_record* _next; // for chaining keys with the same hash
-    //virtual const t_key& giveKey() const = 0;
-    t_key giveKey() const { return _key; }
+    virtual const t_key& giveKey() const = 0;
+};
+*/
+
+template<class t_key, class t_val>
+class hashTableRecord {
+ public:
+    t_key key;
+    t_val val;
+    hashTableRecord* _next; // for chaining keys with the same hash
+    const t_key& giveKey() { return t_key; };
 };
 
+//typedef hashMap<int,hashTableRecord<int,int>,256> hashTable;
 template<class t_key, class t_record, unsigned long t_size>
 class hashMap {
 private:
@@ -35,7 +53,10 @@ public:
     }
     ~hashMap() {
         for (unsigned long int i = 0; i < t_size; i++) {
-            delete _table[i];
+            if (_table[i] != NULL) {
+                delete _table[i];
+                _table[i] = NULL;
+            }
         }
         _recCount = 0;
     }
@@ -54,8 +75,12 @@ void hashMap<t_key,t_record,t_size>::insert(t_record* rec)
     rec->_next = _table[hash];
     _table[hash] = rec;
     _recCount++;
-    //Note: for linear probling simply find an empty spot
-    //by doing (hash+1)%t_size until _table[hash] != NULL && _table[hash]->giveKey() != key
+    /* Note: for linear probling simply find an empty spot by doing the following:
+     * unsigned long hash = rec->giveKey()%size;
+     * while (_table[hash] != NULL && _table[hash]->giveKey() != rec->giveKey()) {
+     *    hash = (hash+1)%size;
+     * }
+     */
 }
 
 template<class t_key, class t_record, unsigned long t_size>

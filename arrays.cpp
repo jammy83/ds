@@ -148,6 +148,7 @@ int computeCompressedLength(char* str)
             last = str[i];
         }
     }
+    //for the last char
     char tmp[65];
     snprintf(tmp, sizeof(tmp), "%d", count);
     size += 1 + strlen(tmp);
@@ -564,7 +565,7 @@ int strToInt(char* arr, int size)
 {
     bool isNeg = false;
     if (arr[0] == '-') {
-        isNeg = 998true;
+        isNeg = true;
     }
     int num = 0;
     for (int i = (isNeg) ? 1 : 0; i < size; i++) {
@@ -671,7 +672,7 @@ double powerOfUtil(double b, int a)
     if (a == 0 || b == 1) {
         return 1;
     }
-    if (a == 1) {
+    if (a == 1 || b == 0) {
         return b;
     }
     double t = powerOf(b, a/2);
@@ -807,10 +808,10 @@ int findCelebrity(int* arr, int size)
  */
 bool edit(string s1, string s2)
 {
-    if (s2.size() < s1.size()) {
+    if (s2.length() < s1.length()) {
         return edit(s2, s1);
     }
-    if (s1.size() + 1 < s2.size()) {
+    if (s1.length() + 1 < s2.length()) {
         return false;
     }
     //invariant: s1.size() (one)<= s2.size()
@@ -823,30 +824,7 @@ bool edit(string s1, string s2)
             }
         }
     }
-    return s1.size() != s2.size();
-}
-
-int strstr(char* haystack, char* needle)
-{
-    if (needle == NULL) { //null string
-        return NULL;
-    }
-    if (!*needle) { //empty string
-        return haystack;
-    }
-    char *p1 = haystack;
-    while (*p1) {
-        char *p1Begin = p1, *p2 = needle;
-        while (*p1 && *p2 && *p1 == *p2) {
-            p1++;
-            p2++;
-        }
-        if (!*p2) {
-            return p1Begin;
-        }
-        p1 = p1Begin + 1;
-    }
-    return NULL;
+    return s1.length() != s2.length();
 }
 
 //Input: A list of points in 2-dimensional space, and an integer k
@@ -858,7 +836,30 @@ int strstr(char* haystack, char* needle)
 //Given an array find an efficient way to sort the list into {high, med, low}
 //Maintain a pointer for the high and low position and keep swapping.. middle elements
 //will naturally be of mid category
-
+void sortPriority(char* priorities)
+{
+    int cur = 0, high = 0, low = strlen(priorities)- 1;
+    char temp;
+    while (cur < low) {
+        if (priorities[cur] == 'H') {
+            if (cur == high) {
+                cur++;
+                continue;
+            }
+            temp = priorities[high];
+            priorities[high] = priorities[cur];
+            priorities[cur] = temp;
+            high++;
+        } else if (priorities[cur] == 'L') {
+            temp = priorities[low];
+            priorities[low] = priorities[cur];
+            priorities[cur] = temp;
+            low--;
+        } else {
+            cur++;
+        }
+    }
+}
 
 int main(int argc, char* argv[])
 {
