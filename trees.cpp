@@ -46,20 +46,12 @@ class Tree {
     // Operations
     bool insertBST(int key);
     node* searchBST(int key);
-    bool findPath(node* start, int key, stack<node*> &path);
-    node* findLCA(node* start, int key1, int key2);
-    node* findLCABST(node* start, int key1, int key2);
-    node* findLCAwithParent(node* p, node* q);
-    node* findLCAPerf(node* start, node* p, node* q);
-    //Use parent pointers or just recuse down the tree
-    // A simple inorder traversal of the nodes will tell you this as well.
-    node* findPredecessorInOrder();
-    node* findSuccessorInOrder();
-    // For just binary trees traverse the tree keeping
-    // track of min and max
+
+    // For just binary trees traverse the tree keeping track of min and max
     node* findMinBST(node* start);
     node* findMaxBST(node* start);
-    // - Traversals for any binary tree including BST -
+
+    // Traversals for any binary tree including BST
     int traverseByLevel();
     void traverseInOrder(node* start);
     void traverseInOrderIterative(node* start);
@@ -67,31 +59,51 @@ class Tree {
     void traversePreOrderItertive(node* start);
     void traversePostOrder(node* start);
     int traversePostOrderIterative(node* start); // returns max depth at root or height of the tree
-    // ------------------------------------------------
-    // applies to any binary tree (including BST)
+
+    bool checkIfBST(node* start);
+
+    // Height: applies to any binary tree (including BST)
     int findHeight();
-    int findHeightWithParent(node* p);
+    int findHeightWrtToAGivenNode(node* p);
     int findMaxDepth(node* start);
     bool checkIfBalanced(node* start);
     int checkIfHeightBalanced(node* start);
-    // simply do an inorder traversal and check if the values are in a sorted order
-    // maintain the previous visited node and check if prev <= curr to avoid a complete traversal
-    // Or apply the property that max(left subtree) <= root < min(right subtree).
-    bool checkIfBST(node* start);
+
+    // Use parent pointers or just recuse down the tree
+    // A simple inorder traversal of the nodes will tell you this as well.
+    node* findPredecessorInOrder();
+    node* findSuccessorInOrder();
+
+    //LCA of binary and BST
+    node* findLCABST(node* start, int key1, int key2);
+    bool findPath(node* start, int key, vector<node*> &path);
+    node* findLCA(node* start, int key1, int key2);
+    node* findLCAPerf(node* start, node* p, node* q);
+    node* findLCAwithParent(node* p, node* q);
+
+    //Rank
+    int getRank(int key);
+    int kthSmallestElement(int n);
+    
     node* createTree(int* arr, int start, int end);
     bool isSubTree(node* t1, node* t2);
     bool matchTree(node* t1, node* t2);
-    void inOrderTraversalWithoutStack(node* start); // threaded binary tree // not imeplemented
     void convertTreeToSumTree();
-    int getRank(int key);
-    int kthSmallestElement(int n);
-    nodeDLL* convertTreeToDLL();
     bool isFoldable();
     void mirror();
     void doubleTree();
+    bool hasPathSum(node* node, int sum);
+    void findPathWithSum(node* start, vector<node*> &v, int& sum, int target);
+    nodeDLL* convertTreeToDLL();
+
+    //Serialize/de-serialize
     void serializeBinaryTree(node* root, FILE* fp);
     void deserializeBinaryTree(node** root, FILE* fp);
     node* deserializeBSTIterative(int* pre, int size);
+
+    void printBinaryTreeInVerticalOrder(node* root, int dist, hashTable<int,int>& hT);
+
+    void inOrderTraversalWithoutStack(node* start); // threaded binary tree // not imeplemented
 };
 
 void Tree::destroyTree(node* start)
@@ -166,18 +178,22 @@ node* Tree:searchBST(int key)
 
 node* Tree::findMaxBST(node* start)
 {
+    node* last = NULL;
     while (start != NULL) {
+        last = start;
         start = start->right;
     }
-    return start;
+    return last;
 }
 
 node* Tree::findMinBST(node* start)
 {
+    node* last = NULL;
     while (start != NULL) {
+        last = start;
         start = start->left;
     }
-    return start;
+    return last;
 }
 
 // Traversals using recursion.
@@ -276,25 +292,8 @@ int Tree::traversePostOrderIterative(node* start)
     return maxDepth;
 }
 
-int Tree::findHeight()
-{
-    return findMaxDepth(root);
-    //iterative - Do a post order traversal iteratively
-    return traversePostOrderIterative(root);
-    // return traverseByLevel();
-}
-
-int Tree::findMaxDepth(node* start)
-{
-    if (start == NULL) {
-        return 0;
-    }
-    int leftD = findMaxDepth(start->left);
-    int rightD = findMaxDepth(start->right);
-    return ((leftD > rightD) ? leftD : rightD) + 1);
-}
-
-// returns the height of the tree
+// returns the height of the tree and prints the
+// nodes by level
 int Tree::traverseByLevel()
 {
     node* start = root;
@@ -316,6 +315,52 @@ int Tree::traverseByLevel()
             if (front->right) { q.push(front->right); }
             count--;
         }
+        cout << endl;
+    }
+    return height;
+}
+
+bool Tree::checkIfBST(node* start, int min, int max)
+{
+    // Every node's value has to be within the range
+    // provided by the min, max values
+    if (start == NULL) {
+        return false;
+    }
+    if (start->key > max || start->key < min) {
+        return false;
+    }
+    if (!checkIfBST(start->left, min, start->key) ||
+        !checkIfBST(start->right, start->key, max)) {
+        return false;
+    }
+    return true;
+}
+
+int Tree::findHeight()
+{
+    return findMaxDepth(root);
+    //iterative - Do a post order traversal iteratively
+    // return traversePostOrderIterative(root);
+    // return traverseByLevel();
+}
+
+int Tree::findMaxDepth(node* start)
+{
+    if (start == NULL) {
+        return 0;
+    }
+    int leftD = findMaxDepth(start->left);
+    int rightD = findMaxDepth(start->right);
+    return ((leftD > rightD) ? leftD : rightD) + 1);
+}
+
+int findHeightWrtToAGivenNode(node* p)
+{
+    int height = 0;
+    while (p) {
+        ++height;
+        p = p->parent;
     }
     return height;
 }
@@ -353,23 +398,6 @@ bool Tree::checkIfBalanced(node* start)
         return true;
     }
     return false;
-}
-
-bool Tree::checkIfBST(node* start, int min, int max)
-{
-    // Every node's value has to be within the range
-    // provided by the min, max values
-    if (start == NULL) {
-        return false;
-    }
-    if (start->key > max || start->key < min) {
-        return false;
-    }
-    if (!checkIfBST(start->left, min, start->key) ||
-        !checkIfBST(start->right, start->key, max)) {
-        return false;
-    }
-    return true;
 }
 
 node* Tree::findPredecessorInOrder(node* start)
@@ -473,7 +501,7 @@ node* findLCABST(node* start, int key1, int key2)
     ////////////
 }
 
-bool findPath(node* start, int key, vector<node*> &path) // the path will be stored in the reverse order
+bool findPath(node* start, int key, vector<node*> &path)
 {
     if (start == NULL) {
         return false;
@@ -492,19 +520,6 @@ bool findPath(node* start, int key, vector<node*> &path) // the path will be sto
     return false;
 }
 
-bool hasPathSum(node* node, int sum)
-{
-    // return true if we run out of tree and sum==0
-    if (node == NULL) {
-        return (sum == 0);
-    } else {
-        // otherwise check both subtrees
-        int subSum = sum - node->data;
-        return(hasPathSum(node->left, subSum) ||
-               hasPathSum(node->right, subSum));
-    } 
-} 
-
 node* findLCA(node* start, int key1, int key2)
 {
     if (start == NULL) {
@@ -516,7 +531,7 @@ node* findLCA(node* start, int key1, int key2)
         return NULL;
     }
     int i = 0;
-    for ( ; i < v1.capacity() && i < v2.capacity(); ++i) {
+    for ( ; i < v1.size() && i < v2.size(); ++i) {
         if (v1[i] != v2[i]) {
             break;
         }
@@ -527,6 +542,7 @@ node* findLCA(node* start, int key1, int key2)
     return NULL;
 }
 
+//assumes that both the nodes are in the tree!
 node* findLCAPerf(node* start, node* p, node* q)
 {
     if (start == NULL) {
@@ -543,20 +559,10 @@ node* findLCAPerf(node* start, node* p, node* q)
     return l ? l : r;
 }
 
-int findHeightWithParent(node* p)
-{
-    int height = 0;
-    while (p) {
-        ++height;
-        p = p->parent;
-    }
-    return height;
-}
-
 node* findLCAwithParent(node* p, node* q)
 {
-    int h1 = findHeightWithParent(p);
-    int h2 = findHeightWithParent(q);
+    int h1 = findHeightWrtToAGivenNode(p);
+    int h2 = findHeightWrtToAGivenNode(q);
     
     // swap both nodes in case p is deeper than q.
     if (h1 > h2) {
@@ -576,29 +582,28 @@ node* findLCAwithParent(node* p, node* q)
     return NULL;  // p and q are not in the same tree
 }
 
-void findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
+int getRank(int key)
 {
-    if (start == NULL) {
-        return;
-    }
-    
-    v.push_back(start);
-    
-    sum += start->key;
-    if (sum == target) {
-        for (vector<node*>::itertor itr = v.begin(); itr != v.end(); itr++) {
-            node* n = *itr;
-            cout << n->key << " ";
-        }
-        cout << endl;
-    }
-    
-    findPathWithSum(start->left, v, sum, target);
-    findPathWithSum(start->right, v, sum, target);
+    node* target = searchBST(key);
+    return ((target != NULL) ? target->rank : 0);
+}
 
-    node* last = v.back();
-    sum -= last->key;
-    v.pop_back();
+int kthSmallestElement(int n)
+{
+    node* start = root;
+    if (start == NULL) {
+        return -1;
+    }
+    while (start != NULL) {
+        if (start->rank+1 == n) {
+            return start->key;
+        } else if (start->rank < n) {
+            start = start->right;
+            n -= (start->rank+1);
+        } else {
+            start = start->left;
+        }
+    }
 }
 
 // create a balanced tree given a sorted array of elements
@@ -658,28 +663,92 @@ int Tree::convertTreeToSumTree()
     return prev+start->key;
 }
 
-int getRank(int key)
+bool isFoldable()
 {
-    node* target = searchBST(key);
-    return ((target != NULL) ? target->rank : 0);
+    if (root == NULL) {
+        return NULL;
+    }
+    return isFoldableUtil(root->left, root->right);
 }
 
-int kthSmallestElement(int n)
+bool isFoldableUtil(node* n1, node* n2)
 {
-    node* start = root;
+    if (!n1 && !n2) {
+        return true;
+    }
+    if (!n1 || !n2) {
+        return false;
+    }
+    return (isFoldableUtil(n1->left, n2->right) &&
+            isFoldableUtil(n1->right, n2->left));
+}
+
+//changes the tree to its mirror image
+void mirror(node* root)
+{
+    if (root == NULL) {
+        return;
+    }
+    mirror(root->left);
+    mirror(root->right);
+    if (root->left || root->right) {
+        node* temp = root->left;
+        root->left = root->right;
+        root->right = temp;
+    }
+}
+
+void doubleTree(node* root)
+{
+    if (root == NULL) {
+        return;
+    }
+    doubleTree(root->left);
+    doubleTree(root->right);
+    node* newNode = dupNode(root);
+    if (newNode == NULL) {
+        return;
+    }
+    newNode->left = root->left;
+    root->left = newNode;
+}
+
+bool hasPathSum(node* node, int sum)
+{
+    // return true if we run out of tree and sum==0
+    if (node == NULL) {
+        return (sum == 0);
+    } else {
+        // otherwise check both subtrees
+        int subSum = sum - node->data;
+        return(hasPathSum(node->left, subSum) ||
+               hasPathSum(node->right, subSum));
+    }
+}
+
+void findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
+{
     if (start == NULL) {
-        return -1;
+        return;
     }
-    while (start != NULL) {
-        if (start->rank+1 == n) {
-            return start->key;
-        } else if (start->rank < n) {
-            start = start->right;
-            n -= (start->rank+1);
-        } else {
-            start = start->left;
+    
+    v.push_back(start);
+    
+    sum += start->key;
+    if (sum == target) {
+        for (vector<node*>::itertor itr = v.begin(); itr != v.end(); itr++) {
+            node* n = *itr;
+            cout << n->key << " ";
         }
+        cout << endl;
     }
+    
+    findPathWithSum(start->left, v, sum, target);
+    findPathWithSum(start->right, v, sum, target);
+    
+    node* last = v.back();
+    sum -= last->key;
+    v.pop_back();
 }
 
 struct {
@@ -720,55 +789,6 @@ nodeDLL* convertTreeToDLL()
     return head;
 }
 
-bool isFoldable()
-{
-    if (root == NULL) {
-        return NULL;
-    }
-    return isFoldableUtil(root->left, root->right);
-}
-
-bool isFoldableUtil(node* n1, node* n2)
-{
-    if (!n1 && !n2) {
-        return true;
-    }
-    if (!n1 || !n2) {
-        return false;
-    }
-    return (isFoldableUtil(n1->left, n2->right) &&
-           isFoldableUtil(n1->right, n2->left));
-}
-
-//changes the tree to its mirror image
-void mirror(node* root)
-{
-    if (root == NULL) {
-        return;
-    }
-    mirror(root->left);
-    mirror(root->right);
-    if (root->left || root->right) {
-        node* temp = root->left;
-        root->left = root->right;
-        root->right = temp;
-    }
-}
-
-void doubleTree(node* root)
-{
-    if (root == NULL) {
-        return;
-    }
-    doubleTree(root->left);
-    doubleTree(root->right);
-    node* newNode = dupNode(root);
-    if (newNode == NULL) {
-        return;
-    }
-    newNode->left = root->left;
-    root->left = newNode;
-}
 
 void serializeBinaryTree(node* root, FILE *fp)
 {
