@@ -12,6 +12,39 @@ using namespace std;
 
 static const int CUTOFF = 7;
 
+void swap(int* arr, int i, int j)
+{
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+// insertion sort. Everything to the left of the array is sorted
+// for the new element, tries to find a spot through exchanges
+void insertionSort(int* arr, int start, int end)
+{
+    for (int i = start; i <= end; i++) {
+        for (int j = i; j > start && a[j] < a[j-1]; j--) {
+            swap(arr, j-1, j);
+        }
+    }
+}
+
+void selectionSort(int* arr, int start, int end)
+{
+    for (int i = 0; i <= end; i++) {
+        int min = i;
+        for (int j = i+1; j <= end; j++) {
+            if (arr[j] < arr[min]) {
+                min = j; // store the index with the smallest element in the subarray starting at i+1
+            }
+        }
+        if (min != i) {
+            swap(arr, min, i);
+        }
+    }
+}
+
 // mergesort arr[start...end] using aux[start...end]
 void combine(int* arr, int start, int mid, int end, int* aux)
 {
@@ -47,19 +80,6 @@ void mergesort(int* arr, int start, int end, int* aux)
     combine(arr, start, mid, end, aux);
 }
 
-// insertion sort. Everything to the left of the array is sorted
-// for the new element, tries to find a spot through exchanges
-void insertionSort(int* arr, int start, int end)
-{
-    for (int i = start; i <= end; i++) {
-        for (int j = i; j > start && a[j] < a[j-1]; j--) {
-            int temp = a[j-1];
-            a[j-1] = a[j];
-            a[j] = temp;
-        }
-    }
-}
-
 void combinePerf(int* src, int start, int mid, int end, int* dst)
 {
     // src contains the sorted sub arrays
@@ -93,44 +113,20 @@ void mergesortPerf(int* src, int start, int end, int* dst)
     combinePerf(src, start, mid, end, dst);
 }
 
-void selectionSort(int* arr, int start, int end)
-{
-    for (int i = 0; i <= end; i++) {
-        int min = i;
-        for (int j = i+1; j <= end; j++) {
-            if (arr[j] < min) {
-                min = j; // store the index with the smallest element in the subarray starting at i+1
-            }
-        }
-        if (min != i) {
-            int temp = arr[i];
-            arr[i] = arr[min];
-            arr[min] = temp;
-        }
-    }
-}
-
 //chose the pivot element to be the last element of the array
 int partition(int* arr, int start, int end)
 {
+    //based on Cormen
     int pivot = arr[end];
-    int j = -1;
+    int low = start;
     for (int i = start; i < end; i++) {
         if (arr[i] <= pivot) {
-            if (i > start && a[i-1] > pivot) {
-                int temp = arr[j];
-                arr[j] = arr[i];
-                arr[i] = temp;
-                j++;
-            }
-        } else if (j == -1) {
-            j = i;
+            swap(arr, i, low);
+            low++;
         }
     }
-    arr[end] = arr[j];
-    arr[j] = pivot;
-    // return the pivot index
-    return j;
+    swap(arr[low], pivot);
+    return low;
 }
 
 void quicksort(int* arr, int start, int end)
@@ -142,13 +138,18 @@ void quicksort(int* arr, int start, int end)
     }
 }
 
+//3-way quicksort tries to solve the problem when there are duplicates
+//Complexity is quadratic unless the partitioning stops on equal keys
+//Solution: DNF by Dijkstra
 
 //https://www.cs.berkeley.edu/~jrs/61b/lec/25
 
-
 // heap represented by an array:
 // for a given 'i', left = 2i and right = 2i+1 and parent = floor(i/2)
-// len - heap size not the size of the array
+// len - no. of actual elements in the array
+// size - heap array capacity
+// time complexity: O(lgn)
+// Note: the array begins at the index 1
 void maxHeapify(int* arr, int len, int i)
 {
     int l = 2*i;
@@ -159,9 +160,7 @@ void maxHeapify(int* arr, int len, int i)
     }
     maxIndex = (arr[l] > arr[r]) ? l : r;
     if (arr[maxIndex] > arr[i]) { //one of the children is > parent
-        int temp = arr[i];
-        arr[i] = arr[maxIndex];
-        arr[maxIndex] = temp;
+        swap(arr, i, maxIndex);
         return maxHeapify(arr, len, maxIndex);
     }
 }
@@ -173,21 +172,19 @@ void buildMaxHeap(int* arr, int size)
     }
 }
 
-// arr runs from 1..size
+// arr[1..size]
 void heapsort(int* arr, int size)
 {
     buildMaxHeap(arr, size);
     int len = size;
     for (int i = size; i > 1; i--) {
-        int temp = a[i];
-        a[i] = a[1]; // swap the max element with the last
-        a[1] = temp;
+        // swap the max element with the last
+        swap(arr, i, 1);
         len--;
         maxHeapify(arr, len, 1);
     }
 }
 
-// priority queues
 int heapExtractMax(int* arr, int size)
 {
     if (size < 1) {
@@ -207,9 +204,7 @@ bool heapIncreaseKey(int* arr, int size, int i, int key)
     arr[i] = key;
     // push the max element up..
     while (i > 1 && arr[i/2] < arr[i]) { // parent less than the updated child
-        int temp = arr[i/2];
-        arr[i/2] = arr[i];
-        arr[i] = temp;
+        swap(arr, i, i/2);
         i = i/2;
     }
 }
@@ -382,7 +377,8 @@ void IndexedMinPQ::delete(int i)
     pq[len+1] = -1;
 }
 
-//Union find data structure
+//Union find data structure that supports union and find operation along
+//with a connected operation that answers if two entities are connected
 class UnionFind {
  private:
     int* parent;
@@ -392,8 +388,8 @@ class UnionFind {
 
  public:
     UnionFind(int val) : count(val), items(val) {
-        parent = new parent(val);
-        rank = new rank(val);
+        parent = new parent[val];
+        rank = new rank[val];
         for (int i = 0; i < val; i++) {
             parent[i] = i;
             rank[i] = 0;
