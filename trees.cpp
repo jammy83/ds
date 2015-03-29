@@ -11,6 +11,11 @@
 #include <stack>
 #include <queue>
 
+struct {
+    int _data;
+    LinkedListNode* _next;
+} LinkedListNode;
+
 // Define a tree node
 class node {
  public:
@@ -64,6 +69,7 @@ class Tree {
     void traversePreOrderItertive(node* start);
     void traversePostOrder(node* start);
     int traversePostOrderIterative(node* start); // returns max depth at root or height of the tree
+    void traverseLevelOrderZigZag(node* start);
 
     bool checkIfBST(node* start);
 
@@ -89,7 +95,8 @@ class Tree {
     int getRankBST(int key);
     int kthSmallestElementBST(int k);
     
-    node* createTree(int* arr, int start, int end);
+    node* sortedArrayToBST(int* arr, int start, int end);
+    node* sortedListToBST(LinkedListNode* head, int start, int end);
     bool isSubTree(node* t1, node* t2);
     bool matchTree(node* t1, node* t2);
     void convertTreeToSumTree();
@@ -313,7 +320,7 @@ int Tree::traverseByLevel()
         while (count > 0) {
             node* front = q.front();
             q.pop();
-            cout << front->key << endl;
+            cout << front->key << " ";
             if (front->left) { q.push(front->left); }
             if (front->right) { q.push(front->right); }
             count--;
@@ -321,6 +328,33 @@ int Tree::traverseByLevel()
         cout << endl;
     }
     return height;
+}
+
+void traverseLevelOrderZigZag(node* start)
+{
+    if (start == NULL) {
+        return;
+    }
+    stack<node*> s;
+    s.push(start);
+    bool leftToRight = false;
+    while (!s.empty()) {
+        int count = s.size();
+        while (count) {
+            node* curr = s.top(); s.pop();
+            cout << curr->key << " ";
+            if (leftToRight) {
+                if (curr->right) s.push(curr->right);
+                if (curr->left) s.push(curr->left);
+            } else {
+                if (curr->left) s.push(curr->left);
+                if (curr->right) s.push(curr->right);
+            }
+            count--;
+        }
+        cout << endl;
+        leftToRight = !leftToRight;
+    }
 }
 
 bool Tree::checkIfBST(node* start, int min, int max)
@@ -610,16 +644,37 @@ int Tree::kthSmallestElementBST(int k)
     return -1;
 }
 
-// create a balanced tree given a sorted array of elements
-node* Tree::createTree(int* arr, int start, int end)
+//create a balanced tree given a sorted array of elements
+//Time complexity O(n)
+node* Tree::sortedArrayToBST(int* arr, int start, int end)
 {
-    int mid = (start+end)/2;
+    if (start > end) return NULL;
+    int mid = start + (end-start) / 2; //avoids overflow
     node* root = new node(arr[mid]);
     if (root) {
         root->left = createTree(arr, start, mid-1);
         root->right = createTree(arr, mid+1, end);
     }
     return root;
+}
+
+//Naive solution: Always finding the middle element traversing n/2 elements each time
+//Time Complexity: O(nlogn)
+//Below is the bottom-up approach taken by just walking the linked list and
+//constructing the tree by linking them to its parent
+//Time Complexity: O(n)
+node* Tree::sortedListToBST(LinkedListnode* head, int start, int end)
+{
+    if (start > end) return NULL;
+    int mid = start + (end-start) / 2; //avoids overflow
+    node* leftChild = sortedListToBST(head, start, mid-1);
+    node* parent = new node(head->_data);
+    if (parent) {
+        parent->left = leftChild;
+        head = head->_next;
+        parent->right = sortedListToBST(head, mid+1, end);
+    }
+    return parent;
 }
 
 //What is a subtree? If the values matched?

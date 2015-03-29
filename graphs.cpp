@@ -176,13 +176,13 @@ void Graph::BFS(int start)
             edgeNode curr = *itr;
             int v = curr.index;
 
-            if (info.processed[v] == false || directed) {
-                processEdge(top, v);
-            }
             if (info.discovered[v] == false) {
                 info.discovered[v] = true;
                 info.parent[v] = top;
                 visit.push(v);
+            }
+            if (info.processed[v] == false || !directed) {
+                processEdge(top, v);
             }
         }
         
@@ -193,7 +193,8 @@ void Graph::BFS(int start)
 int Graph::connectedComponents()
 {
     initTraversalInfo();
-    for (int i = 1, c = 0; i <= nVertices; i++) {
+    int c = 0;
+    for (int i = 1; i <= nVertices; i++) {
         if (info.discovered[i] == false) {
             c++;
             BFS(i);  
@@ -257,7 +258,7 @@ void Graph::DFSUtil(int start, int& time)
             processEdge(start, index);
         }
     }
- 
+
     info.processed[start] = true;  
     info.exitTime[start] = ++time;
  
@@ -297,9 +298,9 @@ void Graph::performTopologicalSort()
 
 void PrimMST(Graph& g, int start)
 {
-    bool inTree[g.nVertices+1] = {};  // is the vertex in the tree
+    bool inTree[g.nVertices+1] = {}; // is the vertex in the tree
     int distance[g.nVertices+1]; // cost of adding to the tree
-    IndexedMinPQ pq(g.nVertices);
+    IndexedMinPQ pq(g.nVertices); // sort the indices based on the distance
     int parent[g.nVertices+1];
 
     for (int i = 1; i <= g.nVertices; i++) {
@@ -348,7 +349,7 @@ void KruskalMST(Graph& g)
     int weight = 0;
     queue<edge> mst;
     while (!pq.empty() && mst.size() < g.nVertices-1) {
-        edge e = pq.delMin(); // PQ odered by weights
+        edge e = pq.delMin(); // PQ odered by edge weights
         int v = e.either();
         int w = e.other(v);
         if (!uf.connected(v, w)) { // v-w does not create a cycle

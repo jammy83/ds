@@ -54,7 +54,7 @@ int leftShift(int index, bool removeTop)
 // pop more elements from s1 onto s2.
 // when you have to push() to s1, simply push onto s1
 
-//Queue implemetation using linked lists will maintain a head and tail pointer
+//Queue implemetation using linked lists will maintain a head and tail pointer: push_back(), pop_front()
 
 //--------------------------------------------------------------------------------------------------------
 

@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <deque>
 
 using namespace std;
 
@@ -96,6 +97,8 @@ bool isPermutation(char* str1, char* str2)
 }
 
 // Replaces space with "%20"
+//in-place replacement with the assumption that the input string
+//is wide enough to hold the size after replacement
 void replaceSpaces(char* str, int size)
 {
     if (str == NULL) {
@@ -103,7 +106,7 @@ void replaceSpaces(char* str, int size)
     }
     //walk the string to find the no. of occurrences of replace char
     int count = 0;
-    for (int i = 0; i < strlen(str); i++) {
+    for (int i = 0; i < strlen(str); i++) { // or until char *pStr = str; *pStr != '\0' or *pStr
         if (str[i] == ' ') {
             count++;
         }
@@ -126,6 +129,46 @@ void replaceSpaces(char* str, int size)
             str[j] = str[i];
         }
     }
+}
+
+//String in-place replacement
+//replace all the occurrences of a given pattern(="abc") to 'X' and note that contiguous
+//occurrence should be replaced only once
+//Going from 3 chars to one. So can start replacing from the beginning since it won't
+//over-write characters
+bool isMatch(char* str, const char* pattern) {
+    while (*str && *pattern) {
+        if (*str++ != *pattern++) {
+            return false;
+        }
+    }
+    if (*pattern) {
+        return false;
+    }
+    return true;
+}
+void replace(char* str, const char* pattern)
+{
+    if (str == NULL || pattern == NULL) {
+        return;
+    }
+    char *pSlow = str, *pFast = str;
+    int pLen = strlen(pattern);
+
+    while (*pFast != '\0') {
+        bool matched = false;
+        while (isMatch(pFast, pattern)) {
+            pFast += pLen;
+            matched = true;
+        }
+        if (matched) {
+            *pSlow++ = 'X';
+        } else if (*pFast != '\0') {
+            *pSlow++ = *pFast++;
+        }
+    }
+    
+    *pSlow = '\0'; // terminate with a null char
 }
 
 // Compute run length and compress the given string
@@ -429,7 +472,7 @@ void findPairForDifference(int* arr, int size, int n)
 
 int binarySearch(int* arr, int start, int end, int n)
 {
-    int mid = (start+end)/2;
+    int mid = start + (end-start) / 2; //avoids overflow
     if (arr[mid] == n) {
         return mid;
     }
@@ -449,8 +492,8 @@ int searchInSortedRotatedArray(int* arr, int start, int end, int n)
     if (end < start) {
         return -1;
     }
-    
-    int mid = start+end/2;
+
+    int mid = start + (end-start) / 2; //avoids overflow
     if (arr[mid] == n) {
         return mid;
     }
@@ -549,16 +592,35 @@ int factorial(int n)
 }
 
 //check if a number is a palindrome
-bool isNumPalindrome(int x)
+bool isPalindrome(int x)
 {
+    if (x < 0) return false;
+
+    //in the solution below, be wary of overflows and
+    //make use a bigger type like long long
     //reverse the no and find the diff between the original no and reveresed
     int rev = 0;
     int num = x;
-    while (num > 0) {
+    while (num != 0) {
         rev = rev*10 + num%10;
         num = num/10;
     }
     return ((x-rev) == 0) ? true : false;
+
+    //alternative soln: with no extra space
+    //comapre the first and last digits, if same, chop off and compare the ends
+    int div = 1;
+    while (x/div > 10) {
+        div *= 10;
+    }
+    while (x != 0) {
+        int l = x/div;
+        int r = x%10;
+        if (l != r) return false;
+        x = (x % div)/10; //chop off digits from either end
+        div /= 100;
+    }
+    return true;
 }
 
 int strToInt(char* arr, int size)
@@ -734,20 +796,25 @@ void selfExcludingSum(int* arr, int size)
 // For example: array = [1,2,3,4,5,6,7]
 // We can take the difference between 2 and 1 (2-1), but not the different between 1 and 2 (1-2).
 // Another example: [1,5,8,7,9,-5,15,21] => maxDiff = 26 {-5, 21}
-void findMaxDiff(int* arr, int size)
+// Alternative way of asking the same problem: Best time to buy and sell stock
+// Say you have an array for which the ith element is the price of a given stock on day i.
+// If you were only permitted to buy one share of the stock and sell one share of the stock,
+// design an algorithm to find the best times to buy and sell.
+void findMaxDiff(int* arr, int size, int& min, int& max)
 {
-    if (arr == NULL || size <= 2) {
+    if (arr == NULL || size <= 1) {
         return;
     }
-    int maxDiff = arr[1] - arr[0];
-    int minElement = arr[0];
+    min = 0; max = 0; // index of the minimum and maximum value seen so far
+    int maxDiff = arr[1] - arr[min];
     for (int i = 1; i < size; ++i) {
-        int diff = arr[i] - minElement;
+        int diff = arr[i] - arr[min]
         if (diff > maxDiff) {
             maxDiff = diff;
+            max = i;
         }
-        if (arr[i] < minElement) {
-            minElement = arr[i];
+        if (arr[i] < arr[min]) {
+            min = i;
         }
     }
     cout << "Max Diff: " << maxDiff << endl;
@@ -860,6 +927,51 @@ void sortPriority(char* priorities)
             cur++;
         }
     }
+}
+
+//Sliding window maximum
+//http://articles.leetcode.com/2011/01/sliding-window-maximum.html
+//Soln 1: Indexed max priority queue and
+//Soln 2: double-ended queue(deque,http://en.wikipedia.org/wiki/Double-ended_queue#Applications)
+//Soln 3: Using a regualr queue implementation that supports pop_front(), push_back()
+//        and getMax()/getMin() - achieved using 2 queues
+//b[i] stores the max value from arr[i..i+w-1]
+void slidingWindowMax(int *arr, int size, int w, int* b)
+{
+    //using indexed max priority queue
+    IndexedMaxPQ pq;
+    for (int i = 0; i < w; i++) {
+        pq.insert(i, arr[i]);
+    }
+    for (int i = w; i < size; i++) {
+        b[i-w] = pq.maxKey();
+        pq.delete(i-w);
+        pq.insert(i, arr[i]);
+    }
+    b[size-w] = pq.maxKey();
+
+    //using deque
+    //Add the new element onto the back and pop off the element
+    //in the left edge from the front
+    //challenge: make sure the largest element always is at the front
+    deque<int> q; // store the indices
+    for (int i = 0; i < w; i++) {
+        while (!q.empty() && arr[i] >= arr[q.back()]) {
+            //remove redundant elements from the queue
+            //q.g [10, 5, 3] and new element is '11'. No need to maintain 10,5,3
+            q.pop_back();
+        }
+        q.push_back(i);
+    }
+    for (int i = w; i < size; i++) {
+        b[i-w] = arr[q.front()];
+        while (!q.empty() && arr[i] >= arr[q.back()])
+            q.pop_back();
+        while (!q.empty() && q.front() <= i-w)
+            q.pop_front();
+        q.push_back(i);
+    }
+    b[n-w] = arr[q.front()];
 }
 
 int main(int argc, char* argv[])

@@ -16,15 +16,41 @@ using namespace std;
 
 //How to sort a given string? if assuming only ascii chars are involved, all
 //comparisons can be performed like integers and so can use any of the sorting algos
-//3way string quciksort is the solution -- Robert Sedgewick
+//3way string quicksort is the solution -- Robert Sedgewick
 
 //How to check if one string is a anagram of another -
 //check one is a permutation of the other - solved already
 
+
+//find a given pattern within a string
+int strstr(char* haystack, char* needle)
+{
+    if (needle == NULL) { //null string
+        return NULL;
+    }
+    if (!*needle) { //empty string
+        return haystack;
+    }
+    char *p1 = haystack;
+    while (*p1) {
+        char *p1Begin = p1, *p2 = needle;
+        while (*p1 && *p2 && *p1 == *p2) {
+            p1++;
+            p2++;
+        }
+        if (!*p2) {
+            return p1Begin;
+        }
+        p1 = p1Begin + 1;
+    }
+    return NULL;
+}
+
 //KMP - pattern matching
 //construct the prefix function
-// lps - longest prefix of the pattern which is also a valid suffix of itself
-// lps[i] represents the no. of chars in the suffix that map to a valid prefix
+//lps - longest prefix of the pattern which is also a valid suffix of itself
+//lps[i] represents the no. of chars in the suffix that map to a valid prefix
+
 void computePrefixFunction(char* pattern, int size, int* lps)
 {
     if (pattern == NULL || size == 0 || lps == NULL) {
@@ -144,7 +170,7 @@ bool isomorphic(char* str1, char* str2)
     if (strlen(str1) != strlen(str2)) {
         return false;
     }
-    int size = 64; // 2*26alphabets(lower and upper case)
+    int size = 256; // asciii characters(lower and upper case)
     int a1[size];
     int a2[size];
     int len = strlen(str1);
@@ -155,6 +181,7 @@ bool isomorphic(char* str1, char* str2)
         a1[i] = a2[i] = -1;
     }
 
+    //associate an index value with each alphabet and look at the encoding
     int index = 0;
     for (int i = 0; i < len; i++) {
         if (a1[str1[i]] == -1) {
@@ -178,25 +205,3 @@ bool isomorphic(char* str1, char* str2)
     return true;
 }
 
-int strstr(char* haystack, char* needle)
-{
-    if (needle == NULL) { //null string
-        return NULL;
-    }
-    if (!*needle) { //empty string
-        return haystack;
-    }
-    char *p1 = haystack;
-    while (*p1) {
-        char *p1Begin = p1, *p2 = needle;
-        while (*p1 && *p2 && *p1 == *p2) {
-            p1++;
-            p2++;
-        }
-        if (!*p2) {
-            return p1Begin;
-        }
-        p1 = p1Begin + 1;
-    }
-    return NULL;
-}

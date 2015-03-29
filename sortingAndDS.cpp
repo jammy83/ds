@@ -139,11 +139,15 @@ void quicksort(int* arr, int start, int end)
 }
 
 //3-way quicksort tries to solve the problem when there are duplicates
-//Complexity is quadratic unless the partitioning stops on equal keys
+//Complexity of general quicksort is quadratic unless the partitioning stops on equal keys
 //Solution: DNF by Dijkstra
 
 //https://www.cs.berkeley.edu/~jrs/61b/lec/25
 
+/*********************
+// MAX Priority Queue
+*********************/
+ 
 // heap represented by an array:
 // for a given 'i', left = 2i and right = 2i+1 and parent = floor(i/2)
 // len - no. of actual elements in the array
@@ -215,19 +219,27 @@ void maxHeapInsert(int* arr, int size, int key)
     heapIncreaseKey(arr, size, size+1, key);
 }
 
+/*********************
+// MIN Priority Queue
+**********************/
 
-//min PQ
 //Similar to max, just reverse the order of comparisons
 //implement heapDecreaseKey() instead of heapIncreaseKey() for maxPQ
 //Heapsort - min element is the arr[1]; return that and move arr[size] to arr[1]
 //and call minHeapify()
 
+//Note: Min or Max priority queue will not provide an option to *delete* an element
+//Only *indexed* priority queues can provide that since lookup is straightforward
 
-//Indexed min PQ
+/*************************
+Indexed Min Priority Queue
+**************************/
+
 class IndexedMinPQ {
  private:
-    int* pq;
-    int* qp;
+    int* pq; // arranges the items in the min priority queue based on the keys
+    int* qp; // inverse mapping stores the position of the key
+             //at index 'i' (in keys), in the priority queue
     int* keys;
     int size; // max size of the queue
     int len; // current length of the queue
@@ -299,6 +311,10 @@ void IndexedMinPQ::insert(int i, int key)
     return bubbleUp(len);
 }
 
+keys[1] = 5, qp[1] = 3, pq[1] = 3
+keys[2] = 3, qp[2] = 2, pq[2] = 2
+keys[3] = 2, qp[3] = 1, pq[3] = 1
+
 void IndexedMinPQ::swap(int i, int j)
 {
     int temp = pq[i];
@@ -318,7 +334,7 @@ void IndexedMinPQ::minHeapify(int i) // bubble down
         return;
     }
     int minIndex = (keys[l] < keys[r]) ? l : r;
-    if (pq[i] > pq[minIndex]) {
+    if (keys[minIndex] < keys[i]) {
         swap(i, minIndex);
         return minHeapify(minIndex);
     }
@@ -376,6 +392,10 @@ void IndexedMinPQ::delete(int i)
     bubbleUp(heapIndex);
     pq[len+1] = -1;
 }
+
+/**********
+UNION FIND
+**********/
 
 //Union find data structure that supports union and find operation along
 //with a connected operation that answers if two entities are connected

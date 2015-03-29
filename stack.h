@@ -19,12 +19,14 @@ public:
     ~element() { _next = NULL; }
 };
 
+//implements a stack using a linked list by pushing and popping off
+//elements at the head of the linked list
 template <class T>
 class MyStack {
     element<T> *_top;
     int _count;
-    MyStack _min; //min stack
-    
+    MyStack<T> _minStack;
+
     void push(element<T> **head, element<T> *item);
     element<T>* pop();
     
@@ -50,7 +52,7 @@ public:
         }
         return res;
     }
-    T min() const;
+    T getMin() const;
 };
 
 template <class T>
@@ -61,29 +63,8 @@ void MyStack<T>::push(T item)
         push(&_top, newE);
         _count++;
     }
-    element<T> *newMin = new element<T>(item);
-    if (newMin) {
-        if (_min.isEmpty() || _min.peek() > item) {
-            push(&_min._top, newMin);
-            _min._count++;
-        } else {
-            // find the right position for this element
-            int popped = 0;
-            while (!_min.isEmpty() && _min.peek() > item) {
-                element<T>* first = _min.popElement();
-                popped++;
-                push(&_top, first);
-            }
-            if (popped) {
-                push(&_min._top, newMin);
-                _min._count++;
-                while (popped) {
-                    element<T>* front = popElement();
-                    push(&_min._top, front);
-                    popped--;
-                }
-            }
-        }
+    if (_minStack.isEmpty() || item <= _minStack.peek()) {
+        _minStack.push(item);
     }
 }
 template <class T>
@@ -98,12 +79,27 @@ T MyStack<T>::pop()
 {
     T res;
     if (_top) {
+        if (_minStack.peek() == _top->_data) {
+            _minStack.pop();
+        }
         res = _top->_data;
         element<T>* head = _top;
         _top = _top->_next;
         head->_next = NULL;
         delete head;
         _count--;
+    }
+    if (_minStack.isEmpty() && !isEmpty()) {
+        //walk the original stack and find the new minimum
+        element<T>* curr = _top;
+        T min = curr->_data;
+        while (curr) {
+            if (curr->_data < min) {
+                min = curr->_data;
+            }
+            curr = curr->_next;
+        }
+        _minStack.push(min);
     }
     return res;
 }
@@ -121,12 +117,13 @@ element<T>* MyStack::popElement()
     return NULL;
 }
 
+//http://articles.leetcode.com/2010/11/stack-that-supports-push-pop-and-getmin.html
 template <class T>
-T MyStack<T>::min()
+T MyStack<T>::getMin()
 {
     T res;
-    if (!_min.isEmpty()) {
-        res = _min.pop();
+    if (!_minStack.isEmpty()) {
+        res = _minStack.pop();
     }
     return res;
 }

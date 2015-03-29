@@ -55,6 +55,7 @@ class LinkedList {
     void deleteNode(node* item);
     void reverseListPairwise();
     node* getIntersectionPoint(LinkedList& l1, LinkedList& l2);
+    bool insertInOrderCyclic(node** aNode, int val);
 
  private:
     void insert(node** head, node* newItem);
@@ -556,6 +557,34 @@ void swapPairwise(nodeDLL** head)
     }
 }
 
+//insert an item into a cyclic sorted linked list, maintaining the sorted order,
+//given a pointer to any node in the list
+bool LinkedList::insertInOrderCyclic(node** aNode, int val)
+{
+    node* item = new node(val);
+    if (item == NULL) {
+        return false;
+    }
+    if ((*aNode) == NULL) {
+        //the list is empty
+        //make the item point back to itself
+        item->next = item;
+        *aNode = item;
+        return true;
+    }
+    node* prev = NULL;
+    node* curr = *aNode;
+    do {
+        prev = curr;
+        curr = curr->next;
+        if (val <= curr->key && val >= prev->key) break;
+        if (prev->key > curr->key && (curr->key > val || val > prev->key) break;
+    } while (curr != (*aNode));
+    //handles only one item in the list as well
+    item->next = curr;
+    prev->next = item;
+    return true;
+}
 
 int main()
 {
@@ -594,3 +623,5 @@ int main()
      */
     return 0;
 }
+
+

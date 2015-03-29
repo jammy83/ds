@@ -13,13 +13,13 @@
 //subsequence means the values need not be consecutive but maintain the relative order
 int LIS(int* arr, int size)
 {
+    //lis will store the length of the longest increasing subsequence ending at 'i'
     int lis[size] = {};
     //initialize to 1
     for (int i = 0; i < size; i++) {
         lis[i] = 1;
     }
     int max = 1;
-    //lis will store the length of the longest increasing subsequence ending at 'i'
     for (int i = 1; i < size; i++) {
         for (int j = 0; j < i; j++) {
             if (arr[i] > arr[j] && lis[i] < lis[j]+1) {
@@ -100,18 +100,17 @@ int maxProductSubarray(int* arr, int size)
 }
 
 // hops 1/2/3 in a staircase
+// how many possible ways to run up the stairs
+// if instead of storing intermediate results, we compute the result, its exponential
+// since each function call branches out to 3 more calls.
 int computeHops(int n, int* arr, int size)
 {
-    /* The caller should initialize the array elements to -1
-    for (int i = 0; i < size; i++) {
-        arr[i] = -1;
-    }
-     */
+    // initialize the elements of arr to -1 on first invocation of this function
     if (n < 0 || n > size) {
         return 0;
     } else if (n == 0) {
         return 1;
-    } else if (arr[n] != -1) { // in the initial caller of computeHops() init arr to -1
+    } else if (arr[n] != -1) {
         return arr[n];
     } else {
         arr[n] = computeHops(n-1, arr, size) +
@@ -121,6 +120,8 @@ int computeHops(int n, int* arr, int size)
     }
 }
 
+//magic index is the one where a[i] = i
+//Given a sorted array of *distinct* integers, find the magic index if one exists
 int magicIndex(int* arr, int start, int end)
 {
     if (end < start || start < 0) {
@@ -129,7 +130,7 @@ int magicIndex(int* arr, int start, int end)
     int mid = (start+end)/2;
     if (arr[mid] == mid) {
         return mid;
-    } else if (arr[mid] < mid) {       //another idea was arr[mid] > end+1 or 'n', discard everything to the right
+    } else if (arr[mid] < mid) { //another idea was arr[mid] > end+1 or 'n', discard everything to the right
         //search right of mid
         magicIndex(arr, mid+1, end);
     } else {
@@ -154,7 +155,7 @@ int longestPalindromeSubstring(char* str) // int* str, int len
         table[i][i] = true;
         if (i < len - 1 && str[i] == str[i+1]) {
             table[i][i+1] = true;
-            start = i;
+            start = i; // records the last instance of the palindrome occurrence
             maxLength = 2;
         }
     }
@@ -164,7 +165,7 @@ int longestPalindromeSubstring(char* str) // int* str, int len
             int j = i+k-1;
             if (table[i+1][j-1] && str[i] == str[j]) {
                 table[i][j] = true;
-                if (k > maxLength) { // this means it will record the first occurrence of the palindrome
+                if (k > maxLength) { // this means it will record the first occurrence of the palindrome for a given length
                     start = i;
                     maxLength = k;
                 }
