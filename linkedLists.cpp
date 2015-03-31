@@ -56,6 +56,7 @@ class LinkedList {
     void reverseListPairwise();
     node* getIntersectionPoint(LinkedList& l1, LinkedList& l2);
     bool insertInOrderCyclic(node** aNode, int val);
+    void frontBackSplit(node* head, node** first, node** second);
 
  private:
     void insert(node** head, node* newItem);
@@ -304,12 +305,13 @@ void LinkedList::reverseList(node** head)
         return;
     }
     node* curr = *head;
-    while (curr->next != NULL) {
+    while (curr) {
         node* nextNode = curr->next;
-        curr->next = nextNode->next;
-        nextNode->next = *head;
-        *head = nextNode;
+        curr->next = prev;
+        prev = curr;
+        curr = nextNode;
     }
+    *head = prev;
 }
 
 // the lists are numbers represented in reverse
@@ -369,7 +371,7 @@ bool LinkedList::isPalindrome(node* start)
         slow = slow->next;
         fast = fast->next->next;
     }
-    // If there are odd no. of elements, fast won't be NULL
+    // has odd no. of elements; skip the middle and point past it
     if (fast != NULL) {
         slow = slow->next;
     }
@@ -578,12 +580,27 @@ bool LinkedList::insertInOrderCyclic(node** aNode, int val)
         prev = curr;
         curr = curr->next;
         if (val <= curr->key && val >= prev->key) break;
-        if (prev->key > curr->key && (curr->key > val || val > prev->key) break;
+        if (prev->key > curr->key && (curr->key > val || val > prev->key)) break;
     } while (curr != (*aNode));
     //handles only one item in the list as well
     item->next = curr;
     prev->next = item;
     return true;
+}
+
+void LinkedList::frontBackSplit(node* head, node** first, node** second)
+{
+    if (head == NULL) {
+        return;
+    }
+    node *pSlow = head, *pFast = head;
+    while (pFast != NULL && pFast->next != NULL) {
+        pSlow = pSlow->next;
+        pFast = pFast->next->next;
+    }
+    *first = *head;
+    *second = pSlow->next;
+    pSlow->next = NULL;
 }
 
 int main()

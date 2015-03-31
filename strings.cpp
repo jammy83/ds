@@ -21,6 +21,109 @@ using namespace std;
 //How to check if one string is a anagram of another -
 //check one is a permutation of the other - solved already
 
+// Reveres a given string
+void reverse(char* str)
+{
+    if (str == NULL) {
+        return;
+    }
+    for (int i = 0, j = strlen(str)-1; i < j; i++, j--) {
+        char tmp = str[i];
+        str[i] = str[j];
+        str[j] = tmp;
+    }
+    cout << "String reversed: " << str << endl;
+}
+
+// Replaces space with "%20"
+//in-place replacement with the assumption that the input string
+//is wide enough to hold the size after replacement
+void replaceSpaces(char* str, int size)
+{
+    if (str == NULL) {
+        return;
+    }
+    //walk the string to find the no. of occurrences of replace char
+    int count = 0;
+    for (int i = 0; i < strlen(str); i++) { // or until char *pStr = str; *pStr != '\0' or *pStr
+        if (str[i] == ' ') {
+            count++;
+        }
+    }
+    int j = strlen(str) + count * 2 + 1; // new length of the string including a null char
+    if (size < j) {
+        cout << "Can't replace spaces. Insufficient space\n";
+        return;
+    }
+    str[--j] = '\0'; //--j is the new index
+    for (int i = strlen(str); i >= 0; i--, j--) {
+        if (i == j) {
+            break;
+        }
+        if (str[i] == ' ') {
+            str[j--] = '0';
+            str[j--] = '2';
+            str[j] = '%';
+        } else {
+            str[j] = str[i];
+        }
+    }
+}
+
+//String in-place replacement
+//replace all the occurrences of a given pattern(="abc") to 'X' and note that contiguous
+//occurrence should be replaced only once
+//Going from 3 chars to one. So can start replacing from the beginning since it won't
+//over-write characters
+bool isMatch(char* str, const char* pattern) {
+    while (*str && *pattern) {
+        if (*str++ != *pattern++) {
+            return false;
+        }
+    }
+    if (*pattern) {
+        return false;
+    }
+    return true;
+}
+void replace(char* str, const char* pattern)
+{
+    if (str == NULL || pattern == NULL) {
+        return;
+    }
+    char *pSlow = str, *pFast = str;
+    int pLen = strlen(pattern);
+    
+    while (*pFast != '\0') {
+        bool matched = false;
+        while (isMatch(pFast, pattern)) {
+            pFast += pLen;
+            matched = true;
+        }
+        if (matched) {
+            *pSlow++ = 'X';
+        } else if (*pFast != '\0') {
+            *pSlow++ = *pFast++;
+        }
+    }
+    
+    *pSlow = '\0'; // terminate with a null char
+}
+
+//remove all spaces in a given string
+void removeSpace(char* str)
+{
+    if (str == NULL || !*str) {
+        return;
+    }
+    char *p1 = str, *p2 = str;
+    while (*p2) {
+        while (*p2 == ' ') {
+            p2++;
+        }
+        *p1++ = *p2++;
+    }
+}
 
 //find a given pattern within a string
 int strstr(char* haystack, char* needle)
@@ -204,4 +307,32 @@ bool isomorphic(char* str1, char* str2)
     }
     return true;
 }
+
+int wordCount(char* str)
+{
+    if (str == NULL || !*str) {
+        return 0;
+    }
+    char* p = str;
+    while (*p) {
+        while (*p != ' ' && isalpha(*p)) {
+            p++;
+        }
+        count++; p++;
+    }
+    return count;
+}
+
+//string reorder distance apart
+
+
+
+
+
+
+
+
+
+
+
 

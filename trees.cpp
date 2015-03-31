@@ -16,6 +16,13 @@ struct {
     LinkedListNode* _next;
 } LinkedListNode;
 
+struct {
+    int key;
+    treeNodeSpl* left;
+    treeNodeSpl* right;
+    treeNodeSpl* nextRight;
+} treeNodeSpl;
+
 // Define a tree node
 class node {
  public:
@@ -62,7 +69,8 @@ class Tree {
     node* findMaxBST(node* start);
 
     // Traversals for any binary tree including BST
-    int traverseByLevel();
+    int traverseByLevelBFS();
+    void traverseByLevelDFS();
     void traverseInOrder(node* start);
     void traverseInOrderIterative(node* start);
     void traversePreOrder(node* start);
@@ -95,8 +103,9 @@ class Tree {
     int getRankBST(int key);
     int kthSmallestElementBST(int k);
     
-    node* sortedArrayToBST(int* arr, int start, int end);
-    node* sortedListToBST(LinkedListNode* head, int start, int end);
+    node* sortedArrayToBalancedBST(int* arr, int start, int end);
+    node* sortedListToBalancedBST(LinkedListNode** head, int start, int end);
+
     bool isSubTree(node* t1, node* t2);
     bool matchTree(node* t1, node* t2);
     void convertTreeToSumTree();
@@ -115,6 +124,8 @@ class Tree {
     void printBinaryTreeInVerticalOrder(node* root);
 
     void inOrderTraversalWithoutStack(node* start); // threaded binary tree // not imeplemented
+    
+    void populateNextRight(treeNodeSpl* start);
 };
 
 void Tree::destroyTree(node* start)
@@ -303,8 +314,8 @@ int Tree::traversePostOrderIterative(node* start)
 }
 
 // returns the height of the tree and prints the
-// nodes by level
-int Tree::traverseByLevel()
+// nodes by level from left to right using BFS
+int Tree::traverseByLevelBFS()
 {
     node* start = root;
     if (start == NULL) {
@@ -330,7 +341,29 @@ int Tree::traverseByLevel()
     return height;
 }
 
-void traverseLevelOrderZigZag(node* start)
+//using recursion
+void Tree::traverseByLevelDFS()
+{
+    int height = findMaxDepth(root);
+    for (int i = 1; i <= height; i++) {
+        printLevel(root, i);
+        cout << endl;
+    }
+}
+void Tree::printLevel(node* start, int level)
+{
+    if (start == NULL) {
+        return;
+    }
+    if (level == 1) {
+        cout << start->key << " ";
+    } else {
+        printLevel(start->left, level-1);
+        printLevel(start->right, level-1);
+    }
+}
+
+void Tree::traverseLevelOrderZigZag(node* start)
 {
     if (start == NULL) {
         return;
@@ -379,7 +412,7 @@ int Tree::findHeight()
     return findMaxDepth(root);
     //iterative - Do a post order traversal iteratively
     // return traversePostOrderIterative(root);
-    // return traverseByLevel();
+    // return traverseByLevelBFS();
 }
 
 int Tree::findMaxDepth(node* start)
@@ -646,7 +679,7 @@ int Tree::kthSmallestElementBST(int k)
 
 //create a balanced tree given a sorted array of elements
 //Time complexity O(n)
-node* Tree::sortedArrayToBST(int* arr, int start, int end)
+node* Tree::sortedArrayToBalancedBST(int* arr, int start, int end)
 {
     if (start > end) return NULL;
     int mid = start + (end-start) / 2; //avoids overflow
@@ -663,15 +696,15 @@ node* Tree::sortedArrayToBST(int* arr, int start, int end)
 //Below is the bottom-up approach taken by just walking the linked list and
 //constructing the tree by linking them to its parent
 //Time Complexity: O(n)
-node* Tree::sortedListToBST(LinkedListnode* head, int start, int end)
+node* Tree::sortedListToBalancedBST(LinkedListnode** head, int start, int end)
 {
     if (start > end) return NULL;
     int mid = start + (end-start) / 2; //avoids overflow
     node* leftChild = sortedListToBST(head, start, mid-1);
-    node* parent = new node(head->_data);
+    node* parent = new node((*head)->_data);
     if (parent) {
         parent->left = leftChild;
-        head = head->_next;
+        *head = (*head)->_next;
         parent->right = sortedListToBST(head, mid+1, end);
     }
     return parent;
@@ -762,7 +795,7 @@ void Tree::mirror(node* root)
     }
 }
 
-//creates a duplicate node and inserts as the left child of the original node
+//creates a duplicate node and insert as the left child of the original node
 void Tree::doubleTree(node* root)
 {
     if (root == NULL) {
@@ -934,7 +967,8 @@ void Tree::printBinaryTreeInVerticalOrder(node* start)
     }
     
 }
-void Tree::calculateHorizontalDist(node* root, int dist, hashTable<int,int>& hT, int& min, int& max)
+void Tree::calculateHorizontalDist(node* root, int dist, hashTable<int,int>& hT,
+                                   int& min, int& max)
 {
     if (root == NULL) {
         return;
@@ -945,8 +979,25 @@ void Tree::calculateHorizontalDist(node* root, int dist, hashTable<int,int>& hT,
         max = dist;
     }
     hT.insert(dist, root->key);
-    printBinaryTreeInVerticalOrder(root->left, dist-1, hT);
-    printBinaryTreeInVerticalOrder(root->right, dist+1, hT);
+    printBinaryTreeInVerticalOrder(root->left, dist-1, hT, min, max);
+    printBinaryTreeInVerticalOrder(root->right, dist+1, hT, min, max);
+}
+
+//connect nodes in the same level using 'nextRight' pointer
+void Tree::populateNextRight(treeNodeSpl* start)
+{
+    if (start == NULL) {
+        return;
+    }
+    if (start->left) {
+        start->left->nextRight = start->right;
+    }
+    if (start->right) {
+        start->right->nextRight = (start->nextRight) ?
+                                  start->nextRight->left : NULL;
+    }
+    populateNextRight(start->left);
+    populateNextRight(start->right);
 }
 
 int main()
