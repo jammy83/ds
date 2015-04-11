@@ -21,8 +21,8 @@ class bitVector {
     }
     ~bitVector();
     void set(int i) {
-        int wordNumber = (i >> SHIFT);
-        int bitNumber = (i & MASK);
+        int wordNumber = (i >> SHIFT); // divide by 32
+        int bitNumber = (i & MASK); // mod 32
         bitSet[wordNumber] |= (1 << bitNumber);
     }
     bool get(int i) {
@@ -36,7 +36,7 @@ class bitVector {
         bitSet[wordNumber] &= ~(1 << bitNumber);
     }
     int findUnsetBit() {
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < size; i++) {
             for (int j =  0; j < BITSPERWORD; j++) {
                 if (bitSet[i] & (1 << j) == 0) {
                     return (i*BITSPERWORD + j);

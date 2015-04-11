@@ -301,10 +301,11 @@ void LinkedList::reverseList()
 }
 void LinkedList::reverseList(node** head)
 {
-    if (*head == NULL) {
+    if (*head == NULL || (*head)->next == NULL) {
         return;
     }
-    node* curr = *head;
+    //there are atleast 2 items in the linked list
+    node* curr = *head, *prev = NULL;
     while (curr) {
         node* nextNode = curr->next;
         curr->next = prev;
@@ -419,7 +420,7 @@ RandomListNode* copyRandomList(RandomListNode* head)
     
     // copy random pointer for each new node
     p = head;
-    while (p != null) {
+    while (p != NULL) {
         if (p->random != NULL) {
             p->next->random = p->random->next;
         } else {
@@ -464,7 +465,7 @@ node* LinkedList::getIntersectionPoint(LinkedList& l1, LinkedList& l2)
     }
     int len1 = getLength(l1);
     int len2 = getLength(l2);
-    int d = abs(len1-len2);
+
     node *p1 = l1.head, *p2 = l2.head;
 
     if (len2 > len1) {
@@ -472,6 +473,7 @@ node* LinkedList::getIntersectionPoint(LinkedList& l1, LinkedList& l2)
         int temp = len1; len1 = len2; len2 = temp;
     }
     //invariant: l1 >= l2 and p1,len1 points to the longer list
+    int d = len1-len2;
     for (int i = 0; i < d && p1 != NULL; ++i) {
         p1 = p1->next;
     }
@@ -600,7 +602,7 @@ void LinkedList::frontBackSplit(node* head, node** first, node** second)
     }
     *first = *head;
     *second = pSlow->next;
-    pSlow->next = NULL;
+    pSlow->next = NULL; //break into 2 lists
 }
 
 int main()

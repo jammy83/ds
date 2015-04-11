@@ -19,7 +19,7 @@ void swap(int* arr, int i, int j)
     arr[j] = temp;
 }
 
-// insertion sort. Everything to the left of the array is sorted
+// insertion sort. Everything to the left of the array is sorted;
 // for the new element, tries to find a spot through exchanges
 void insertionSort(int* arr, int start, int end)
 {
@@ -74,7 +74,7 @@ void mergesort(int* arr, int start, int end, int* aux)
     if (end <= start) {
         return;
     }
-    int mid = start+end/2;
+    int mid = start+(end-start)/2;
     mergesort(arr, start, mid, aux);
     mergesort(arr, mid+1, end, aux);
     combine(arr, start, mid, end, aux);
@@ -121,7 +121,7 @@ int partition(int* arr, int start, int end)
     int low = start;
     for (int i = start; i < end; i++) {
         if (arr[i] <= pivot) {
-            swap(arr, i, low);
+            swap(arr, i, low); // if low != i
             low++;
         }
     }
@@ -138,9 +138,38 @@ void quicksort(int* arr, int start, int end)
     }
 }
 
-//3-way quicksort tries to solve the problem when there are duplicates
+//3-way partitioning quicksort tries to solve the problem when there are duplicates
 //Complexity of general quicksort is quadratic unless the partitioning stops on equal keys
 //Solution: DNF by Dijkstra
+void 3WayPartitionQuickSort(int *arr, int start, int end)
+{
+    if (start >= end) { return; }
+
+    int low = start, high = end-1;
+    int pivot = arr[end];
+    int i = start;
+    while (i <= high) {
+        if (arr[i] < pivot) {
+            if (i == low) {
+                i++; continue;
+            }
+            swap(arr, i, low++);
+        } else if (arr[i] > pivot) {
+            swap(arr, i, high--);
+        } else {
+            i++;
+        }
+    }
+    //the above partitioning guarantees that
+    //arr[start..low-1] < pivot = (arr[low..high]) < arr[high+1..end]
+    3WayPartitionQuicksort(arr, start, low-1);
+    3WayPartitionQuicksort(arr, high+1, end);
+}
+
+//Quick-select
+//Order statistics using the method of 3-way quicksort like above except that inside
+//the partitioning logic, based on the pivot index and 'k' decide which half to
+//continue sorting. Time complexity: O(n)
 
 //https://www.cs.berkeley.edu/~jrs/61b/lec/25
 

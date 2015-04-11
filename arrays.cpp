@@ -223,7 +223,7 @@ int getMedian(int* arr, int size)
     if (arr == NULL) {
         return 0;
     }
-    return (size%2 == 0) ? (arr[n/2-1]+arr[n/2])/2 : arr[n/2];
+    return (size%2 == 0) ? (arr[n/2-1]+arr[n/2])/2 : arr[n/2]; //which is basically the mid,mid+1
 }
 // median of 2 sorted arrays; both of size n
 int mergedMedian(int* arr1, int* arr2, int n)
@@ -519,7 +519,7 @@ bool isPalindrome(int x)
     return ((x-rev) == 0) ? true : false;
 
     //alternative soln: with no extra space
-    //comapre the first and last digits, if same, chop off and compare the ends
+    //compare the first and last digits, if same, chop off and compare the ends
     int div = 1;
     while (x/div > 10) {
         div *= 10;
@@ -558,6 +558,7 @@ void intToStr(int num, char* str)
         isNeg = true;
     }
     char temp[64+2];
+    int i = 0;
     do {
         temp[i++] = (num%10) + '0';
         num = num/10;
@@ -565,6 +566,7 @@ void intToStr(int num, char* str)
     if (isNeg) temp[i++] = '-';
 
     int j = 0;
+    i = strlen(temp);
     while (i > 0) {
         str[j++] = temp[--i];
     }
@@ -707,7 +709,7 @@ void selfExcludingSum(int* arr, int size)
 // For example: array = [1,2,3,4,5,6,7]
 // We can take the difference between 2 and 1 (2-1), but not the different between 1 and 2 (1-2).
 // Another example: [1,5,8,7,9,-5,15,21] => maxDiff = 26 {-5, 21}
-// Alternative way of asking the same problem: Best time to buy and sell stock
+// Alternative way of asking the same problem: "Best time to buy and sell stock"
 // Say you have an array for which the ith element is the price of a given stock on day i.
 // If you were only permitted to buy one share of the stock and sell one share of the stock,
 // design an algorithm to find the best times to buy and sell.
@@ -716,8 +718,8 @@ void findMaxDiff(int* arr, int size, int& min, int& max)
     if (arr == NULL || size <= 1) {
         return;
     }
-    min = 0; max = 0; // index of the minimum and maximum value seen so far
-    int maxDiff = arr[1] - arr[min];
+    min = 0; max = 1; // index of the minimum and maximum value seen so far
+    int maxDiff = arr[max] - arr[min];
     for (int i = 1; i < size; ++i) {
         int diff = arr[i] - arr[min]
         if (diff > maxDiff) {
@@ -899,6 +901,47 @@ void intersection(int* a, int m, int* b, int n)
             cout << a[i] << endl;
             i++; j++;
         }
+    }
+}
+
+//Running median (incoming stream of data)
+//Stratergy is to be able to retrieve the middle element and the one before
+//(for even no. of elements) in O(1) time
+void insertNumber(int num)
+{
+    if (maxHeap.isEmpty()) {
+        maxHeap.insert(num);
+        return;
+    }
+    if (num <= maxHeap.getMax()) {
+        maxHeap.insert(num);
+    } else {
+        minHeap.insert(num);
+    }
+    int min = minHeap.size();
+    int max = maxHeap.size();
+    if (min == max || (max > min && (max-min == 1))) {
+        return;
+    }
+    if (max > min) {
+        minHeap.insert(maxHeap.getMax());
+        maxHeap.delMax();
+    } else {
+        maxHeap.insert(minHeap.getMin());
+        minHeap.delMin();
+    }
+}
+int getRunningMedian(int* arr, int size)
+{
+    minPQ minHeap;
+    maxPQ maxHeap;
+    if (maxHeap.isEmpty()) {
+        return 0;
+    }
+    if (maxHeap.size() == minHeap.size()) {
+        return (maxHeap.getMax()+minHeap.getMin())/2;
+    } else {
+        return maxHeap.getMax();
     }
 }
 

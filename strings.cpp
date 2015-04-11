@@ -218,7 +218,7 @@ int searchStrings(std::string* arr, int start, int end, string pattern)
     if (arr == NULL || size == 0 || pattern.empty()) {
         return -1;
     }
-    int mid = (start+end)/2;
+    int mid = start + (end-start) / 2; // avoids overflow
     if (arr[mid].empty()) {
         // try to find a non-empty element
         for (int i = mid-1, j = mid+1; i >= start && j <= end; i--, j++) {
@@ -273,7 +273,7 @@ bool isomorphic(char* str1, char* str2)
     if (strlen(str1) != strlen(str2)) {
         return false;
     }
-    int size = 256; // asciii characters(lower and upper case)
+    int size = 256; // ascii characters(lower and upper case)
     int a1[size];
     int a2[size];
     int len = strlen(str1);
@@ -313,7 +313,7 @@ int wordCount(char* str)
     if (str == NULL || !*str) {
         return 0;
     }
-    char* p = str;
+    char *p = str;
     while (*p) {
         while (*p != ' ' && isalpha(*p)) {
             p++;
@@ -324,13 +324,6 @@ int wordCount(char* str)
 }
 
 //string reorder distance apart
-
-
-
-
-
-
-
 
 
 

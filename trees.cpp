@@ -107,6 +107,7 @@ class Tree {
     node* sortedListToBalancedBST(LinkedListNode** head, int start, int end);
 
     bool isSubTree(node* t1, node* t2);
+    bool isSubTreeUtil(node* t1, node* t2);
     bool matchTree(node* t1, node* t2);
     void convertTreeToSumTree();
     bool isFoldable();
@@ -170,7 +171,7 @@ bool Tree::insertBST(node* n)
     }
     if (last == NULL) {
         // tree is empty
-        root = last;
+        root = n;
     } else {
         if (n->key <= last->key) {
             last->left = n;
@@ -373,7 +374,7 @@ void Tree::traverseLevelOrderZigZag(node* start)
     bool leftToRight = false;
     while (!s.empty()) {
         int count = s.size();
-        while (count) {
+        while (count > 0) {
             node* curr = s.top(); s.pop();
             cout << curr->key << " ";
             if (leftToRight) {
@@ -425,6 +426,7 @@ int Tree::findMaxDepth(node* start)
     return ((leftD > rightD) ? leftD : rightD) + 1);
 }
 
+//using parent pointer
 int Tree::findHeightWrtToAGivenNode(node* p)
 {
     int height = 0;
@@ -543,10 +545,6 @@ node* Tree::findSuccessorInOrder(node* start)
 
 node* Tree::findLCABST(node* start, int key1, int key2)
 {
-    if (start == NULL) {
-        return NULL;
-    }
-
     // with the assumption that the keys are in the tree
     while (start != NULL) {
         if (start->key > key1 && start->key > key2) {
@@ -562,6 +560,9 @@ node* Tree::findLCABST(node* start, int key1, int key2)
     return start;
     
     //recursive
+    if (start == NULL) {
+        return NULL;
+    }
     if (start->key > key1 && start->key > key2) {
         findLCABST(start->left, key1, key2);
     } else if (start->key < key1 && start->key < key2) {
@@ -715,19 +716,33 @@ node* Tree::sortedListToBalancedBST(LinkedListnode** head, int start, int end)
 //and lookup the elements of the other tree to confirm if its a subtree
 //And all this will tell you is that the elements are present.. but
 //in what order/structure? It has to be solved like the following..
+
+//'n' - no. of nodes in T1, 'm' - nodes in T2 and 'k' is the
+//no. of occurrences of T2's root in T1.
+//Time complexity: O(n+km)
 bool Tree::isSubTree(Tree* t1, Tree* t2)
 {
-    if (t1 == NULL || t2 == NULL) {
+    if (t2 == NULL || t2->root == NULL) { //empty tree is considered a subtree
+        return true;
+    }
+    if (t1 == NULL || t1->root == NULL) {
         return false;
     }
-    if (t1->root == NULL || t2->root == NULL) {
+    return isSubTreeUtil(t1->root, t2->root);
+}
+
+bool Tree::isSubTreeUtil(node* t1, node* t2)
+{
+    if (t1 == NULL) {
         return false;
     }
-    vector<node*> v;
-    if (findPath(t1->root, t2->root->key, v)) {
-        node* head = v.back();
-        matchTree(head, t2->root);
+    if (t1->key == t2->key) {
+        if (matchTree(t1, t2)) {
+            return true;
+        }
     }
+    return (isSubTreeUtil(t1->left, t2) ||
+            isSubTreeUtil(t1->right, t2));
 }
 
 bool Tree::matchTree(node* t1, node* t2)
@@ -813,6 +828,7 @@ void Tree::doubleTree(node* root)
     root->rank++;
 }
 
+//print if the tree, starting at the root, leads to a given sum
 bool Tree::hasPathSum(node* node, int sum)
 {
     // return true if we run out of tree and sum==0
@@ -826,6 +842,9 @@ bool Tree::hasPathSum(node* node, int sum)
     }
 }
 
+//given a binary tree, print all the paths that lead to a particular sum
+//starting from any node in the tree and not necessarily the root
+//time complexity: O(nlogn)
 void Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
 {
     if (start == NULL) {
@@ -835,7 +854,7 @@ void Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
     v.push_back(start);
     sum += start->key;
     if (sum == target) {
-        for (vector<node*>::itertor itr = v.begin(); itr != v.end(); itr++) {
+        for (vector<node*>::iterator* itr = v.begin(); itr != v.end(); itr++) {
             node* n = *itr;
             cout << n->key << " ";
         }

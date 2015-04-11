@@ -181,7 +181,7 @@ void Graph::BFS(int start)
                 info.parent[v] = top;
                 visit.push(v);
             }
-            if (info.processed[v] == false || !directed) {
+            if (info.processed[v] == false || directed) {
                 processEdge(top, v);
             }
         }

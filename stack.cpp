@@ -28,7 +28,7 @@ int leftShift(int index, bool removeTop)
 {
     int res = 0;
     if (!stacks.empty()) {
-        if (index >= stacks.size()) {
+        if (index < 0 || index >= stacks.size()) {
             return -1; // out of bounds
         }
         Mystack topStack = stacks.at(index);
