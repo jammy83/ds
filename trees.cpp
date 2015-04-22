@@ -855,7 +855,7 @@ void Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
     sum += start->key;
     if (sum == target) {
         for (vector<node*>::iterator* itr = v.begin(); itr != v.end(); itr++) {
-            node* n = *itr;
+            node* n = (node*)*itr;
             cout << n->key << " ";
         }
         cout << endl;

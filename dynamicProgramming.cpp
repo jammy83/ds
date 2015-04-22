@@ -179,6 +179,10 @@ int longestPalindromeSubstring(char* str) // int* str, int len
 
 //longest common subsequence
 
+//Longest prefix match: Radix tree or trie (used by routers)
+//Given a dictionary of words and an input string, find the longest prefix of the
+//string which is also a word in dictionary.
+
 int main()
 {
     return 0;

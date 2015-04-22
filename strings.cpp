@@ -323,8 +323,24 @@ int wordCount(char* str)
     return count;
 }
 
-//string reorder distance apart
+//tokenzier
 
+
+//    std::string s = "scott>=tiger";
+//    std::string delim = ">=";
+    
+void splitString(string line, string delim) {
+    size_t start = 0U;
+    size_t end = s.find(delim);
+    while (end != std::string::npos)
+    {
+        std::cout << s.substr(start, end - start) << std::endl;
+        start = end + delim.length();
+        end = s.find(delim, start);
+    }
+    
+    std::cout << s.substr(start, end);
+}
 
 
 

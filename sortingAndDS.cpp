@@ -32,7 +32,7 @@ void insertionSort(int* arr, int start, int end)
 
 void selectionSort(int* arr, int start, int end)
 {
-    for (int i = 0; i <= end; i++) {
+    for (int i = start; i <= end; i++) {
         int min = i;
         for (int j = i+1; j <= end; j++) {
             if (arr[j] < arr[min]) {

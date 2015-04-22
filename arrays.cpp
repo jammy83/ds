@@ -945,6 +945,46 @@ int getRunningMedian(int* arr, int size)
     }
 }
 
+//in-place palindrome check
+bool isPalindrome(string s)
+{
+    return isPalindromeUtil(s, 0, s.length());
+}
+bool isPalindromeUtil(string str, int start, int end) {
+    
+    if (str.length() <= 1) {
+        return true;
+    }
+    return (str.at(start) == str.at(end) &&
+            isPalindrome(str.substring(start + 1, end - 1)));
+}
+
+//Reverse polish notation: maintain a stack; as soon as you see an operand, pop the top 2 elements off the
+//stack. Think about sqrt() which takes only one operand.
+
+
+//Prime factorization
+void primeFactors(long int num)
+{
+    vactor<int> factors;
+    while (num % 2 == 0) {
+        factors.push_back(2);
+        num /= 2;
+    }
+    //odd prime factors
+    for (int i = 3; i < sqrt(num); i = i + 2) {
+        while (num % i == 0) {
+            factors.push_back(i);
+            num /= i;
+        }
+    }
+    //what if the given num is prime > 2?
+    if (num > 2) {
+        factors.push_back(num);
+    }
+}
+
+
 int main(int argc, char* argv[])
 {
     char test[] = "healo$erd$@";
