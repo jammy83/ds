@@ -509,7 +509,7 @@ bool isPalindrome(int x)
 
     //in the solution below, be wary of overflows and
     //make use a bigger type like long long
-    //reverse the no and find the diff between the original no and reveresed
+    //reverse the no and find the diff between the original no and reversed
     int rev = 0;
     int num = x;
     while (num != 0) {
@@ -959,8 +959,8 @@ bool isPalindromeUtil(string str, int start, int end) {
             isPalindrome(str.substring(start + 1, end - 1)));
 }
 
-//Reverse polish notation: maintain a stack; as soon as you see an operand, pop the top 2 elements off the
-//stack. Think about sqrt() which takes only one operand.
+//Reverse polish notation: maintain a stack; as soon as you see an operand,
+//pop the top 2 elements off the stack. Think about sqrt() which takes only one operand.
 
 
 //Prime factorization
@@ -983,6 +983,8 @@ void primeFactors(long int num)
         factors.push_back(num);
     }
 }
+
+//Pascal's triangle
 
 
 int main(int argc, char* argv[])

@@ -39,6 +39,8 @@ General:\
 
 \f0\fs24 \cf0 \CocoaLigature1 * {\field{\*\fldinst{HYPERLINK "http://edusagar.com/articles/view/70/What-happens-when-you-type-a-URL-in-browser"}}{\fldrslt http://edusagar.com/articles/view/70/What-happens-when-you-type-a-URL-in-browser}}\
 *** DNS - load balancing(across data center.. within data center, get a load balancer which does it based on various other heuristics), TTL/expiry on the result, caching at the browser, OS, cookies for storing session data or keep the session data and everything in a separate database server.. caching is very important as well.. store static html content than dynamic content..auto-scaling, sharding, normalization\
+storing per-session data: if the client is a browser, then URL re-writing/cookies else use shared database with replicas\
+Caching - in-memory memcached\
 \
 STL:\
 * {\field{\*\fldinst{HYPERLINK "https://www.topcoder.com/community/data-science/data-science-tutorials/power-up-c-with-the-standard-template-library-part-1/"}}{\fldrslt https://www.topcoder.com/community/data-science/data-science-tutorials/power-up-c-with-the-standard-template-library-part-1/}}\

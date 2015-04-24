@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-xzccvoid perform(void* arg) {
+void perform(void* arg) {
     vector<int>* jobs = static_cast< vector<int>* >arg;
     for (vector<int>::iterator itr = jobs->begin(); itr != jobs->end(); itr++) {
         if (ping(*itr)) {

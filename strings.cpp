@@ -45,18 +45,19 @@ void replaceSpaces(char* str, int size)
     }
     //walk the string to find the no. of occurrences of replace char
     int count = 0;
-    for (int i = 0; i < strlen(str); i++) { // or until char *pStr = str; *pStr != '\0' or *pStr
+    int len = strlen(str);
+    for (int i = 0; i < len; i++) { // or until char *pStr = str; *pStr != '\0' or *pStr
         if (str[i] == ' ') {
             count++;
         }
     }
-    int j = strlen(str) + count * 2 + 1; // new length of the string including a null char
+    int j = len + count * 2 + 1; // new length of the string including a null char
     if (size < j) {
         cout << "Can't replace spaces. Insufficient space\n";
         return;
     }
     str[--j] = '\0'; //--j is the new index
-    for (int i = strlen(str); i >= 0; i--, j--) {
+    for (int i = len; i >= 0; i--, j--) {
         if (i == j) {
             break;
         }
@@ -324,21 +325,17 @@ int wordCount(char* str)
 }
 
 //tokenzier
-
-
 //    std::string s = "scott>=tiger";
 //    std::string delim = ">=";
     
 void splitString(string line, string delim) {
     size_t start = 0U;
     size_t end = s.find(delim);
-    while (end != std::string::npos)
-    {
+    while (end != std::string::npos) {
         std::cout << s.substr(start, end - start) << std::endl;
         start = end + delim.length();
         end = s.find(delim, start);
     }
-    
     std::cout << s.substr(start, end);
 }
 
