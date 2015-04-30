@@ -113,6 +113,7 @@ void mergesortPerf(int* src, int start, int end, int* dst)
     combinePerf(src, start, mid, end, dst);
 }
 
+//Note: Sedgewick tries to find the low > pivot and high < pivot to interchange
 //chose the pivot element to be the last element of the array
 int partition(int* arr, int start, int end)
 {
