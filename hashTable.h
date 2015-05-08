@@ -53,10 +53,8 @@ public:
     }
     ~hashMap() {
         for (unsigned long int i = 0; i < t_size; i++) {
-            if (_table[i] != NULL) {
-                delete _table[i];
-                _table[i] = NULL;
-            }
+            delete _table[i];
+            _table[i] = NULL;
         }
         _recCount = 0;
     }
@@ -129,3 +127,7 @@ bool hashMap<t_key,t_record,t_size>::remove(t_record* rec, unsigned long bkt)
 }
 
 #endif
+
+
+//Allocating multi-dimensional arrays: https://isocpp.org/wiki/faq/freestore-mgmt#multidim-arrays
+

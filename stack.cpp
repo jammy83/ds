@@ -40,7 +40,7 @@ int leftShift(int index, bool removeTop)
         }
         if (topStack.empty()) {
             stacks.erase(index);
-        } else if (stacks.size() > index + 1) {
+        } else if (stacks.size() >= index + 1) {
             int v = leftShift(index+1, false);
             topStack.push(v);
         }

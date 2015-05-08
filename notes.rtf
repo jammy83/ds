@@ -78,4 +78,15 @@ Distributed systems:\
 \
 Base32/base64 encoding: {\field{\*\fldinst{HYPERLINK "http://code.tutsplus.com/tutorials/base-what-a-practical-introduction-to-base-encoding--net-27590"}}{\fldrslt http://code.tutsplus.com/tutorials/base-what-a-practical-introduction-to-base-encoding--net-27590}}\
 \
-C++: {\field{\*\fldinst{HYPERLINK "http://stroustrup.com/bs_faq2.html"}}{\fldrslt http://stroustrup.com/bs_faq2.html}}}
+C++: {\field{\*\fldinst{HYPERLINK "http://stroustrup.com/bs_faq2.html"}}{\fldrslt http://stroustrup.com/bs_faq2.html}}\
+\
+Structure padding: {\field{\*\fldinst{HYPERLINK "http://www.catb.org/esr/structure-packing/"}}{\fldrslt http://www.catb.org/esr/structure-packing/}}\
+*structure aligned to its widest scalar member\
+*re-order by decreasing alignment: widest scalar first..\
+*padding is something the complier adds to keep the types/structure self-aligned. Packing is to eliminate the padding. __attribute__packed\
+*cache lines is about 32/64 bytes fetch. Grouping related and co-accessed data will improve cache-line locality.\
+*Cache line bouncing might be a problem when multiple threads are involved accessing the co-located fields that are individually being modified by different threads.\
+\
+\
+\
+}

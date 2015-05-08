@@ -127,7 +127,7 @@ int magicIndex(int* arr, int start, int end)
     if (end < start || start < 0) {
         return -1;
     }
-    int mid = (start+end)/2;
+    int mid = start+ (end-start)/2;
     if (arr[mid] == mid) {
         return mid;
     } else if (arr[mid] < mid) { //another idea was arr[mid] > end+1 or 'n', discard everything to the right

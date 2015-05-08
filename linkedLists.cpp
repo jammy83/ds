@@ -204,13 +204,12 @@ void LinkedList::removeDups()
         if (hashT.containsKey(start->key)) {
             prev->next = start->next;
             node* temp = start;
-            start = start->next;
             delete temp;
         } else {
             hashT.insert(start->key, start);
             prev = start; // update previous only if this is not a duplicate
-            start = start->next;
         }
+        start = start->next;
     }
 }
 
@@ -271,8 +270,8 @@ node* LinkedList::partitionList(node* start, int val)
             start->next = after;
             after = start;
         } else {
+            start->next = valNode; // to handle the case where there are dups
             valNode = start;
-            start->next = NULL;
         }
         start = nextNode;
     }

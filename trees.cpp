@@ -587,7 +587,7 @@ bool Tree::findPath(node* start, int key, vector<node*> &path)
         (start->right && findPath(start->right, key, path)) ) {
         return true;
     }
-    path.pop_back(start);
+    path.pop_back();
     return false;
 }
 

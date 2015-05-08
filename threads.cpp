@@ -28,7 +28,6 @@ void evaluateIPAddresses(int* arr, int size)
     pthread_t threads[NUM_THREADS];
 
     vector<int>* jobs = new vector<int>[NUM_THREADS];
-    if (jobs == NULL) { return; }
     for (int index = 0; index < size; index++) {
         jobs[index%NUM_THREADS].push_back(arr[index]);
     }

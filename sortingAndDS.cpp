@@ -115,6 +115,7 @@ void mergesortPerf(int* src, int start, int end, int* dst)
 
 //Note: Sedgewick tries to find the low > pivot and high < pivot to interchange
 //chose the pivot element to be the last element of the array
+//http://algs4.cs.princeton.edu/23quicksort/Quick.java.html
 int partition(int* arr, int start, int end)
 {
     //based on Cormen
