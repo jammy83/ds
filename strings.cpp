@@ -250,6 +250,7 @@ void reverseString(char* str, int start, int end)
         str[j] = temp;
     }
 }
+
 //Reverse words in a string
 void reverseWords(char* str)
 {
@@ -327,7 +328,6 @@ int wordCount(char* str)
 //tokenzier
 //    std::string s = "scott>=tiger";
 //    std::string delim = ">=";
-    
 void splitString(string line, string delim) {
     size_t start = 0U;
     size_t end = s.find(delim);

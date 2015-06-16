@@ -218,12 +218,12 @@ int min(int a, int b)
 {
     return ( a <= b) ? a : b;
 }
-int getMedian(int* arr, int size)
+int getMedian(int* arr, int n)
 {
     if (arr == NULL) {
         return 0;
     }
-    return (size%2 == 0) ? (arr[n/2-1]+arr[n/2])/2 : arr[n/2]; //which is basically the mid,mid+1
+    return (n%2 == 0) ? (arr[n/2-1]+arr[n/2])/2 : arr[n/2]; //which is basically the mid,mid+1
 }
 // median of 2 sorted arrays; both of size n
 int mergedMedian(int* arr1, int* arr2, int n)
@@ -337,7 +337,7 @@ void closestPair2Arrays(int* a, int* b, int n1, int n2, int val)
 }
 
 // 3SUM problem - Given a sorted array, find 3 elements whose sum equals to zero
-//What if the nos are not sorted - rem a+b = -c and you can look up for "-c" in the hash table
+// What if the nos are not sorted - rem a+b = -c and you can look up for "-c" in the hash table
 set<vector<int>> 3SUM(int* arr, int size)
 {
     // assuming it is a sorted array, insert the elements in a hash table or BST
@@ -476,14 +476,28 @@ int fibonacci(int n)
     }
     cout << endl;
     //just return the "nth" fibonacci
+    //returns {0,1,1..} for n starting from '0'.
     int n1 = 0, n2 = 1;
     if (n == 0) return n1;
+    if (n == 1) return n2;
     for (int i = 2; i < n; i++) {
-        next = n1 + n2;
+        int next = n1 + n2;
         n1 = n2;
         n2 = next;
     }
     return (n1+n2);
+    //returns {1,1,2..} for n starting from '0'.
+    int n1 = n2 = 1;
+    if (n == 0 || n == 1) {
+        return 1;
+    }
+    int next = 0;
+    for (int i = 2; i <= n; i++) {
+        next = n1 + n2;
+        n1 = n2;
+        n2 = next;
+    }
+    return next;
 }
 
 int factorial(int n)
@@ -495,7 +509,7 @@ int factorial(int n)
     
     //iterative
     int result = 1;
-    while (n >=1) {
+    while (n) {
         result *= n;
         n--;
     }
@@ -650,7 +664,7 @@ double powerOfUtil(double b, int a)
     if (a == 1 || b == 0) {
         return b;
     }
-    double t = powerOf(b, a/2);
+    double t = powerOfUtil(b, a/2);
     double res = t*t;
     return ((a%2==0) ? res : b*res);
 }
@@ -824,7 +838,7 @@ void sortPriority(char* priorities)
     while (cur < low) {
         if (priorities[cur] == 'H') {
             if (cur == high) {
-                cur++;
+                cur++; high++;
                 continue;
             }
             temp = priorities[high];
@@ -948,25 +962,28 @@ int getRunningMedian(int* arr, int size)
 //in-place palindrome check
 bool isPalindrome(string s)
 {
+    if (str.length() <= 1) {
+        return true;
+    }
     return isPalindromeUtil(s, 0, s.length());
 }
 bool isPalindromeUtil(string str, int start, int end) {
     
-    if (str.length() <= 1) {
+    if (start >= end) {
         return true;
     }
     return (str.at(start) == str.at(end) &&
-            isPalindrome(str.substring(start + 1, end - 1)));
+            isPalindromeUtil(str.substring(start + 1, end - 1), start + 1, end - 1) );
 }
 
-//Reverse polish notation: maintain a stack; as soon as you see an operand,
+//Reverse polish notation (postfix notation): maintain a stack; as soon as you see an operand,
 //pop the top 2 elements off the stack. Think about sqrt() which takes only one operand.
 
 
 //Prime factorization
 void primeFactors(long int num)
 {
-    vactor<int> factors;
+    vector<int> factors;
     while (num % 2 == 0) {
         factors.push_back(2);
         num /= 2;
@@ -985,7 +1002,25 @@ void primeFactors(long int num)
 }
 
 //Pascal's triangle
-
+void printPascal(int n)
+{
+    int arr[n][n]; // An auxiliary array to store generated pascal triangle values
+    
+    // Iterate through every line and print integer(s) in it
+    for (int line = 0; line < n; line++) {
+        // Every line has number of integers equal to line number
+        for (int i = 0; i <= line; i++) {
+            // First and last values in every row are 1
+            if (line == i || i == 0) {
+                arr[line][i] = 1;
+            } else {// Other values are sum of values just above and left of above
+                arr[line][i] = arr[line-1][i-1] + arr[line-1][i];
+            }
+            printf("%d ", arr[line][i]);
+        }
+        printf("\n");
+    }
+}
 
 int main(int argc, char* argv[])
 {

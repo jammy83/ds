@@ -35,7 +35,7 @@ int leftShift(int index, bool removeTop)
         if (removeTop) {
             res = topStack.pop();
         } else {
-            res = topStack.popEnd();
+            res = topStack.popEnd(); // should be a doubly linked list
             // need to maintain the head and tail of underlying linked list impl of the stack
         }
         if (topStack.empty()) {
