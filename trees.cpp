@@ -500,6 +500,7 @@ node* Tree::findPredecessorInOrder(node* start)
             p = top;
             top = top->right;
         } else {
+            p = top;
             break;
         }
     }
@@ -536,6 +537,7 @@ node* Tree::findSuccessorInOrder(node* start)
             s = top;
             top = top->left;
         } else {
+            s = top;
             break;
         }
     }
@@ -683,6 +685,7 @@ int Tree::kthSmallestElementBST(int k)
 node* Tree::sortedArrayToBalancedBST(int* arr, int start, int end)
 {
     if (start > end) return NULL;
+
     int mid = start + (end-start) / 2; //avoids overflow
     node* root = new node(arr[mid]);
     if (root) {
@@ -700,6 +703,7 @@ node* Tree::sortedArrayToBalancedBST(int* arr, int start, int end)
 node* Tree::sortedListToBalancedBST(LinkedListnode** head, int start, int end)
 {
     if (start > end) return NULL;
+
     int mid = start + (end-start) / 2; //avoids overflow
     node* leftChild = sortedListToBST(head, start, mid-1);
     node* parent = new node((*head)->_data);
@@ -850,20 +854,19 @@ void Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
     if (start == NULL) {
         return;
     }
-    
+
     v.push_back(start);
     sum += start->key;
     if (sum == target) {
         for (vector<node*>::iterator* itr = v.begin(); itr != v.end(); itr++) {
-            node* n = (node*)*itr;
-            cout << n->key << " ";
+            cout << (*itr)->key << " ";
         }
         cout << endl;
     }
-    
+
     findPathWithSum(start->left, v, sum, target);
     findPathWithSum(start->right, v, sum, target);
-    
+
     node* last = v.back();
     sum -= last->key;
     v.pop_back();
@@ -974,32 +977,24 @@ node* Tree::deserializeBSTIterative(int* pre, int size)
 // on either ends determines the order in which the nodes get printed
 void Tree::printBinaryTreeInVerticalOrder(node* start)
 {
-    hashTable<int, int> hT;
-    int min = 0, max = 0;
-    calculateHorizontalDist(start, 0, hT, min, max);
-    for (int i = min; i <= max; i++) {
-        hashTableRecord* p = hT.lookup(i);
-        while (p) {
-            cout << p->key << " " << endl;
+    std::miltimap<int,int> map;
+    calculateHorizontalDist(start, 0, map);
+    int last = 0;
+    for (std::multimap<int,int>::iterator itr = map.begin(); itr != map.end(); itr++) {
+        if (last != (*itr).first) {
+            cout << endl;
+            last = (*itr).first;
         }
-        cout << endl;
+        cout << (*itr).second << " ";
     }
-    
 }
-void Tree::calculateHorizontalDist(node* root, int dist, hashTable<int,int>& hT,
-                                   int& min, int& max)
-{
+void Tree::calculateHorizontalDist(node* root, int dist, multimap<int, int>& map) {
     if (root == NULL) {
         return;
     }
-    if (dist < min) {
-        min = dist;
-    } else if (dist > max) {
-        max = dist;
-    }
-    hT.insert(dist, root->key);
-    printBinaryTreeInVerticalOrder(root->left, dist-1, hT, min, max);
-    printBinaryTreeInVerticalOrder(root->right, dist+1, hT, min, max);
+    map.insert(std::pair(dist, root->key));
+    printBinaryTreeInVerticalOrder(root->left, dist-1, map);
+    printBinaryTreeInVerticalOrder(root->right, dist+1, map);
 }
 
 //connect nodes in the same level using 'nextRight' pointer
