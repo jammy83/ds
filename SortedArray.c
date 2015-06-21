@@ -106,7 +106,7 @@ Search(const int* const items,
        const int ascending,
        const int key,
        const SearchType type,
-       int* index)
+       int* const index)
 {
     assert(items != NULL);
     assert(n_items > 0);
@@ -160,6 +160,7 @@ Search(const int* const items,
             case LessThan:
                 if (items[i] >= key) {
                     (*index) = (ascending) ? i - 1 : i + 1;
+                    //validate index since its calculated
                     assert(isValid((*index), n_items));
                     return FoundLess;
                 }
@@ -171,6 +172,7 @@ Search(const int* const items,
                         return FoundExact;
                     } else {
                         (*index) = (ascending) ? i - 1 : i + 1;
+                        //validate index since its calculated
                         assert(isValid((*index), n_items));
                         return FoundLess;
                     }
@@ -178,14 +180,12 @@ Search(const int* const items,
                 break;
             case Equals:
                 if (items[i] == key) {
-                    // index must be valid since items[i] was just accessed
                     (*index) = i;
                     return FoundExact;
                 }
                 break;
             case GreaterThanEquals:
                 if (items[i] >= key) {
-                    // index must be valid since items[i] was just accessed
                     (*index) = i;
                     if (items[(*index)] == key) {
                         return FoundExact;
@@ -196,7 +196,6 @@ Search(const int* const items,
                 break;
             case GreaterThan:
                 if (items[i] > key) {
-                    // index must be valid since items[i] was just accessed
                     (*index) = i;
                     return FoundGreater;
                 }
@@ -378,7 +377,7 @@ int main()
 
 /* Regression Testing to be performed
  * 1. Memory consumption: Run valgrind or any other tool to make sure there aren't any leaks
- * 2. Behavior in multi-threaded systems: There are no data structures or anything shared, so should work fine
+ * 2. Behavior in multi-threaded systems: There are no global data structures or anything shared, so should work fine
  * 3. Performance of the algorithm at run time: time complexity: O(n), space complexity: O(1) since the algorithm does not make
  * any allocations except for few local variables. Needs to be validated
  * 4. Performance needs to be evaluated for large no. of elements in the array and system under high load
