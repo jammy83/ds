@@ -294,6 +294,7 @@ int main()
     assert(isValid(5, 6));
     assert(isValid(-1, 6) == 0);
     assert(isValid(0, 4));
+    assert(isValid(10, 6) == 0);
     printf("Working on testcase 3: Validating isValid() function: Completed successfully\n");
     
     //Testcase 4: test Search() function with all different searchType and searchResult combinations
