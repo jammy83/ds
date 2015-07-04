@@ -130,17 +130,17 @@ int magicIndex(int* arr, int start, int end)
     int mid = start+ (end-start)/2;
     if (arr[mid] == mid) {
         return mid;
-    } else if (arr[mid] < mid) { //another idea was arr[mid] > end+1 or 'n', discard everything to the right
+    } else if (arr[mid] < mid) { //another idea was arr[mid] >= end or 'n', discard everything to the right
         //search right of mid
-        magicIndex(arr, mid+1, end);
+        return magicIndex(arr, mid+1, end);
     } else {
-        magicIndex(arr, start, mid-1);
+        return magicIndex(arr, start, mid-1);
     }
 }
 
 //longest palindromic substring not *subsequence*
 //This can be easily modified to work with integers
-int longestPalindromeSubstring(char* str) // int* str, int len
+int longestPalindromeSubstring(char* str)
 {
     if (str == NULL) {
         return 0;

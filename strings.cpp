@@ -1,5 +1,5 @@
 //
-//  stringSearching.cpp
+//  strings.cpp
 //  
 //
 //  Created by Janani Natarajan on 12/19/14.

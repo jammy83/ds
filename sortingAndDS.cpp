@@ -114,8 +114,10 @@ void mergesortPerf(int* src, int start, int end, int* dst)
 }
 
 //Note: Sedgewick tries to find the low > pivot and high < pivot to interchange
-//chose the pivot element to be the last element of the array
+//and chooses the first element in the array as a the pivot
 //http://algs4.cs.princeton.edu/23quicksort/Quick.java.html
+
+//chose the pivot element to be the last element of the array
 int partition(int* arr, int start, int end)
 {
     //based on Cormen
@@ -127,7 +129,7 @@ int partition(int* arr, int start, int end)
             low++;
         }
     }
-    swap(arr[low], pivot);
+    arr[low] = pivot;
     return low;
 }
 
@@ -153,7 +155,8 @@ void 3WayPartitionQuickSort(int *arr, int start, int end)
     while (i <= high) {
         if (arr[i] < pivot) {
             if (i == low) {
-                i++; continue;
+                low++; i++;
+                continue;
             }
             swap(arr, i, low++);
         } else if (arr[i] > pivot) {
@@ -246,8 +249,8 @@ bool heapIncreaseKey(int* arr, int size, int i, int key)
 
 void maxHeapInsert(int* arr, int size, int key)
 {
-    arr[size+1] = -1;
-    heapIncreaseKey(arr, size, size+1, key);
+    arr[size++] = -1;
+    heapIncreaseKey(arr, size, size-1, key);
 }
 
 /*********************
