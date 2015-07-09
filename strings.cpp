@@ -57,6 +57,7 @@ void replaceSpaces(char* str, int size)
         return;
     }
     str[--j] = '\0'; //--j is the new index
+    j--;
     for (int i = len; i >= 0; i--, j--) {
         if (i == j) {
             break;
@@ -76,7 +77,7 @@ void replaceSpaces(char* str, int size)
 //occurrence should be replaced only once
 //Going from 3 chars to one. So can start replacing from the beginning since it won't
 //over-write characters
-bool isMatch(char* str, const char* pattern) {
+bool isMatch(char* const str, const char* const pattern) {
     while (*str && *pattern) {
         if (*str++ != *pattern++) {
             return false;
@@ -87,7 +88,7 @@ bool isMatch(char* str, const char* pattern) {
     }
     return true;
 }
-void replace(char* str, const char* pattern)
+void replace(char* const str, const char* const pattern)
 {
     if (str == NULL || pattern == NULL) {
         return;
@@ -127,7 +128,7 @@ void removeSpace(char* str)
 }
 
 //find a given pattern within a string
-int strstr(char* haystack, char* needle)
+char* strstr(char* haystack, char* needle)
 {
     if (needle == NULL) { //null string
         return NULL;
@@ -216,7 +217,7 @@ void KMPSearch(char* txt, char* pattern)
 //serach for a given string
 int searchStrings(std::string* arr, int start, int end, string pattern)
 {
-    if (arr == NULL || size == 0 || pattern.empty()) {
+    if (arr == NULL || start >= end || pattern.empty()) {
         return -1;
     }
     int mid = start + (end-start) / 2; // avoids overflow

@@ -17,7 +17,7 @@ struct {
 } LinkedListNode;
 
 struct {
-    int key;
+    int key;9
     treeNodeSpl* left;
     treeNodeSpl* right;
     treeNodeSpl* nextRight;
@@ -500,7 +500,6 @@ node* Tree::findPredecessorInOrder(node* start)
             p = top;
             top = top->right;
         } else {
-            p = top;
             break;
         }
     }
@@ -537,7 +536,6 @@ node* Tree::findSuccessorInOrder(node* start)
             s = top;
             top = top->left;
         } else {
-            s = top;
             break;
         }
     }
@@ -556,10 +554,10 @@ node* Tree::findLCABST(node* start, int key1, int key2)
         } else {
             // if the two nodes are on either side of a node
             // then thats the common ancestor
-            break;
+            return start;
         }
     }
-    return start;
+    return NULL;
     
     //recursive
     if (start == NULL) {
