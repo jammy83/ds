@@ -1022,6 +1022,13 @@ void printPascal(int n)
     }
 }
 
+//https://github.com/checkcheckzz/coding-questions#array
+//1. Given two arrays, find elements that are in the first array but not in the second
+//2. Detect cycle in an array
+//3. Length of the first sub-array that sums to zero
+//4. Given n points on a two-dimensional plane, find the closest (euclidean distance) k points
+//to the point (0, 0).
+
 int main(int argc, char* argv[])
 {
     char test[] = "healo$erd$@";
