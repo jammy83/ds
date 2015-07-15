@@ -162,8 +162,14 @@ int longestPalindromeSubstring(char* str)
         table[i][i] = true;
         if (i < len - 1 && str[i] == str[i+1]) {
             table[i][i+1] = true;
-            start = i; // records the last instance of the palindrome occurrence
-            maxLength = 2;
+            if (maxLength < 2) {
+                start = i; // records the last instance of the palindrome occurrence
+                maxLength = 2;
+            }
+            
+            
+            
+            
         }
     }
 

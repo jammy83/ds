@@ -313,7 +313,7 @@ void PrimMST(Graph& g, int start)
     while (!pq.empty()) {
         int v = pq.delMin();
         inTree[v] = true;
-        for (list<edgeNode>::iterator itr=adjList[v].begin(); itr != adjList[v].end(); itr++) {
+        for (list<edgeNode>::iterator itr = adjList[v].begin(); itr != adjList[v].end(); itr++) {
             edgeNode curr = *itr;
             int w = curr.index;
             if (inTree[w] == true) {
@@ -366,7 +366,7 @@ void dijkstraSP(Graph& g, int s, int t)
     bool inTree[g.nVertices+1] = {};
     int distance[g.nVertices+1];
     int parent[g.nVertices+1];
-    IndexedMinPQ pq = new IndexedMinPQ(g.nVertices);
+    IndexedMinPQ pq[g.nVertices+1];
 
     for (int i = 1; i <= g.nVertices; i++) {
         distance[i] = INT_MAX;

@@ -39,11 +39,12 @@ void evaluateIPAddresses(int* arr, int size)
         }
     }
     
-    for int i = 0; i < NUM_THREADS; i++) {
+    for (int i = 0; i < NUM_THREADS; i++) {
         int ret = pthread_join(&threads[i], NULL);
         if (ret) {
             cout << "Failed to join thread " << i << "with ret code: " << ret;
         }
     }
     delete[] jobs;
+    //pthread_exit(NULL);
 }

@@ -436,7 +436,7 @@ UNION FIND
 class UnionFind {
  private:
     int* parent;
-    int* rank;
+    int* rank; // analogous to level or depth
     int count; // no. of connected components
     int items; // no. of elements
 
@@ -457,7 +457,7 @@ class UnionFind {
     // the idea is that all the connected components are from the
     // same subtree and hence share the parent which is marked as
     // the root of the tree -- which connected component am I a part of?
-    int find(int v);
+    int find(int v); // find the parent pointer
     bool connected(int v, int w) {
         return (find(v) == find(w)); // are the two items connected
     }

@@ -51,6 +51,9 @@ void replaceSpaces(char* str, int size)
             count++;
         }
     }
+    if (count == 0) {
+        return;
+    }
     int j = len + count * 2 + 1; // new length of the string including a null char
     if (size < j) {
         cout << "Can't replace spaces. Insufficient space\n";
@@ -78,6 +81,12 @@ void replaceSpaces(char* str, int size)
 //Going from 3 chars to one. So can start replacing from the beginning since it won't
 //over-write characters
 bool isMatch(char* const str, const char* const pattern) {
+    if (str == NULL || pattern == NULL) {
+        return false;
+    }
+    if (!*pattern) { //empty string
+        return true;
+    }
     while (*str && *pattern) {
         if (*str++ != *pattern++) {
             return false;
@@ -94,11 +103,11 @@ void replace(char* const str, const char* const pattern)
         return;
     }
     char *pSlow = str, *pFast = str;
-    int pLen = strlen(pattern);
+    int pLen = strlen(str);
     
     while (*pFast != '\0') {
         bool matched = false;
-        while (isMatch(pFast, pattern)) {
+        while (*pFast && isMatch(pFast, pattern)) {
             pFast += pLen;
             matched = true;
         }
@@ -120,11 +129,14 @@ void removeSpace(char* str)
     }
     char *p1 = str, *p2 = str;
     while (*p2) {
-        while (*p2 == ' ') {
+        while (*p2 && *p2 == ' ') {
             p2++;
         }
-        *p1++ = *p2++;
+        if (*p2) {
+            *p1++ = *p2++;
+        }
     }
+    *p1 = '\0';
 }
 
 //find a given pattern within a string
