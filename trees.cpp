@@ -848,10 +848,10 @@ bool Tree::hasPathSum(node* node, int sum)
 //given a binary tree, print all the paths that lead to a particular sum
 //starting from any node in the tree and not necessarily the root
 //time complexity: O(nlogn)
-void Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
+bool Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
 {
     if (start == NULL) {
-        return;
+        return false;
     }
 
     v.push_back(start);
@@ -861,14 +861,19 @@ void Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
             cout << (*itr)->key << " ";
         }
         cout << endl;
+        return true;
     }
 
-    findPathWithSum(start->left, v, sum, target);
-    findPathWithSum(start->right, v, sum, target);
+    if (findPathWithSum(start->left, v, sum, target) ||
+        findPathWithSum(start->right, v, sum, target)) {
+        return true;
+    }
 
     node* last = v.back();
     sum -= last->key;
     v.pop_back();
+    
+    return false;
 }
 
 struct {
