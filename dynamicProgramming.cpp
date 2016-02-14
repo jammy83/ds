@@ -166,10 +166,6 @@ int longestPalindromeSubstring(char* str)
                 start = i; // records the last instance of the palindrome occurrence
                 maxLength = 2;
             }
-            
-            
-            
-            
         }
     }
 

@@ -195,6 +195,9 @@ void reverseIntArray(int* arr, int start, int end)
 
 void rotateArray(int* arr, int size, int d)
 {
+    if (arr == nullptr || size == 0) {
+        return;
+    }
     // left rotate the array 'd' times
     for (int i = 0; i < d; i++) {
         int temp = arr[0];
@@ -223,7 +226,7 @@ int getMedian(int* arr, int n)
     if (arr == NULL) {
         return 0;
     }
-    return (n%2 == 0) ? (arr[n/2-1]+arr[n/2])/2 : arr[n/2]; //which is basically the mid,mid+1
+    return (n%2 == 0) ? (arr[n/2-1]+arr[n/2])/2 : arr[n/2]; //which is basically the mid, mid+1
 }
 // median of 2 sorted arrays; both of size n
 int mergedMedian(int* arr1, int* arr2, int n)
@@ -388,9 +391,9 @@ int binarySearch(int* arr, int start, int end, int n)
         return mid;
     }
     if (n < arr[mid]) {
-        binarySearch(arr, start, mid-1, n);
+        return binarySearch(arr, start, mid-1, n);
     } else {
-        binarySearch(arr, mid+1, end, n);
+        return binarySearch(arr, mid+1, end, n);
     }
 }
 
@@ -976,6 +979,20 @@ bool isPalindromeUtil(string str, int start, int end) {
             isPalindromeUtil(str.substring(start + 1, end - 1), start + 1, end - 1) );
 }
 
+//alternate version
+bool isPalindrome(char* arr, int size)
+{
+    if (size == 0 || arr == nullptr) {
+        return false;
+    }
+    for (int i = 0, j = size-1; i < j; i++, j--) {
+        if (arr[i] != arr[j]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 //Reverse polish notation (postfix notation): maintain a stack; as soon as you see an operand,
 //pop the top 2 elements off the stack. Think about sqrt() which takes only one operand.
 
@@ -1054,4 +1071,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

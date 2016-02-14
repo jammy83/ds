@@ -341,7 +341,7 @@ int wordCount(char* str)
 //tokenzier
 //    std::string s = "scott>=tiger";
 //    std::string delim = ">=";
-void splitString(string line, string delim) {
+void splitString(string s, string delim) {
     size_t start = 0U;
     size_t end = s.find(delim);
     while (end != std::string::npos) {
@@ -349,7 +349,7 @@ void splitString(string line, string delim) {
         start = end + delim.length();
         end = s.find(delim, start);
     }
-    std::cout << s.substr(start, end);
+    std::cout << s.substr(start, s.length()-start);
 }
 
 

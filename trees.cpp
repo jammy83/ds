@@ -17,7 +17,7 @@ struct {
 } LinkedListNode;
 
 struct {
-    int key;9
+    int key;
     treeNodeSpl* left;
     treeNodeSpl* right;
     treeNodeSpl* nextRight;
@@ -591,6 +591,7 @@ bool Tree::findPath(node* start, int key, vector<node*> &path)
     return false;
 }
 
+//This solution below won't work..Basically comparison of the 2 vectors aren't correct.
 node* Tree::findLCA(node* start, int key1, int key2)
 {
     if (start == NULL) {
@@ -687,8 +688,8 @@ node* Tree::sortedArrayToBalancedBST(int* arr, int start, int end)
     int mid = start + (end-start) / 2; //avoids overflow
     node* root = new node(arr[mid]);
     if (root) {
-        root->left = createTree(arr, start, mid-1);
-        root->right = createTree(arr, mid+1, end);
+        root->left = sortedArrayToBalancedBST(arr, start, mid-1);
+        root->right = sortedArrayToBalancedBST(arr, mid+1, end);
     }
     return root;
 }
@@ -780,7 +781,7 @@ int Tree::convertTreeToSumTree()
 bool Tree::isFoldable()
 {
     if (root == NULL) {
-        return NULL;
+        return false;
     }
     return isFoldableUtil(root->left, root->right);
 }
