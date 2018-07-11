@@ -5,18 +5,16 @@
 //  Created by Janani Natarajan on 11/20/14.
 //
 //
-
+
 //http://kartikkukreja.wordpress.com
 //http://noteworthyalgorithms.blogspot.com
-
 
 #include <iostream>
 #include <string.h>
 #include <deque>
-
 using namespace std;
 
-bool hasUniqueCharacters(char* str)
+bool hasUniqueCharacters(char *str)
 {
     // Assuming ASCII characters alone are used in the given
     // string. There are 128 ascii chars including lower and upper case
@@ -25,20 +23,12 @@ bool hasUniqueCharacters(char* str)
     if (str == NULL || strlen(str) > 128) {
         return false;
     }
-    // strlen(str) returns the length of the string excluding the null char
-    int alpha[256] = {}; // bool alpha[256] = {} .. initializes to false
+    bool *charSeen = new bool[128](); 
     for (int i = 0; i < strlen(str); i++) {
-        alpha[str[i]]++; // you need to first increment and then check
-        if (alpha[str[i]] > 1) {
-            return false;
-        }
-        /* if the array just stores whether the char was seen before or not
         if (alpha[str[i]]) {
             return false;
         }
         alpha[str[i]] = true;
-        */
-        
     }
     return true;
 }
