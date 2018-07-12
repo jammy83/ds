@@ -44,12 +44,7 @@ bool isPermutation(string s1, string s2)
     }
     sort(s1.begin(), s1.end());
     sort(s2.begin(), s2.end());
-    if (int i = 0; i < s1.length(); i++) {
-        if (s1[i] != s2[i]) {
-            return false;
-        }
-    }
-    return true;
+    return (s1 == s2);
 }
 
 bool isPermutation(string s1, string s2)
@@ -75,64 +70,46 @@ bool isPermutation(string s1, string s2)
     return true;
 }
 
-// Compute run length and compress the given string
-int computeCompressedLength(char* str)
+// Replace space with %20
+void replace(string s)
 {
-    if (str == NULL) {
-        return 0;
+    if (s.empty()) {
+        return;
     }
-    char last = str[0];
-    int count = 1;
-    int size = 0;
-    for (int i = 1; i < strlen(str); i++) {
-        if (str[i] == last) {
-            count++;
+    //make sure size() >= length() + spaces * 2
+    for (int end = s.size()-1, last = s.length()-1; last >= 0; end--, last--) {
+        if (s[last] != " ") {
+            s[end] = s[last];
         } else {
-            char tmp[65];
-            snprintf(tmp, sizeof(tmp), "%d", count);
-            size += 1 + strlen(tmp);
-            count = 1;
-            last = str[i];
+            s[end--] = "0"; s[end--] = "2"; s[end] = "%";
         }
     }
-    //for the last char
-    char tmp[65];
-    snprintf(tmp, sizeof(tmp), "%d", count);
-    size += 1 + strlen(tmp);
-    return size;
 }
 
-char* runLength(char* str)
+// Compute run length and compress the given string
+string compressStr(string s)
 {
-    if (str == NULL) {
-        return NULL;
+    if (s.empty()) {
+        return "";
     }
-    int newlen = computeCompressedLength(str);
-    if (newlen == 0) {
-        return NULL;
-    } /* else if (newlen >= strlen(str)) {
-        return str;
-    }*/
-    cout << "The length of the compressed string would be " << newlen << endl;
-    char* cstr = new char[newlen];
-    if (cstr == NULL) {
-        return NULL;
-    }
-    char last = str[0];
-    int count = 1;
-    for (int i = 1; i < strlen(str); i++) {
-        if (last == str[i]) {
-            count++;
-        } else {
-            snprintf(cstr+strlen(cstr), newlen, "%c%d", last, count);
-            count = 1;
-            last = str[i];
+    map<char, int> mapL;
+    map<char, int>::iterator itr;
+    for (int i = 0; i < s.length(); i++) {
+        itr = mapL.find(s[i]);
+        if (itr != mapL.end()) {
+            itr.second++;
+            continue;
         }
+        mapL[s[i]] = 1;
     }
-    snprintf(cstr+strlen(cstr), newlen, "%c%d", last, count);
-    cstr[newlen] = '\0';
-
-    return cstr;
+    string compStr;
+    for (map<char, int>::const_reference e : mapL) {
+        compStr += e.first + e.second;
+    }
+    if (compStr.length() > s.length()) {
+        return s;
+    }
+    return compStr;
 }
 
 bool isRotation(char* str1, char* str2)
