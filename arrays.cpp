@@ -25,10 +25,10 @@ bool hasUniqueCharacters(char *str)
     }
     bool *charSeen = new bool[128](); 
     for (int i = 0; i < strlen(str); i++) {
-        if (alpha[str[i]]) {
+        if (charSeen[str[i]]) {
             return false;
         }
-        alpha[str[i]] = true;
+        charSeen[str[i]] = true;
     }
     return true;
 }
