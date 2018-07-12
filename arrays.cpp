@@ -112,20 +112,12 @@ string compressStr(string s)
     return compStr;
 }
 
-bool isRotation(char* str1, char* str2)
+bool isRotation(string s1, string s2)
 {
-    if (str1 == NULL || str2 == NULL) {
+    if (s1.empty() || s2.empty() || s1.length() != s2.length()) {
         return false;
     }
-    if (strlen(str1) != strlen(str2)) {
-        return false;
-    }
-    string s2(str2);
-    size_t found = (s2+s2).find(str1);
-    if (found != string::npos) {
-        return true;
-    }
-    return false;
+    return ((s2+s2).find(s1) != string::npos);
 }
 
 void zeroing2DMatrix(int** matrix, int n, int m)
