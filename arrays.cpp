@@ -37,37 +37,40 @@ bool hasUniqueCharacters(char *str)
 // Same logic can be used to check if str2 is an anagram of str1
 // anagrams are meanigful words formed by using the same chars from str1
 // and this means its a permutation of the str1 that's also a dict word
-bool isPermutation(char* str1, char* str2)
+bool isPermutation(string s1, string s2)
 {
-    if (str1 == NULL || str2 == NULL) {
+    if (s1.empty() || s2.empty() || s1.length() != s2.length()) {
         return false;
     }
-    // 1. Sort both the strings and compare. They should match exactly
-    // 2. Compare chars from str1 against str2 - O(n^2).
-    // 3. Build a hash table with the chars from str1 as keys
-    // Lookup the chars from str2 and all the lookups should succeed.
-    /*
-    for (int i = 0; i < strlen(str1); i++) {
-        hashTable.insert(str1[i]);
-    }
-    for int i = 0; i < strlen(str2); i++) {
-        if (hashTable.lookup(str2[i]) == false) {
-            cout << str2 << "is not a permutation of str1" << endl;
+    sort(s1.begin(), s1.end());
+    sort(s2.begin(), s2.end());
+    if (int i = 0; i < s1.length(); i++) {
+        if (s1[i] != s2[i]) {
             return false;
         }
-    }*/
-    // 4. Check if the 2 strings have identical char counts
-    if (strlen(str1) != strlen(str2)) {
+    }
+    return true;
+}
+
+bool isPermutation(string s1, string s2)
+{
+    if (s1.empty() || s2.empty() || s1.length() != s2.length()) {
         return false;
     }
-    int counts[256] = {};
-    for (int i = 0; i < strlen(str1); i++) {
-        counts[str1[i]]++;
-    }
-    for (int i = 0; i < strlen(str2); i++) {
-        if (--counts[str2[i]] < 0) {
-            return false;
+    map<char, int> hashMaps1;
+    map<char, int>::const_iterator itr;
+    for (int i = 0; i < s1.length(); i++) {
+        if ((itr = hashMaps1.find(s1[i])) != hashMaps1.end()) {
+            itr.second++;
+        } else {
+            hashMaps1[s1[i]] = 1;
         }
+    }
+    for (int i = 0; i < s2.length(); i++) {
+       itr = hashMaps1.find([s2[i]]);
+       if (itr == hashMaps1.end() || --itr.second < 0) {
+           return false;
+       }
     }
     return true;
 }
