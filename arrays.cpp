@@ -157,6 +157,7 @@ void reverseIntArray(int* arr, int start, int end)
     }
 }
 
+//rotate elements to the right
 void rotate(vector<int>& nums, int k) {
     if (k < 0 || nums.empty()) {
         return;
