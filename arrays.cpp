@@ -157,18 +157,25 @@ void reverseIntArray(int* arr, int start, int end)
     }
 }
 
+void rotate(vector<int>& nums, int k) {
+    if (k < 0 || nums.empty()) {
+        return;
+    }
+    int r = nums.size() < k ? k - nums.size() : k;
+    for (int i = 0; i < r; i++) {
+        int j = nums.size()-1;
+        int temp = nums[j];
+        for (; j >= 0; j--) {
+            nums[j] = nums[j-1];                
+        }
+        nums[0] = temp;
+    }
+}
+
 void rotateArray(int* arr, int size, int d)
 {
     if (arr == nullptr || size == 0) {
         return;
-    }
-    // left rotate the array 'd' times
-    for (int i = 0; i < d; i++) {
-        int temp = arr[0];
-        for (int i = 0; i < size-1; i++) {
-            arr[i] = arr[i+1];
-        }
-        arr[i] = temp;
     }
     // reverse the array
     reverseIntArray(arr, 0, d-1);
