@@ -56,14 +56,14 @@ bool isPermutation(string s1, string s2)
     map<char, int>::const_iterator itr;
     for (int i = 0; i < s1.length(); i++) {
         if ((itr = hashMaps1.find(s1[i])) != hashMaps1.end()) {
-            itr.second++;
+            itr->second++;
         } else {
             hashMaps1[s1[i]] = 1;
         }
     }
     for (int i = 0; i < s2.length(); i++) {
        itr = hashMaps1.find([s2[i]]);
-       if (itr == hashMaps1.end() || --itr.second < 0) {
+       if (itr == hashMaps1.end() || --itr->second < 0) {
            return false;
        }
     }
@@ -97,7 +97,7 @@ string compressStr(string s)
     for (int i = 0; i < s.length(); i++) {
         itr = mapL.find(s[i]);
         if (itr != mapL.end()) {
-            itr.second++;
+            itr->second++;
             continue;
         }
         mapL[s[i]] = 1;
