@@ -193,6 +193,32 @@ void rotateArray(int* arr, int size, int d)
  */
 
 
+// In a sorted array find a pair of nos that adds up to a certain target value.
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int mid = (numbers.size() - 1) / 2;
+        if (numbers[mid] > target) {
+            numbers.resize(mid+1);
+            return twoSum(numbers, target);
+        }
+        vector<int> result;
+        for (int start = 0, end = numbers.size() - 1; start < end;) {
+            int val = numbers[start] + numbers[end];
+            if (val > target) {
+                end--;
+            } else if (val < target) {
+                start++;
+            } else {
+                result.push_back(start+1);
+                result.push_back(end+1);
+                break;
+            }
+        }
+        return result;
+    }
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
