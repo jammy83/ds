@@ -210,7 +210,7 @@ public:
                     }
                 }
                 if (start == end) {
-                    return start;
+                    return nums[start] == val ? start : start+1;
                 }
             }
         }
