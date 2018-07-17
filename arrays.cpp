@@ -162,7 +162,7 @@ void rotate(vector<int>& nums, int k) {
     if (k < 0 || nums.empty()) {
         return;
     }
-    int r = nums.size() < k ? k - nums.size() : k;
+    int r = nums.size() < k ? k % nums.size() : k;
     for (int i = 0; i < r; i++) {
         int j = nums.size()-1;
         int temp = nums[j];
@@ -184,6 +184,14 @@ void rotateArray(int* arr, int size, int d)
     reverseIntArray(arr, 0, size-1);
     // juggling .. using gcd(size, d)
 }
+
+// Remove all instance of a value in a given array and return the new length
+/*
+ * 1. Sort and remove instances and compact
+ * 2. Maintain 2 pointers - one ptr finds the occurrences of the value, 2nd ptr finds the #
+ * swap with.
+ */
+
 
 int max(int a, int b)
 {
