@@ -244,6 +244,33 @@ public:
     }
 };
 
+// Min size sub-array sum with only positive integers
+class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        int sum = 0, len = INT_MAX, start = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            if (sum == s && (i-start) < len) {
+                len = i-start;
+            } else if (sum > s) {
+                // move start forward
+                while (sum > s && start < i) {
+                    sum -= nums[start++];
+                }
+                if (sum < s) {
+                    sum += nums[--start];
+                }
+                if (sum >= s && (i-start) < len) {
+                    len = i-start;
+                }
+            }
+        }
+        return len == INT_MAX ? 0 : len+1;
+    }
+};
+
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
