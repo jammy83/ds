@@ -300,6 +300,36 @@ public:
     }
 };
 
+// move zeros in a given array to the end maintaining the relative order of the non-zero elements
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        if (nums.empty() || nums.size() == 1) {
+            return;
+        }
+        int len = nums.size(), j = 0;
+        for (int i = 0; i < len; i++) {
+            if (nums[i] == 0) {
+                while (i < len && nums[++i] == 0) { }
+                if (i < len) {
+                    nums[j++] = nums[i]; continue;
+                } else {
+                    if (nums[0] == 0) return;
+                }
+                break;
+            } else {
+                if (i != j) {
+                    nums[j] = nums[i];
+                }
+                ++j;
+            }
+        }
+        while (j < len) {
+            nums[j++] = 0;
+        }
+    }
+};
+
 
 int max(int a, int b)
 {
