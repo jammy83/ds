@@ -218,6 +218,36 @@ public:
     }
 };
 
+// Remove duplicates from a sorted array
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        } else if (nums.size() == 1) {
+            return 1;
+        }
+        int len = nums.size(), j = 1;
+        for (int i = 1; i < len; i++) {
+            if (nums[i] == nums[j-1]) {
+                int dup = nums[i];
+                while (i < len && nums[++i] == dup) { }
+                if (i < len) {
+                    nums[j++] = nums[i];
+                } else {
+                    return j;
+                }
+            } else {
+                if (j != i) {
+                    nums[j] = nums[i];
+                }
+                ++j;
+            }
+        }
+        return j;
+    }
+};
+
 // In a sorted array find a pair of nos that adds up to a certain target value.
 class Solution {
 public:
