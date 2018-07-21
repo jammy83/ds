@@ -1137,25 +1137,27 @@ void primeFactors(long int num)
 }
 
 //Pascal's triangle
-void printPascal(int n)
-{
-    int arr[n][n]; // An auxiliary array to store generated pascal triangle values
-    
-    // Iterate through every line and print integer(s) in it
-    for (int line = 0; line < n; line++) {
-        // Every line has number of integers equal to line number
-        for (int i = 0; i <= line; i++) {
-            // First and last values in every row are 1
-            if (line == i || i == 0) {
-                arr[line][i] = 1;
-            } else {// Other values are sum of values just above and left of above
-                arr[line][i] = arr[line-1][i-1] + arr[line-1][i];
-            }
-            printf("%d ", arr[line][i]);
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        vector<int> result;
+        if (rowIndex == 0) {
+            result.push_back(1);
+            return result;
+        } else if (rowIndex == 1) {
+            result.push_back(1);
+            result.push_back(1);
+            return result;
         }
-        printf("\n");
+        result.push_back(1);
+        vector<int> prevRow = getRow(rowIndex-1);
+        for (int i = 1; i < rowIndex; i++) {
+            result.push_back(prevRow[i] + prevRow[i-1]);
+        }
+        result.push_back(1);
+        return result;
     }
-}
+};
 
 //https://github.com/checkcheckzz/coding-questions#array
 //1. Given two arrays, find elements that are in the first array but not in the second
@@ -1163,29 +1165,3 @@ void printPascal(int n)
 //3. Length of the first sub-array that sums to zero
 //4. Given n points on a two-dimensional plane, find the closest (euclidean distance) k points
 //to the point (0, 0).
-
-int main(int argc, char* argv[])
-{
-    char test[] = "healo$erd$@";
-    cout << "hasUniqueCharacters returned " << hasUniqueCharacters(test) << endl;
-
-    reverse(test);
-
-    char test2[] = "I am janani ";
-    char test3[] = "Iamjanani";
-    string res = isPermutation(test2, test3) ? "" : "not ";
-    cout << "\"" << test3 << "\"" << " is " << res << "a permutation of " << "\"" << test2 << "\"" << endl;
-
-    char replace[12] = {'I', ' ', 'a', 'm', ' ', 'j', 'a', 'n', 'a', 'n', 'i', '\0'};
-    replaceSpaces(replace, sizeof(replace));
-    cout << replace << endl;
-
-    char teststring[] = "aaaabfcdeeff";
-    cout << "RunLenghth of " << teststring << " : " << runLength(teststring);
-
-    char[] s1 = "waterbottle";
-    char[] s2 = "erbottlewat";
-    cout << s2 << "is rotation of " << s1 << "? : " << isRotation(s1, s2);
-
-    return 0;
-}
