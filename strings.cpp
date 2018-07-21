@@ -18,63 +18,6 @@ using namespace std;
 //comparisons can be performed like integers and so can use any of the sorting algos
 //3way string quicksort is the solution -- Robert Sedgewick
 
-//How to check if one string is a anagram of another -
-//check one is a permutation of the other - solved already
-
-// Reveres a given string
-void reverse(char* str)
-{
-    if (str == NULL) {
-        return;
-    }
-    for (int i = 0, j = strlen(str)-1; i < j; i++, j--) {
-        char tmp = str[i];
-        str[i] = str[j];
-        str[j] = tmp;
-    }
-    cout << "String reversed: " << str << endl;
-}
-
-// Replaces space with "%20"
-//in-place replacement with the assumption that the input string
-//is wide enough to hold the size after replacement
-void replaceSpaces(char* str, int size)
-{
-    if (str == NULL) {
-        return;
-    }
-    //walk the string to find the no. of occurrences of replace char
-    int count = 0;
-    int len = strlen(str);
-    for (int i = 0; i < len; i++) { // or until char *pStr = str; *pStr != '\0' or *pStr
-        if (str[i] == ' ') {
-            count++;
-        }
-    }
-    if (count == 0) {
-        return;
-    }
-    int j = len + count * 2 + 1; // new length of the string including a null char
-    if (size < j) {
-        cout << "Can't replace spaces. Insufficient space\n";
-        return;
-    }
-    str[--j] = '\0'; //--j is the new index
-    j--;
-    for (int i = len; i >= 0; i--, j--) {
-        if (i == j) {
-            break;
-        }
-        if (str[i] == ' ') {
-            str[j--] = '0';
-            str[j--] = '2';
-            str[j] = '%';
-        } else {
-            str[j] = str[i];
-        }
-    }
-}
-
 //String in-place replacement
 //replace all the occurrences of a given pattern(="abc") to 'X' and note that contiguous
 //occurrence should be replaced only once
@@ -97,6 +40,7 @@ bool isMatch(char* const str, const char* const pattern) {
     }
     return true;
 }
+
 void replace(char* const str, const char* const pattern)
 {
     if (str == NULL || pattern == NULL) {
