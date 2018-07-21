@@ -255,32 +255,30 @@ int searchStrings(std::string* arr, int start, int end, string pattern)
     }
 }
 
-void reverseString(char* str, int start, int end)
-{
-    for (int i = start, j = end; i < j; i++, j--) {
-        char temp = str[i];
-        str[i] = str[j];
-        str[j] = temp;
-    }
-}
-
-//Reverse words in a string
-void reverseWords(char* str)
-{
-    int len = strlen(str);
-    //reverse the entire string
-    reverseString(str, 0, len-1);
-    
-    for (int i = 0; i < len; ++i) {
-        int start, end;
-        start = end = i;
-        while (str[i] != ' ' && i < len) {
-            i++;
+// Reverse the order of characters in each word within a sentence while still preserving whitespace and initial word order
+class Solution {
+public:
+    string reverseWords(string s) {
+        int start = 0, end = 0, len = s.size(); 
+        for (int i = 0; i < len; i++) {
+            if (s[i] == ' ') {
+                reverseWord(s, start, end-1);
+                start = end = i+1;                    
+            } else {
+                ++end;
+            }
         }
-        end = i - 1;
-        reverseString(str, start, end);
+        reverseWord(s, start, end-1);
+        return s;
     }
-}
+    void reverseWord(string& s, int start, int end) {
+        while (start < end) {
+            char temp = s[start];
+            s[start++] = s[end];
+            s[end--] = temp;
+        }
+    }
+};
 
 //Check if 2 strings are isomorphic abb --> xyy and not yxy or yyx
 bool isomorphic(char* str1, char* str2)
