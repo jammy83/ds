@@ -208,6 +208,31 @@ public:
     }
 };
 
+// remove duplicates in a unsorted linked list
+class Solution {
+public:
+    void removeDuplicates(ListNode *head) {
+        ListNode * curr = head, *prev = nullptr;
+        set<int> values;
+        pair<set<int>::iterator, bool> result;
+        while (curr != nullptr) {
+            ListNode *nextNode = curr->next;
+            result = values.insert(curr->val);
+            if (result.second == false) {
+                if (prev != nullptr) {
+                    prev->next = nextNode;
+                } else {
+                    head = nextNode;
+                }
+                delete curr;
+            } else {
+                prev = curr;
+            }
+            curr = nextNode;
+        }
+    }
+};
+
 int LinkedList::findKtoLastElement(int k)
 {
     node* start = head;
