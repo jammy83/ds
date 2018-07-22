@@ -12,37 +12,35 @@
 class node {
  public:
     int key;
-    node* next;
+    node *next;
 
-    node(int val) : key(val), next(NULL) {}
+    node(int val) : key(val), next(nullptr) {}
     ~node() {
-        next = NULL;
+        next = nullptr;
     }
 };
 
 class nodeDLL {
  public:
     int key;
-    nodeDLL* prev;
-    nodeDLL* next;
+    nodeDLL *prev;
+    nodeDLL *next;
 
-    nodeDLL(int val) : key(val), prev(NULL), next(NULL) {}
+    nodeDLL(int val) : key(val), prev(nullptr), next(nullptr) {}
     ~nodeDLL() {
-        prev = next = NULL;
+        prev = next = nullptr;
     }
 };
 
 class LinkedList {
  private:
-    node* head;
+    node *head;
  
  public:
-    LinkedList() : head(NULL) {}
+    LinkedList() : head(nullptr) {}
     ~LinkedList();
     void insert(int val);
     bool insertInOrder(int val);
-    void removeAll(int val);
-    void remove(int val);
     void printList();
     void reverseList();
     bool isPalindrome(node* start);
@@ -58,10 +56,9 @@ class LinkedList {
     bool insertInOrderCyclic(node** aNode, int val);
     void frontBackSplit(node* head, node** first, node** second);
 
- private:
+ private:mc v
     void insert(node** head, node* newItem);
-    void removeAllUtil(node** head, int val);
-    void removeUtil(node** head, int val);
+    node* removeElements(node *head, int val);
     void reverseList(node** head);
     void reverseListPairwise(node** head);
     int getLength(LinkedList& l);
@@ -69,7 +66,7 @@ class LinkedList {
 
 LinkedList::~LinkedList()
 {
-    while (head != NULL) {
+    while (head != nullptr) {
         node* temp = head;
         head = head->next;
         delete temp;
@@ -78,7 +75,7 @@ LinkedList::~LinkedList()
 
 void LinkedList::printList()
 {
-    node* curr = head;
+    node *curr = head;
     while (curr) {
         cout << curr->key << endl;
         curr = curr->next;
@@ -129,89 +126,87 @@ void LinkedList::insert(node** start, node* newItem)
 }
 
 //remove all elements of a given value
-void LinkedList::removeAll(int val)
+node* removeElements(node* head, int val)
 {
-    return removeAllUtil(&head, val);
-}
-void LinkedList::removeAllUtil(node**head, int val)
-{
-    if ((*head) == NULL) {
-        return;
-    }
-    //head is the item to be removed
-    while ((*head) != NULL && (*head)->key == val) {
-        node* nextNode = (*head)->next;
-        (*head)->next = NULL;
-        delete *head;
-        *head = nextNode;
-    }
-    //if the element to be removed is somewhere in
-    //the middle of the list
-    node* curr = *head;
-    while (curr->next != NULL) {
-        if (curr->next->key == val) {
-            node* nextNode = curr->next;
-            curr->next = nextNode->next;
-            nextNode->next = NULL;
-            delete nextNode;
-        } else {
-            curr = curr->next;
+     node *prev = nullptr, *curr = head;
+     while (curr != nullptr) {
+         node *nextNode = curr->next;
+             if (curr->val == val) {
+                if (prev != nullptr) {
+                    prev->next = nextNode;
+                } else {
+                    head = nextNode;
+                }
+                delete curr;
+            } else {
+                prev = curr;
+            }
+            curr = nextNode;
         }
+        return head;
     }
 }
 
-//remove an element of a given value
-void LinkedList::remove(int val)
-{
-    return removeUtil(&head, val);
-}
-void LinkedList::removeUtil(node** head, int val)
-{
-    if (*head == NULL) {
-        return;
-    }
-    //head is the item to be removed
-    if ((*head)->key == val) {
-        node* nextNode = (*head)->next;
-        (*head)->next = NULL;
-        delete *head;
-        *head = nextNode;
-        return;
-    }
-    //if the element to be removed is in the middle
-    node* curr = *head;
-    while (curr->next != NULL) {
-        if (curr->next->key == val) {
-            node* nextNode = curr->next;
-            curr->next = nextNode->next;
-            nextNode->next = NULL;
-            delete nextNode;
-            return;
+// delete dups in a sorted list such that each element appear only once
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (head == nullptr) {
+            return nullptr;
+        } else if (head->next == nullptr) {
+            return head;
         }
-        curr = curr->next;
+        ListNode *curr = head->next, *prev = head;
+        while (curr != nullptr) {
+            ListNode *nextNode = curr->next;
+            if (curr->val == prev->val) {
+                prev->next = nextNode;
+                delete curr;
+            } else {
+                prev = curr;
+            }
+            curr = nextNode;
+        }
+        return head;
     }
-}
+};
 
-void LinkedList::removeDups()
-{
-    if (head == NULL) {
-        return;
-    }
-    HashTable hashT = new HashTable();
-    node* start = head;
-    node* prev = NULL;
-    while (start) {
-        if (hashT.containsKey(start->key)) {
-            prev->next = start->next;
-            node* temp = start;
-            delete temp;
-        } else {
-            hashT.insert(start->key, start);
-            prev = start; // update previous only if this is not a duplicate
+/*
+ * Given a sorted linked list, delete all nodes that have duplicate numbers, 
+ * leaving only *distinct* numbers from the original list.
+ * Input: 1->2->3->3->4->4->5
+ * Output: 1->2->5
+ */
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (head == nullptr) {
+            return nullptr;
+        } else if (head->next == nullptr) {
+            return head;
         }
-        start = start->next;
+        ListNode *curr = head, *prev = nullptr;
+        while (curr != nullptr) {
+            if (curr->next != nullptr && curr->val == curr->next->val) {
+                int dupVal = curr->val;
+                while (curr != nullptr && curr->val == dupVal) {
+                    ListNode *nextNode = curr->next;
+                    if (prev != nullptr) {
+                        prev->next = nextNode;
+                    } else {
+                        head = nextNode;
+                    }
+                    delete curr;
+                    curr = nextNode;
+                }
+            } else {
+                prev = curr;
+                curr = curr->next;
+            }
+        }
+        return head;
     }
-}
+};
 
 int LinkedList::findKtoLastElement(int k)
 {
