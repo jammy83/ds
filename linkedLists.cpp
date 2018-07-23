@@ -233,22 +233,38 @@ public:
     }
 };
 
-int LinkedList::findKtoLastElement(int k)
-{
-    node* start = head;
-    node* knode = NULL;
-    int count = 0;
-    while (start != NULL) {
-        count++;
-        if (count == k) {
-            knode = head;
-        } else if (count > k) {
-            knode = knode->next;
+/*
+ * Given a linked list, remove the n-th node from the end of list and return its head.
+ * Approach 1: Find the length of the list and return the len-n+1
+ * Approach 2: Maintain 2 ptrs that are n nodes apart. When the fast pointer reaches the end,
+ * the slow pointer will be pointing to nth node from the last.
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode *curr = head, *node = head;
+        int count = 0;
+        while (curr != nullptr && count++ < n) {
+            curr = curr->next;
         }
-        start = start->next;
+        if (count != n && curr == nullptr) {
+            return nullptr;
+        }
+        ListNode *prev = nullptr;
+        while (curr != nullptr) {
+            curr = curr->next;
+            prev = node;
+            node = node->next;
+        }
+        if (prev != nullptr) {
+            prev->next = node->next;
+        } else {
+            head = node->next;
+        }
+        delete node;
+        return head;
     }
-    return ((knode) ? knode->key : -1);
-}
+};
 
 void LinkedList::deleteNode(node* item)
 {
