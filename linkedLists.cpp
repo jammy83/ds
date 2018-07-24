@@ -266,89 +266,116 @@ public:
     }
 };
 
-void LinkedList::deleteNode(node* item)
-{
-    // don't have access to the prev node
-    if (item == NULL || item->next == NULL) {
-        return;
+// Delete a node in a linked list given only access to that node.
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        if (node == nullptr || node->next == nullptr) {
+            return;
+        }
+        ListNode *nextNode = node->next;
+        node->val = nextNode->val;
+        node->next = nextNode->next;
+        nextNode->next = nullptr;
+        delete nextNode;
     }
-    node* nextNode = item->next;
-    item->next = nextNode->next;
-    item->key = nextNode->key;
-    delete nextNode;
-}
+};
 
-node* LinkedList::partitionList(node* start, int val)
-{
-    if (head == NULL) {
-        return;
-    }
-    // maintain 2 separate lists for storing values <x
-    // and one for >x
-    node* beforeHead, *beforeTail;
-    beforeHead = beforeTail = NULL;
-    node* after = NULL;
-    node* valNode = NULL;
-
-    while (start != NULL) {
-        node* nextNode = start->next;
-        if (start->key < val) {
-            if (beforeHead == NULL) {
-                start->next = beforeHead;
-                beforeHead = start;
-                beforeTail = beforeHead;
+/*
+ * Given a linked list and a value x, partition it such that all nodes <x come before nodes >=x.
+ * You should preserve the original relative order of the nodes in each of the two partitions.
+ * Input: head = 1->4->3->2->5->2, x = 3
+ * Output: 1->2->2->4->3->5
+ */
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if (head == nullptr) {
+            return nullptr;
+        }
+        ListNode *curr = head, *prev = nullptr;
+        ListNode *prevItem = nullptr, *beforeItem = nullptr;
+        while (curr != nullptr && curr->val < x) {
+            prev = curr;
+            curr = curr->next;
+        }
+        if (curr == nullptr) {
+            return head;
+        }
+        prevItem = prev;
+        beforeItem = curr;
+        while (curr != nullptr) {
+            if (curr->val >= x) {
+                prev = curr;
+                curr = curr->next;
             } else {
-                beforeTail->next = start;
-                start->next = NULL;
-                beforeTail = start;
+                ListNode *nextNode = curr->next;
+                prev->next = nextNode;
+                if (prevItem != nullptr) {
+                    prevItem->next = curr;
+                } else {
+                    head = curr;
+                }
+                curr->next = beforeItem;
+                prevItem = curr;
+                curr = nextNode;
             }
-        } else if (start->key > val) {
-            start->next = after;
-            after = start;
-        } else {
-            start->next = valNode; // to handle the case where there are dups
-            valNode = start;
         }
-        start = nextNode;
+        return head;
     }
-    
-    if (beforeHead && beforeTail) {
-        beforeTail->next = valNode;
-        if (valNode) {
-            valNode->next = after;
-        }
-        start = beforeHead;
-    } else if (valNode) {
-        valNode->next = after;
-        start = valNode;
-    } else {
-        start = after;
-    }
-    
-    return start;
-}
+};
 
-//reverse the linked list
-//keep moving the elements to the head
-void LinkedList::reverseList()
-{
-    return reverseList(&head);
-}
-void LinkedList::reverseList(node** head)
-{
-    if (*head == NULL || (*head)->next == NULL) {
-        return;
+// Reverse the linked list
+// Approach 1: using a stack
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        stack<int> vals;
+        ListNode *curr = head;
+        while (curr != nullptr) {
+            vals.push(curr->val);
+            ListNode *nextNode = curr->next;
+            curr->next = nullptr;
+            delete curr;
+            curr = nextNode;
+        }
+        head = nullptr;
+        ListNode* prev = nullptr;
+        while (!vals.empty()) {
+            if (head == nullptr) {
+                head = new ListNode(vals.top());
+                vals.pop();
+                prev = head;
+                continue;
+            }
+            curr = new ListNode(vals.top());
+            vals.pop();
+            prev->next = curr;
+            prev = curr;
+        }
+        return head;
     }
-    //there are atleast 2 items in the linked list
-    node* curr = *head, *prev = NULL;
-    while (curr) {
-        node* nextNode = curr->next;
-        curr->next = prev;
-        prev = curr;
-        curr = nextNode;
+};
+
+// Approach 2: Reverse the pointers in one pass
+class Solution {
+public:
+   ListNode* reverseList(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+        ListNode *curr = head->next, *prev = head;
+        prev->next = nullptr;
+        while (curr != nullptr) {
+            ListNode *nextNode = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextNode;
+        }
+        head = prev;
+        return head;
     }
-    *head = prev;
-}
+};
 
 // the lists are numbers represented in reverse
 node* LinkedList::addLists(node* l1, node* l2, int carry)
@@ -479,16 +506,6 @@ RandomListNode* copyRandomList(RandomListNode* head)
     return newHead;
 }
 
-int LinkedList::getLength(LinkedList& l)
-{
-    node* p = l.head;
-    int len = 0;
-    while (p) {
-        len++;
-        p = p->next;
-    }
-    return len;
-}
 //intersection point of two singly linked lists
 //Soln: Find the length of the 2 linked list and calculate the diff
 //Move the longer list to that point and start comparing the 2 list
