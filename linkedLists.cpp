@@ -543,39 +543,44 @@ RandomListNode* copyRandomList(RandomListNode* head)
 //Soln: Find the length of the 2 linked list and calculate the diff
 //Move the longer list to that point and start comparing the 2 list
 //walking until you find the common element
-node* LinkedList::getIntersectionPoint(LinkedList& l1, LinkedList& l2)
-{
-    if (l1.head == NULL || l2.head == NULL) {
-        return NULL;
-    }
-    int len1 = getLength(l1);
-    int len2 = getLength(l2);
-
-    node *p1 = l1.head, *p2 = l2.head;
-
-    if (len2 > len1) {
-        p2 = l1.head; p1 = l2.head;
-        int temp = len1; len1 = len2; len2 = temp;
-    }
-    //invariant: l1 >= l2 and p1,len1 points to the longer list
-    int d = len1-len2;
-    for (int i = 0; i < d && p1 != NULL; ++i) {
-        p1 = p1->next;
-    }
-    node* res = NULL;
-    while (p1 && p2) {
-        if (p1->key == p2->key) {
-            if (res == NULL) {
-                res = p1;
-            }
-        } else if (res) { // keep walking the list to the end to make sure the values are alinged
-            return NULL;
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if (headA == nullptr || headB == nullptr) {
+            return nullptr;
         }
-        p1 = p1->next;
-        p2 = p2->next;
+        int lenA = 0, lenB = 0;
+        ListNode *currA = headA, *currB = headB;
+        while (currA != nullptr) {
+            currA = currA->next;
+            ++lenA;
+        }
+        while (currB != nullptr) {
+            currB = currB->next;
+            ++lenB;
+        }
+        currA = headA;
+        currB = headB;
+        int move = abs(lenA-lenB);
+        if (lenA > lenB) {
+            while (move-- > 0) {
+                currA = currA->next;
+            }
+        } else if (lenB > lenA) {
+            while (move-- > 0) {
+                currB = currB->next;
+            }
+        }
+        while (currA != nullptr && currB != nullptr) {
+            if (currA == currB) {
+                return currA;
+            }
+            currA = currA->next;
+            currB = currB->next;
+        }
+        return nullptr;
     }
-    return res;
-}
+};
 
 //reversing linked lists pair-wise
 void LinkedList::reverseListPairwise(node** head)
