@@ -410,6 +410,22 @@ public:
     }
 };
 
+// middle element in a linked list
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        if (head == nullptr || head-> next == nullptr) {
+            return head;
+        }
+        ListNode *slow = head, *fast = head->next->next;
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow->next;
+    }
+};
+
 // the lists are numbers represented in reverse
 node* LinkedList::addLists(node* l1, node* l2, int carry)
 {
