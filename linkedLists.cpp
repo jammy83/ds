@@ -550,14 +550,19 @@ public:
             return nullptr;
         }
         int lenA = 0, lenB = 0;
-        ListNode *currA = headA, *currB = headB;
+        ListNode *currA = headA, *currB = headB, *lastA, *lastB;
         while (currA != nullptr) {
+            lastA = currA;
             currA = currA->next;
             ++lenA;
         }
         while (currB != nullptr) {
+            lastB = currB;
             currB = currB->next;
             ++lenB;
+        }
+        if (lastA != lastB) {
+            return nullptr;
         }
         currA = headA;
         currB = headB;
