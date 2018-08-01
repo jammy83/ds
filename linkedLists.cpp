@@ -448,6 +448,24 @@ node* LinkedList::addLists(node* l1, node* l2, int carry)
     return result;
 }
 
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (head == nullptr || head->next == nullptr) {
+            return false;
+        }
+        ListNode *slow = head, *fast = head->next->next;
+        while (fast != nullptr && fast->next != nullptr) {
+            if (slow == fast) {
+                return true;
+            }
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return false;
+    }
+};
+
 node* LinkedList::findLoopBeginning(node* start)
 {
     node* fast, *slow;
