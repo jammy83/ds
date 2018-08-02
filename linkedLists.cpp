@@ -677,6 +677,73 @@ public:
     }
 };
 
+// sort linked list using insertion sort
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+        ListNode *curr = head->next, *sortedEnd = head;
+        while (curr != nullptr) {
+            if (curr->val >= sortedEnd->val) {
+                sortedEnd = curr;
+                curr = curr->next;
+                continue;
+            }
+            ListNode *begin = head, *prev = nullptr;
+            while (begin != curr) {
+                if (begin->val <= curr->val) {
+                    prev = begin;
+                    begin = begin->next;
+                } else {
+                    if (prev != nullptr) {
+                        prev->next = curr;
+                    } else {
+                        head = curr;
+                    }
+                    sortedEnd->next = curr->next;
+                    curr->next = begin;
+                    break;
+                }
+            }
+            curr = sortedEnd->next;
+        }
+        sortedEnd->next = nullptr;
+        return head;
+    }
+};
+
+//reverse a linked list between m & n where  1 <= m <= n
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if (head == nullptr || m == 0 || n == 0 || n <= m) {
+            return head;
+        }
+        int cnt = 1;
+        ListNode *curr = head, *prev = nullptr, *start = nullptr, *prevStart = nullptr;
+        while (curr != nullptr && cnt <= n) {
+            ListNode *nextNode = curr->next;
+            if (cnt == m) {
+                start = curr;
+                prevStart = prev;
+            } else if (cnt > m) {
+                curr->next = prev;
+            }
+            prev = curr;
+            curr = nextNode; cnt++;
+        }
+        if (prevStart != nullptr) {
+            prevStart->next = prev;
+        } else {
+            head = prev;
+        }
+        start->next = curr;
+        return head;
+    }
+};
+
 //reversing linked lists pair-wise
 void LinkedList::reverseListPairwise(node** head)
 {
