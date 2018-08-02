@@ -654,6 +654,29 @@ public:
     }
 };
 
+// odd-even linked list
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (head == nullptr || head->next == nullptr || head->next->next == nullptr) {
+            return head;
+        }
+        //atleast 3 elements
+        ListNode *odd = head, *even = nullptr, *prevOdd = nullptr, *evenHead = head->next;
+        while (odd != nullptr) {
+            even = odd->next;
+            odd->next = even != nullptr ? even->next : nullptr;
+            prevOdd = odd;
+            odd = odd->next;
+            if (even != nullptr) {
+                even->next = odd != nullptr ? odd->next : nullptr;
+            }
+        }
+        prevOdd->next = evenHead;
+        return head;
+    }
+};
+
 //reversing linked lists pair-wise
 void LinkedList::reverseListPairwise(node** head)
 {
