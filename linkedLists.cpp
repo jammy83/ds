@@ -488,6 +488,39 @@ node* LinkedList::findLoopBeginning(node* start)
     return slow;
 }
 
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return true;
+        }
+        ListNode *slow = head, *fast = head->next->next, *prev = nullptr;
+        ListNode *nextNode = nullptr;
+        while (fast != nullptr && fast->next != nullptr) {
+            nextNode = slow->next;
+            slow->next = prev;
+            prev = slow;
+            slow = nextNode;
+            fast = fast->next->next;
+        }
+        nextNode = slow->next;
+        slow->next = prev;
+        prev = slow;
+        slow = nextNode;
+        if (fast != nullptr) { // odd no. of elements
+            slow = slow->next;
+        }
+        while (slow != nullptr && prev != nullptr) {
+            if (slow->val != prev->val) {
+                return false;
+            }
+            slow = slow->next;
+            prev = prev->next;
+        }
+        return true;
+    }
+};
+
 bool LinkedList::isPalindrome(node* start)
 {
     //find the middle and reverse the linked list until middle point using a stack
