@@ -494,19 +494,15 @@ public:
         if (head == nullptr || head->next == nullptr) {
             return true;
         }
-        ListNode *slow = head, *fast = head->next->next, *prev = nullptr;
+        ListNode *slow = head, *fast = head, *prev = nullptr;
         ListNode *nextNode = nullptr;
         while (fast != nullptr && fast->next != nullptr) {
+            fast = fast->next->next;
             nextNode = slow->next;
             slow->next = prev;
             prev = slow;
-            slow = nextNode;
-            fast = fast->next->next;
+            slow = nextNode; 
         }
-        nextNode = slow->next;
-        slow->next = prev;
-        prev = slow;
-        slow = nextNode;
         if (fast != nullptr) { // odd no. of elements
             slow = slow->next;
         }
