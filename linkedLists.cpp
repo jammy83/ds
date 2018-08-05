@@ -740,6 +740,46 @@ public:
     }
 };
 
+// Reorder the list
+// Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+// reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if (head == nullptr || head->next == nullptr || head->next->next == nullptr) {
+            return;
+        }
+        //atleast 3 elements
+        ListNode *slow = head; ListNode *fast = head, *odd = nullptr;
+        while (fast != nullptr && fast->next != nullptr) {
+            fast = fast->next->next;
+            slow = slow->next;     
+        }
+        ListNode *mid = slow;
+        if (fast != nullptr) { // odd no. of elements
+            odd = slow;
+            slow = slow->next;
+            odd->next = nullptr;
+        }
+        stack<ListNode*> s;
+        while (slow != nullptr) {
+            s.push(slow);
+            slow = slow->next;
+        }
+        ListNode *curr = head, *prev = nullptr;
+        while (curr != mid) {
+            ListNode *nextNode = curr->next;
+            curr->next = s.top(); s.pop();
+            if (prev != nullptr) {
+                prev->next = curr;
+            }
+            prev = curr->next;
+            curr = nextNode;
+        }
+        prev->next = odd;
+    }
+};
+
 //reversing linked lists pair-wise
 void LinkedList::reverseListPairwise(node** head)
 {
