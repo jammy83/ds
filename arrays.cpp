@@ -331,6 +331,31 @@ public:
 };
 
 
+// find the unique element in an array
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int len = nums.size();
+        if (len == 1) {
+            return nums[0];
+        }
+        for (int i = 0; i < len-1; ) {
+            if (nums[i] == nums[i+1]) {
+                int dup = nums[i];
+                while (++i < len && nums[i] == dup) { }
+                if (i == len) {
+                    return -1;    
+                } else if (i == len-1) {
+                    return nums[i];
+                }
+            } else {
+                return nums[i];
+            }
+        }
+        return -1;
+    }
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
