@@ -9,6 +9,62 @@
 #include iostream
 #include "stack.h"
 
+/*
+ * Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+ * An input string is valid if:
+ * Open brackets must be closed by the same type of brackets.
+ * Open brackets must be closed in the correct order.
+ * Note that an empty string is also considered valid.
+ */
+class Solution {
+public:
+    bool isValid(string s) {
+        if (s.empty()) {
+            return true;
+        }
+        stack<char> expr;
+        for (char c : s) {
+            if (c == '{' || c == '[' || c == '(') {
+               expr.push(c); 
+            } else if (c == '}') {
+                if (expr.empty() || expr.top() != '{') {
+                    return false;
+                }
+                expr.pop();
+            } else if (c == ']') {
+                if (expr.empty() || expr.top() != '[') {
+                    return false;
+                }
+                expr.pop();
+            } else if (c == ')') {
+                if (expr.empty() || expr.top() != '(') {
+                    return false;
+                }
+                expr.pop();
+            }
+        }
+        return expr.empty();
+    }
+};
+
+// Daily temperature to find out no. of days to wait for warmer climate
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        vector<int> ans(temperatures.size());
+        stack<int> indices;
+        for (int i = temperatures.size()-1; i >=0; i--) {
+            while (!indices.empty() &&
+                   temperatures[indices.top()] <= temperatures[i]) {
+                indices.pop();
+            }
+            ans.at(i) = indices.empty() ? 0 : indices.top() - i;
+            indices.push(i);
+        }
+        return ans;
+    }
+};
+
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
