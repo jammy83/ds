@@ -9,6 +9,34 @@
 #ifndef _stacks_h
 #define _stacks_h
 
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    MinStack() {}
+    void push(int x) {
+        _nums.push(x);
+        if (_minStack.empty() || x <= _minStack.top()) {
+            _minStack.push(x);
+        }
+    }
+    void pop() {
+        if (_nums.empty()) {
+            return;
+        }
+        int val = _nums.top();
+        if (_minStack.top() == val) {
+        _nums.pop();
+    }
+    int top() {
+       return _nums.empty() ? -1 : _nums.top(); 
+    }    
+    int getMin() {
+        return _minStack.empty() ? -1 : _minStack.top();
+    }
+    stack<int> _nums;
+    stack<int> _minStack;
+};
+
 template <class T>
 class element {
 public:
