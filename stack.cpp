@@ -65,6 +65,37 @@ public:
     }
 };
 
+// Reverse polish notation
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> operands;
+        for (string s : tokens) {
+            if (!isOperator(s)) {
+                operands.push(atoi(s.c_str()));
+            } else {
+                assert(operands.size() >= 2);
+                int val2 = operands.top(); operands.pop();
+                int val1 = operands.top(); operands.pop();
+                int expr;
+                if (s == "+") {
+                    operands.push(val1 + val2);
+                } else if (s == "-") {
+                    operands.push(val1 - val2);
+                } else if (s == "*") {
+                    operands.push(val1 * val2);
+                } else if (s == "/") {
+                    operands.push(val1 / val2);
+                }
+            }
+        }
+        return operands.top();
+    }
+    bool isOperator(string& s) {
+        return (s == "+" || s == "*" || s == "/" || s == "-");
+    }
+};
+
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
