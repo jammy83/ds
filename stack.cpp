@@ -96,6 +96,45 @@ public:
     }
 };
 
+// Implement a queue using stack
+class MyQueue {
+public:
+    /** Initialize your data structure here. */
+    MyQueue() { }
+    /** Push element x to the back of queue. */
+    void push(int x) {
+        if (_nums.empty()) {
+            while (!_rnums.empty()) {
+                _nums.push(_rnums.top());
+                _rnums.pop();
+            }
+        }
+        _nums.push(x);
+    }
+    /** Removes the element from in front of queue and returns that element. */
+    int pop() {
+        int result = peek();
+        _rnums.pop();
+        return result;
+    }
+    /** Get the front element. */
+    int peek() {
+        if (_rnums.empty()) {
+            while (!_nums.empty()) {
+                _rnums.push(_nums.top());
+                _nums.pop();
+            }
+        }
+        return _rnums.top();
+    }
+    /** Returns whether the queue is empty. */
+    bool empty() {
+        return _nums.empty() && _rnums.empty();
+    }
+    stack<int> _nums;
+    stack<int> _rnums;
+};
+
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
@@ -134,14 +173,6 @@ int leftShift(int index, bool removeTop)
     }
     return res;
 }
-//--------------------------------------------------------------------------------------------------------
-
-// create a queue using 2 stacks
-// pop() -- pop all the elements from s1 onto s2 and return the top. When empty,
-// pop more elements from s1 onto s2.
-// when you have to push() to s1, simply push onto s1
-
-//Queue implemetation using linked lists will maintain a head and tail pointer: push_back(), pop_front()
 
 //--------------------------------------------------------------------------------------------------------
 
