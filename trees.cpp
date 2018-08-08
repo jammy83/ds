@@ -259,22 +259,27 @@ void Tree::traverseInOrder(node* start)
     traverseInOrder(start->right);
 }
 
-void Tree::traverseInOrderIterative(node* start)
-{
-    //Stack
-    stack<node*> s;
-    while (!s.empty() || start) {
-        if (start) {
-            s.push(start);
-            start = start->left;
-        } else {
-            node* top = s.top();
-            s.pop();
-            cout << top->key << endl;
-            start = top->right;
+// Inorder iterative
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> s;
+        TreeNode *curr = root;
+        while (!s.empty() || curr != nullptr) {
+            if (curr != nullptr) {
+                s.push(curr);
+                curr = curr->left;
+            } else {
+                TreeNode *node = s.top();
+                result.push_back(node->val);
+                s.pop();
+                curr = node->right;
+            }
         }
+        return result;
     }
-}
+};
 
 void Tree::traversePostOrder(node* start)
 {
