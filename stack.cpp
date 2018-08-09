@@ -169,6 +169,63 @@ public:
 };
 
 
+// Circular queue implementation
+class MyCircularQueue {
+public:
+    /** Initialize your data structure here. Set the size of the queue to be k. */
+    MyCircularQueue(int k) : _head(-1), _tail(-1) {
+        _nums.reserve(k);
+    }
+    /** Insert an element into the circular queue. Return true if the operation is successful. */
+    bool enQueue(int value) {
+        if (isFull()) {
+            return false;
+        }
+        if (_head == -1) {
+            ++_head;
+        }
+        _tail = ++_tail % _nums.capacity();
+        _nums[_tail] = value;
+        return true;
+    }
+    /** Delete an element from the circular queue. Return true if the operation is successful. */
+    bool deQueue() {
+        if (!isEmpty()) {
+            if (_head == _tail) { // removing the last element
+                _head = _tail = -1;
+            } else {
+                _head = ++_head % _nums.capacity();
+            }
+            return true;
+        }
+        return false;
+    }
+    /** Get the front item from the queue. */
+    int Front() {
+        return !isEmpty() ? _nums[_head] : -1;
+    }
+    /** Get the last item from the queue. */
+    int Rear() {
+        return !isEmpty() ? _nums[_tail] : -1;
+    }
+    /** Checks whether the circular queue is empty or not. */
+    bool isEmpty() {
+        return (_head == -1 && _tail == -1);
+    }
+    /** Checks whether the circular queue is full or not. */
+    bool isFull() {
+        if (_head < _tail) {
+            return (_tail-_head == _nums.capacity()-1);
+        } else if (_head > _tail) {
+            return (_head-_tail == 1);
+        }
+        return false;
+    }
+    vector<int> _nums;
+    int _head;
+    int _tail;
+};
+
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
