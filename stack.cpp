@@ -135,6 +135,40 @@ public:
     stack<int> _rnums;
 };
 
+// Implementing a stack using queues
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+    MyStack() {}  
+    /** Push element x onto stack. */
+    void push(int x) {
+        _rnums.push(x);
+        while (!_nums.empty()) {
+            _rnums.push(_nums.front());
+            _nums.pop();
+        }
+        _rnums.swap(_nums);
+    }
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        int val = top();
+        _nums.pop();
+        return val;
+    }
+    /** Get the top element. */
+    int top() {
+        return _nums.front();
+    }
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return _nums.empty() && _rnums.empty();
+    }
+    // maintain the elements pushed, in a reverse order in _nums
+    queue<int> _nums;
+    queue<int> _rnums;
+};
+
+
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
