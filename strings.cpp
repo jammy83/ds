@@ -10,6 +10,46 @@
 
 using namespace std;
 
+/*
+ * decode string
+ * s = "3[a]2[bc]", return "aaabcbc".
+ * s = "3[a2[c]]", return "accaccacc".
+ * s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
+ */
+class Solution {
+public:
+    string decodeString(string s) {
+        if (s.empty()) {
+            return s;
+        }
+        string result;
+        for (int i = 0; i < s.size(); ) {
+            if (!isdigit(s[i])) {
+                result += s[i++];
+            } else {
+                int start = s.find_first_of('[', i);
+                int num = stoi(s.substr(i, start-i));
+                int depth = 1; i = start;
+                while (++i < s.size()) {
+                    if (s[i] == '[') {
+                        depth++;
+                    } else if (s[i] == ']') {
+                        depth--;
+                    }
+                    if (depth == 0) break;
+                }
+                ++start;
+                string str = decodeString(s.substr(start, i-start));
+                for (int j = 0; j < num; j++) {
+                    result += str;
+                }
+                ++i;
+            }
+        }
+        return result;
+    }
+};
+
 //Group strings that are anagrams: given an array of strings
 //Sort every string and put it in a hash table. Since the string is sorted,
 //anagrams will hash to the same value and will be chained together.
