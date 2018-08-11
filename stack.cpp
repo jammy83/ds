@@ -214,6 +214,7 @@ public:
     }
     /** Checks whether the circular queue is full or not. */
     bool isFull() {
+        // (tail+1 % _nums.capacity() == _head)
         if (_head < _tail) {
             return (_tail-_head == _nums.capacity()-1);
         } else if (_head > _tail) {
