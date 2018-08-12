@@ -227,6 +227,35 @@ public:
     int _tail;
 };
 
+
+/*
+ * There are N rooms and you start in room 0.  Each room has a distinct number in 0, 1, 2, ..., N-1, and each room may have some keys to access the next room. 
+ * Formally, each room i has a list of keys rooms[i], and each key rooms[i][j] is an integer in [0, 1, ..., N-1] where N = rooms.length.  A key rooms[i][j] = v opens the room with number v.
+ * Initially, all the rooms start locked (except for room 0). You can walk back and forth between rooms freely.
+ * Return true if and only if you can enter every room.
+ */
+class Solution {
+public:
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        set<int> visited;
+        pair<set<int>::iterator, bool> ret;
+        queue<int> toVisit;
+        toVisit.push(0);
+        visited.insert(0);
+        while (!toVisit.empty()) {
+            int next = toVisit.front();
+            toVisit.pop();
+            for (int key : rooms[next]) {
+                ret = visited.insert(key);
+                if (ret.second != false) {
+                    toVisit.push(key);
+                }
+            }
+        }
+        return (visited.size() == rooms.size());
+    }
+};
+
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
