@@ -331,7 +331,7 @@ public:
 };
 
 
-// find the unique element in an array
+// find the first unique element in an array
 class Solution {
 public:
     int singleNonDuplicate(vector<int>& nums) {
@@ -355,6 +355,44 @@ public:
         return -1;
     }
 };
+
+/*
+ * Given an array of integers nums, write a method that returns the "pivot" index of this array.
+ * We define the pivot index as the index where the sum of the numbers to the left of the index is equal to the sum of the numbers to the right of the index.
+ * If no such index exists, we should return -1. If there are multiple pivot indexes, you should return the left-most pivot index. 
+ */
+class Solution {
+public:
+    int pivotIndex(vector<int>& nums) {
+        int len = nums.size();
+        if (len == 0 || len == 1) {
+            return -1;
+        }
+        vector<int> fSum; fSum.reserve(nums.size());
+        vector<int> rSum; rSum.reserve(nums.size());
+        fSum[0] = nums[0];
+        rSum[len-1] = nums[len-1];
+        for (int i = 1; i < len; i++) {
+            fSum[i] = fSum[i-1] + nums[i];
+        }
+        for (int j = len-2; j >= 0; j--) {
+            rSum[j] = rSum[j+1] + nums[j];
+        }
+        if (rSum[1] == 0) { //spl index 0
+            return 0;
+        }
+        for (int i = 1; i < len-1; i++) {
+            if (fSum[i-1] == rSum[i+1]) {
+                return i;
+            }    
+        }
+        if (fSum[len-2] == 0) { //spl index len-2
+            return len-1;
+        }
+        return -1;
+    }
+};
+
 
 int max(int a, int b)
 {
