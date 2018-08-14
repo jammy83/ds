@@ -330,7 +330,6 @@ public:
     }
 };
 
-
 // find the first unique element in an array
 class Solution {
 public:
@@ -393,6 +392,34 @@ public:
     }
 };
 
+// Largest Number At Least Twice of Others
+class Solution {
+public:
+    int dominantIndex(vector<int>& nums) {
+        if (nums.empty()) {
+            return -1;
+        }
+        if (nums.size() == 1) {
+            return 0;
+        }
+        int sMaxIndex = -1;
+        int maxIndex = 0;
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] > nums[maxIndex]) {
+                sMaxIndex = maxIndex;
+                maxIndex = i;
+            } else if ((sMaxIndex == -1 && nums[i] < nums[maxIndex]) ||
+                       (nums[i] < nums[maxIndex] && nums[i] > nums[sMaxIndex])) {
+                sMaxIndex = i;
+            }
+        }
+        if (sMaxIndex != -1 &&
+            nums[maxIndex] >= 2*nums[sMaxIndex]) {
+            return maxIndex;
+        }
+        return -1;
+    }
+};
 
 int max(int a, int b)
 {
