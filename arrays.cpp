@@ -421,6 +421,34 @@ public:
     }
 };
 
+// Plus one
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        if (digits.empty()) {
+            return digits;
+        }
+        int len = digits.size();
+        if (digits[len-1] != 9) {
+            digits[len-1]++;
+            return digits;
+        }
+        int i;
+        for (i = len-1; i >= 0 && digits[i] == 9; i--) {
+            digits[i] = 0;
+        }
+        if (i >= 0) {
+            digits[i]++;
+        } else {
+            vector<int>::iterator itr = digits.begin();
+            digits.insert(itr, 1);
+        }
+        return digits;
+    }
+};
+
+
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
