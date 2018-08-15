@@ -248,32 +248,6 @@ public:
     }
 };
 
-// In a sorted array find a pair of nos that adds up to a certain target value.
-class Solution {
-public:
-    vector<int> twoSum(vector<int>& numbers, int target) {
-        int mid = (numbers.size() - 1) / 2;
-        if (numbers[mid] > target) {
-            numbers.resize(mid+1);
-            return twoSum(numbers, target);
-        }
-        vector<int> result;
-        for (int start = 0, end = numbers.size() - 1; start < end;) {
-            int val = numbers[start] + numbers[end];
-            if (val > target) {
-                end--;
-            } else if (val < target) {
-                start++;
-            } else {
-                result.push_back(start+1);
-                result.push_back(end+1);
-                break;
-            }
-        }
-        return result;
-    }
-};
-
 // Min size sub-array sum with only positive integers
 class Solution {
 public:
@@ -330,7 +304,7 @@ public:
     }
 };
 
-// find the first unique element in an array
+// find the first unique element in a sorted array
 class Solution {
 public:
     int singleNonDuplicate(vector<int>& nums) {
@@ -493,43 +467,89 @@ int mergedMedian(int* arr1, int* arr2, int n)
 }
 //http://aleph.nu/blog/kth-smallest-in-sorted-union.html
 
+// In a sorted array find a pair of nos that adds up to a certain target value.
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int mid = (numbers.size() - 1) / 2;
+        if (numbers[mid] > target) {
+            numbers.resize(mid+1);
+            return twoSum(numbers, target);
+        }
+        vector<int> result;
+        for (int start = 0, end = numbers.size() - 1; start < end;) {
+            int val = numbers[start] + numbers[end];
+            if (val > target) {
+                end--;
+            } else if (val < target) {
+                start++;
+            } else {
+                result.push_back(start+1);
+                result.push_back(end+1);
+                break;
+            }
+        }
+        return result;
+    }
+};
+
 // Gn a sorted array and value X, find a pair whose sum is closest to X
-void closestPair(int* arr, int size, int val)
-{
-    if (arr == NULL) {
-        return;
-    }
-    if (size < 2) {
-        return;
-    }
-    // assuming this is a sorted array
-    int l = 0;
-    int r = size - 1;
-    int last_l, last_r;
-    last_l = last_r = 0;
-    int last_diff = MAX_INT;
-    while (l < r) {
-        int sum = arr[l] + arr[r];
-        int diff = abs(sum - val);
-        if (diff < last_diff) {
-            // found a better pair
-            last_l = l;
-            last_r = r;
-            last_diff = diff;
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        vector<int> result;
+        int len = numbers.size();
+        if (len == 0) {
+            return result;
         }
-        if (sum == val) {
-            break; // definitively closest.
-            // if you want to continue, advance both the pointers
-            // l++; r--;
+        int lastDiff = INT_MAX;
+        for (int start = 0, end = len - 1; start < end; ) {
+            int sum = numbers[end]+numbers[start];
+            int diff = abs(target-sum);
+            if (diff < lastDiff) {
+                result.clear();
+                result.push_back(start+1);
+                result.push_back(end+1);
+                lastDiff = diff;
+            }
+            if (sum == target) {
+                return result;
+            } else if (sum > target) {
+                end--;
+            } else {
+                start++;
+            }
         }
-        if (sum < val) {
-            l++;
-        } else {
-            r--;
-        }
+        return result;
     }
-    cout <<" The closest pair is " << arr[last_l] << " and " << arr[last_r];
-}
+};
+
+// Merge 2 sorted arrays
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        if (nums1.capacity() < m+n) {
+            return;
+        }
+        vector<int>::iterator itr;
+        int i = 0, j = 0, inserts = 0;
+        while (i < m+inserts && j < n) {
+            if (nums1[i] <= nums2[j]) {
+                i++;
+            } else {
+                itr = nums1.begin() + i;
+                nums1.insert(itr, nums2[j]);
+                i++; j++; inserts++;
+            }
+        }
+        while (j < n) {
+            itr = nums1.begin() + i;
+            nums1.insert(itr, nums2[j]);
+            j++; i++;
+        }
+        nums1.resize(m+n);
+    }
+};
 
 // Gn 2 sorted arrays and a value X, find a pair one from each array whose sum is closest to X
 void closestPair2Arrays(int* a, int* b, int n1, int n2, int val)
