@@ -499,7 +499,7 @@ public:
     vector<int> twoSum(vector<int>& numbers, int target) {
         vector<int> result;
         int len = numbers.size();
-        if (len == 0) {
+        if (numbers.empty() || len == 1) {
             return result;
         }
         int lastDiff = INT_MAX;
