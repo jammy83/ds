@@ -14,6 +14,7 @@
 #include <deque>
 using namespace std;
 
+//1
 bool hasUniqueCharacters(char *str)
 {
     // Assuming ASCII characters alone are used in the given
@@ -33,7 +34,7 @@ bool hasUniqueCharacters(char *str)
     return true;
 }
 
-// find if str2 is a permutation of str1
+// 2: find if str2 is a permutation of str1
 // Same logic can be used to check if str2 is an anagram of str1
 // anagrams are meanigful words formed by using the same chars from str1
 // and this means its a permutation of the str1 that's also a dict word
@@ -47,6 +48,7 @@ bool isPermutation(string s1, string s2)
     return (s1 == s2);
 }
 
+//3
 bool isPermutation(string s1, string s2)
 {
     if (s1.empty() || s2.empty() || s1.length() != s2.length()) {
@@ -70,7 +72,7 @@ bool isPermutation(string s1, string s2)
     return true;
 }
 
-// Replace space with %20
+// 4: Replace space with %20
 void replace(string s)
 {
     if (s.empty()) {
@@ -86,7 +88,7 @@ void replace(string s)
     }
 }
 
-// Compute run length and compress the given string
+// 5: Compute run length and compress the given string
 string compressStr(string s)
 {
     if (s.empty()) {
@@ -112,6 +114,7 @@ string compressStr(string s)
     return compStr;
 }
 
+// 6
 bool isRotation(string s1, string s2)
 {
     if (s1.empty() || s2.empty() || s1.length() != s2.length()) {
@@ -120,6 +123,7 @@ bool isRotation(string s1, string s2)
     return ((s2+s2).find(s1) != string::npos);
 }
 
+//7
 void zeroing2DMatrix(int** matrix, int n, int m)
 {
     for (int i = 1; i < n; i++) {
@@ -148,6 +152,7 @@ void zeroing2DMatrix(int** matrix, int n, int m)
     }
 }
 
+//8
 void reverseIntArray(int* arr, int start, int end)
 {
     for (int i = start, j = end; i < j, i++, j--) {
@@ -157,7 +162,7 @@ void reverseIntArray(int* arr, int start, int end)
     }
 }
 
-//rotate elements to the right
+// 9: rotate elements to the right
 void rotate(vector<int>& nums, int k) {
     if (k < 0 || nums.empty()) {
         return;
@@ -185,7 +190,7 @@ void rotateArray(int* arr, int size, int d)
     // juggling .. using gcd(size, d)
 }
 
-// Remove all instance of a value in a given array and return the new length; order change is fine.
+// 10: Remove all instance of a value in a given array and return the new length; order change is fine.
 /*
  * 1. Sort and remove instances and compact
  * 2. Maintain 2 indices - one ptr finds the occurrences of the value, 2nd ptr finds the #
@@ -218,7 +223,7 @@ public:
     }
 };
 
-// Remove duplicates from a sorted array
+// 11: Remove duplicates from a sorted array
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
@@ -248,7 +253,7 @@ public:
     }
 };
 
-// Min size sub-array sum with only positive integers
+// 12: Min size sub-array sum with only positive integers
 class Solution {
 public:
     int minSubArrayLen(int s, vector<int>& nums) {
@@ -274,7 +279,7 @@ public:
     }
 };
 
-// move zeros in a given array to the end maintaining the relative order of the non-zero elements
+// 13: move zeros in a given array to the end maintaining the relative order of the non-zero elements
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
@@ -304,7 +309,7 @@ public:
     }
 };
 
-// find the first unique element in a sorted array
+// 14: find the first unique element in a sorted array
 class Solution {
 public:
     int singleNonDuplicate(vector<int>& nums) {
@@ -330,7 +335,7 @@ public:
 };
 
 /*
- * Given an array of integers nums, write a method that returns the "pivot" index of this array.
+ * 15: Given an array of integers nums, write a method that returns the "pivot" index of this array.
  * We define the pivot index as the index where the sum of the numbers to the left of the index is equal to the sum of the numbers to the right of the index.
  * If no such index exists, we should return -1. If there are multiple pivot indexes, you should return the left-most pivot index. 
  */
@@ -366,7 +371,7 @@ public:
     }
 };
 
-// Largest Number At Least Twice of Others
+// 16: Largest Number At Least Twice of Others
 class Solution {
 public:
     int dominantIndex(vector<int>& nums) {
@@ -395,7 +400,7 @@ public:
     }
 };
 
-// Plus one
+// 17: Plus one
 class Solution {
 public:
     vector<int> plusOne(vector<int>& digits) {
@@ -467,7 +472,7 @@ int mergedMedian(int* arr1, int* arr2, int n)
 }
 //http://aleph.nu/blog/kth-smallest-in-sorted-union.html
 
-// In a sorted array find a pair of nos that adds up to a certain target value.
+// 19: In a sorted array find a pair of nos that adds up to a certain target value.
 class Solution {
 public:
     vector<int> twoSum(vector<int>& numbers, int target) {
@@ -524,7 +529,7 @@ public:
     }
 };
 
-// Merge 2 sorted arrays
+// 20: Merge 2 sorted arrays
 class Solution {
 public:
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
