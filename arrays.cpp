@@ -624,6 +624,50 @@ public:
     }    
 };
 
+// Search in sorted rotated array and handle duplicates
+class Solution {
+public:
+    int getMid(int start, int end) {
+        return start + ((end - start) / 2);
+    }
+    bool searchInSortedRotatedArray(vector<int>& nums, int start, int end, int target) {
+        if (start > end) {
+            return false;
+        }
+        int mid = getMid(start, end);
+        if (target == nums[mid]) {
+            return true;
+        } else if (nums[start] < nums[mid]) { // nums[start..mid] is sorted
+            if (target >= nums[start] && target < nums[mid]) {
+                return searchInSortedRotatedArray(nums, start, mid-1, target);
+            }
+            return searchInSortedRotatedArray(nums, mid+1, end, target);
+        } else if (nums[mid] < nums[end]) { // nums[mid..end] is sorted
+            if (target > nums[mid] && target <= nums[end]) {
+                return searchInSortedRotatedArray(nums, mid+1, end, target);
+            }
+            return searchInSortedRotatedArray(nums, start, mid-1, target);
+        } else {
+            if (nums[start] == nums[mid] && nums[mid] != nums[end]) {
+                return searchInSortedRotatedArray(nums, mid+1, end, target);
+            } else if (nums[mid] == nums[end] && nums[start] != nums[mid]) {
+                return searchInSortedRotatedArray(nums, start, mid-1, target);
+            }
+            return searchInSortedRotatedArray(nums, start+1, end, target);
+        }
+    }
+    bool search(vector<int>& nums, int target) {
+        if (nums.empty()) {
+            return false;
+        } else if (nums.size() == 1) {
+            return nums[0] == target;
+        } else if (nums.size() == 2) {
+            return (nums[0] == target || nums[1] == target);
+        }
+        return searchInSortedRotatedArray(nums, 0, nums.size()-1, target);
+    }    
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
