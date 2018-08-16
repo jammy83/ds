@@ -682,13 +682,14 @@ public:
             return nums[start];
         }
         int mid = getMid(start, end);
+        /*
         if (start < mid && nums[mid-1] > nums[mid]) {
             return nums[mid];
         } else if (mid < end && nums[mid] > nums[mid+1]) {
             return nums[mid+1];
-        }
+        } */
         if (nums[start] > nums[mid]) {
-            return findMinInSortedRotatedArray(nums, start, mid-1);
+            return findMinInSortedRotatedArray(nums, start, mid);
         }
         return findMinInSortedRotatedArray(nums, mid+1, end);
     }
