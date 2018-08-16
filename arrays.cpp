@@ -678,6 +678,9 @@ public:
         if (start > end) {
             return -1;
         }
+        if (start == end || nums[start] < nums[end]) { // single element or sorted
+            return nums[start];
+        }
         int mid = getMid(start, end);
         if (start < mid && nums[mid-1] > nums[mid]) {
             return nums[mid];
@@ -686,24 +689,16 @@ public:
         }
         if (nums[start] > nums[mid]) {
             return findMinInSortedRotatedArray(nums, start, mid-1);
-        } else if (nums[mid] > nums[end]) {
-            return findMinInSortedRotatedArray(nums, mid+1, end);
-        } else {
-            return nums[start]; // sorted array
         }
+        return findMinInSortedRotatedArray(nums, mid+1, end);
     }
     int findMin(vector<int>& nums) {
         if (nums.empty()) {
             return -1;
-        } else if (nums.size() == 1) {
-            return nums[0];
-        } else if (nums.size() == 2) {
-            return nums[0] < nums[1] ? nums[0] : nums[1];
         }
         return findMinInSortedRotatedArray(nums, 0, nums.size()-1);
     }
 };
-
 
 int max(int a, int b)
 {
