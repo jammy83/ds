@@ -426,52 +426,6 @@ public:
     }
 };
 
-
-
-int max(int a, int b)
-{
-    return (a >= b) ? a : b;
-}
-int min(int a, int b)
-{
-    return ( a <= b) ? a : b;
-}
-int getMedian(int* arr, int n)
-{
-    if (arr == NULL) {
-        return 0;
-    }
-    return (n%2 == 0) ? (arr[n/2-1]+arr[n/2])/2 : arr[n/2]; //which is basically the mid, mid+1
-}
-// median of 2 sorted arrays; both of size n
-int mergedMedian(int* arr1, int* arr2, int n)
-{
-    if (n <= 0) {
-        return -1;
-    }
-    if (n == 1) {
-        return (arr1[0]+arr2[0])/2;
-    }
-    if (n == 2) {
-        return (max(arr1[0], arr2[0]) + min(arr1[1], arr2[1]))/2;
-    }
-    int m1 = getMedian(arr1, n);
-    int m2 = getMedian(arr2, n);
-    if (m1 == m2) {
-        return m1;
-    }
-    // have even no. of elements. Median is the avg of middle and the one before
-    bool even = (n%2 == 0) ? true : false;
-    int size = even ? n-n/2+1 : n-n/2;
-    int offset = even ? n/2-1 : n/2;
-    if (m1 > m2) {
-        return mergedMedian(arr1, arr2+offset, size);
-    } else {
-        return mergedMedian(arr2, arr1+offset, size);
-    }
-}
-//http://aleph.nu/blog/kth-smallest-in-sorted-union.html
-
 // 19: In a sorted array find a pair of nos that adds up to a certain target value.
 class Solution {
 public:
@@ -607,7 +561,7 @@ public:
     }
 };
 
-// Binary search of sorted array looking for a target value
+// 22: Binary search of sorted array looking for a target value
 class Solution {
 public:
     int getMid(int start, int end) {
@@ -628,7 +582,7 @@ public:
     }
 }
 
-// Search for an element in a sorted, rotated array with no duplicates
+// 23: Search for an element in a sorted, rotated array with no duplicates
 class Solution {
 public:
     int getMid(int start, int end) {
@@ -669,6 +623,50 @@ public:
         return searchInSortedRotatedArray(nums, 0, nums.size()-1, target);
     }    
 };
+
+int max(int a, int b)
+{
+    return (a >= b) ? a : b;
+}
+int min(int a, int b)
+{
+    return ( a <= b) ? a : b;
+}
+int getMedian(int* arr, int n)
+{
+    if (arr == NULL) {
+        return 0;
+    }
+    return (n%2 == 0) ? (arr[n/2-1]+arr[n/2])/2 : arr[n/2]; //which is basically the mid, mid+1
+}
+// median of 2 sorted arrays; both of size n
+int mergedMedian(int* arr1, int* arr2, int n)
+{
+    if (n <= 0) {
+        return -1;
+    }
+    if (n == 1) {
+        return (arr1[0]+arr2[0])/2;
+    }
+    if (n == 2) {
+        return (max(arr1[0], arr2[0]) + min(arr1[1], arr2[1]))/2;
+    }
+    int m1 = getMedian(arr1, n);
+    int m2 = getMedian(arr2, n);
+    if (m1 == m2) {
+        return m1;
+    }
+    // have even no. of elements. Median is the avg of middle and the one before
+    bool even = (n%2 == 0) ? true : false;
+    int size = even ? n-n/2+1 : n-n/2;
+    int offset = even ? n/2-1 : n/2;
+    if (m1 > m2) {
+        return mergedMedian(arr1, arr2+offset, size);
+    } else {
+        return mergedMedian(arr2, arr1+offset, size);
+    }
+}
+//http://aleph.nu/blog/kth-smallest-in-sorted-union.html
 
 // Gn 2 sorted arrays and a value X, find a pair one from each array whose sum is closest to X
 void closestPair2Arrays(int* a, int* b, int n1, int n2, int val)
