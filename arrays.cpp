@@ -584,6 +584,8 @@ public:
  * What if the given array is already sorted? How would you optimize your algorithm?
  * What if nums1's size is small compared to nums2's size? Which algorithm is better?
  * What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
+ * If nums1 is small, hash it and read as much as possible from disk of nums2 and lookup and create the result
+ * If both nums1 and nums2 can't be fully loaded into memory, external sort both separately and load and compare since they are both sorted now.
  */
 class Solution {
 public:
@@ -603,6 +605,69 @@ public:
         }
         return result;
     }
+};
+
+// Binary search of sorted array looking for a target value
+class Solution {
+public:
+    int getMid(int start, int end) {
+        return start + (end - start / 2);
+    }
+    int BST(vector<int>& nums, int start, int end, int target) {
+        if (start > end) {
+            return -1;
+        }
+        int mid = getMin(start, end);
+        if (target == nums[mid]) {
+            return mid;
+        } else if (target < nums[mid]) {
+            return BST(nums, start, mid-1);
+        } else {
+            return BST(nums, mid+1, end);
+        }
+    }
+}
+
+// Search for an element in a sorted, rotated array with no duplicates
+class Solution {
+public:
+    int getMid(int start, int end) {
+        return start + ((end - start) / 2);
+    }
+    int searchInSortedRotatedArray(vector<int>& nums, int start, int end, int target) {
+        if (start > end) {
+            return -1;
+        }
+        int mid = getMid(start, end);
+        if (target == nums[mid]) {
+            return mid;
+        } else if (nums[start] <= nums[mid]) { // sorted half
+            if (target >= nums[start] && target < nums[mid]) {
+                return searchInSortedRotatedArray(nums, start, mid-1, target);
+            }
+            return searchInSortedRotatedArray(nums, mid+1, end, target);
+        } 
+        // nums[mid..end] is sorted
+        if (target > nums[mid] && target <= nums[end]) {
+            return searchInSortedRotatedArray(nums, mid+1, end, target);
+        }
+        return searchInSortedRotatedArray(nums, start, mid-1, target);
+    }
+    int search(vector<int>& nums, int target) {
+        if (nums.empty()) {
+            return -1;
+        } else if (nums.size() == 1) {
+            return nums[0] == target ? 0 : -1;
+        } else if (nums.size() == 2) {
+            if (nums[0] == target) {
+                return 0;
+            } else if (nums[1] == target) {
+                return 1;
+            }
+            return -1;
+        }
+        return searchInSortedRotatedArray(nums, 0, nums.size()-1, target);
+    }    
 };
 
 // Gn 2 sorted arrays and a value X, find a pair one from each array whose sum is closest to X
@@ -692,68 +757,6 @@ void findPairForDifference(int* arr, int size, int n)
             return;
         }
     }
-}
-
-int binarySearch(int* arr, int start, int end, int n)
-{
-    int mid = start + (end-start) / 2; //avoids overflow
-    if (arr[mid] == n) {
-        return mid;
-    }
-    if (n < arr[mid]) {
-        return binarySearch(arr, start, mid-1, n);
-    } else {
-        return binarySearch(arr, mid+1, end, n);
-    }
-}
-
-//sorted+rotated array - search for a given element or the smallest element
-int searchInSortedRotatedArray(int* arr, int start, int end, int n)
-{
-    //Note: if the array is sorted around the middle element, the subarrays on either
-    //side of it will be sorted as well. So return middle element which is the beginning
-    //of the sorted array.
-    if (end < start) {
-        return -1;
-    }
-
-    int mid = start + (end-start) / 2; //avoids overflow
-    if (arr[mid] == n) {
-        return mid;
-    }
-    if (arr[start] < arr[mid-1]) {
-        // sorted half
-        if (arr[start] >= n && n <= arr[mid-1]) {
-            // search in this half
-            return binarySearch(arr, start, mid-1, n);
-        } else {
-            return searchInSortedRotatedArray(arr, mid+1, end, n);
-        }
-    } else if (arr[mid+1] < arr[end]) {
-        // sorted half
-        if (arr[mid+1] >= n && n <= arr[end]) {
-            return binarySearch(arr, mid+1, end, n);
-        } else {
-            return searchInSortedRotatedArray(arr, start, mid-1, n);
-        }
-    } else if (arr[start] == arr[mid]) {
-        // handles duplicates with the left half containing the same elements
-        if (arr[mid] != arr[end]) { // the second half is different
-            // search in the second half since we can discard the first as
-            // "n" has already been compared with mid
-            // e.g {2, 2, 2, 3, 4, 2}
-            //duplicates will make this more of a O(n) solution than O(lgn)
-            return searchInSortedRotatedArray(arr, mid+1, end, n);
-        } else {
-            // search both the halves
-            int result = searchInSortedRotatedArray(arr, start, mid-1, n);
-            if (result == -1) {
-                return searchInSortedRotatedArray(arr, mid+1, end, n);
-            }
-            return result;
-        }
-    }
-    return -1;
 }
 
 int gcd(int a, int b)
