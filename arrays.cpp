@@ -565,7 +565,7 @@ public:
 class Solution {
 public:
     int getMid(int start, int end) {
-        return start + (end - start / 2);
+        return start + ((end - start) / 2);
     }
     int BST(vector<int>& nums, int start, int end, int target) {
         if (start > end) {
