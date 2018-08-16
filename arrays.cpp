@@ -556,6 +556,55 @@ public:
     }
 };
 
+// 21: Intersection of 2 arrays. The result should only include unique elements.
+// Need to filter duplicates so make use of the set but need not be sorted.
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> result;
+        unordered_set<int> hashMap;
+        for (int num : nums1) {
+            hashMap.insert(num);
+        }
+        unordered_set<int> hashMap1;
+        pair<unordered_set<int>::iterator, bool> insertRet;
+        for (int num : nums2) {
+            insertRet = hashMap1.insert(num);
+            if (insertRet.second != false &&
+                hashMap.find(num) != hashMap.end()) {
+                result.push_back(num);
+            }
+        }
+        return result;
+    }
+};
+
+/*
+ * Intersection of 2 arrays - the result need not contain unique elements.
+ * What if the given array is already sorted? How would you optimize your algorithm?
+ * What if nums1's size is small compared to nums2's size? Which algorithm is better?
+ * What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
+ */
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        sort(nums1.begin(), nums1.end());
+        sort(nums2.begin(), nums2.end());
+        vector<int> result;
+        for (int i = 0, j = 0; i < nums1.size() && j < nums2.size(); ) {
+            if (nums1[i] < nums2[j]) {
+                i++;
+            } else if (nums1[i] > nums2[j]) {
+                j++;
+            } else if (nums1[i] == nums2[j]) {
+                result.push_back(nums1[i]);
+                i++; j++;
+            }
+        }
+        return result;
+    }
+};
+
 // Gn 2 sorted arrays and a value X, find a pair one from each array whose sum is closest to X
 void closestPair2Arrays(int* a, int* b, int n1, int n2, int val)
 {
@@ -1163,23 +1212,6 @@ void slidingWindowMax(int *arr, int size, int w, int* b)
         q.push_back(i);
     }
     b[n-w] = arr[q.front()];
-}
-
-//find the intersection of 2 sorted arrays - finding common elements between the 2 sorted arrays
-//Time complexity O(n+m)
-void intersection(int* a, int m, int* b, int n)
-{
-    int i = 0; j = 0;
-    while (i < m && j < n; ) {
-        if (a[i] < b[j]) {
-            i++;
-        } else if (a[i] > b[j]) {
-            j++;
-        } else {
-            cout << a[i] << endl;
-            i++; j++;
-        }
-    }
 }
 
 //Running median (incoming stream of data)
