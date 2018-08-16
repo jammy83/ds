@@ -624,7 +624,7 @@ public:
     }    
 };
 
-// Search in sorted rotated array and handle duplicates
+// 24: Search in sorted rotated array and handle duplicates
 class Solution {
 public:
     int getMid(int start, int end) {
@@ -667,6 +667,43 @@ public:
         return searchInSortedRotatedArray(nums, 0, nums.size()-1, target);
     }    
 };
+
+// 25: Find minimum element in sorted rotated array without any duplicates
+class Solution {
+public:
+    int getMid(int start, int end) {
+        return start + (end - start) / 2;
+    }
+    int findMinInSortedRotatedArray(vector<int>& nums, int start, int end) {
+        if (start > end) {
+            return -1;
+        }
+        int mid = getMid(start, end);
+        if (start < mid && nums[mid-1] > nums[mid]) {
+            return nums[mid];
+        } else if (mid < end && nums[mid] > nums[mid+1]) {
+            return nums[mid+1];
+        }
+        if (nums[start] > nums[mid]) {
+            return findMinInSortedRotatedArray(nums, start, mid-1);
+        } else if (nums[mid] > nums[end]) {
+            return findMinInSortedRotatedArray(nums, mid+1, end);
+        } else {
+            return nums[start]; // sorted array
+        }
+    }
+    int findMin(vector<int>& nums) {
+        if (nums.empty()) {
+            return -1;
+        } else if (nums.size() == 1) {
+            return nums[0];
+        } else if (nums.size() == 2) {
+            return nums[0] < nums[1] ? nums[0] : nums[1];
+        }
+        return findMinInSortedRotatedArray(nums, 0, nums.size()-1);
+    }
+};
+
 
 int max(int a, int b)
 {
