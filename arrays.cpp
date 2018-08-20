@@ -766,6 +766,34 @@ public:
     }
 };
 
+// 30: Self excluding product without the use of division
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> result;
+        if (nums.empty()) {
+            return result;
+        }
+        int len = nums.size();
+        vector<int> frontPr, backPr;
+        frontPr.reserve(len); backPr.reserve(len); result.reserve(len);
+        frontPr[0] = nums[0];
+        for (int i = 1; i < len; i++) {
+            frontPr[i] = frontPr[i-1] * nums[i]; 
+        }
+        backPr[len-1] = nums[len-1];
+        for (int i = len-2; i >= 0; i--) {
+            backPr[i] = backPr[i+1] * nums[i];
+        }
+        result.push_back(backPr[1]);
+        for (int i = 1; i < len-1; i++) {
+            result.push_back(frontPr[i-1] * backPr[i+1]);
+        }
+        result.push_back(frontPr[len-2]);
+        return result;
+    }
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
