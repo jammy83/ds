@@ -302,7 +302,32 @@ public:
     }
 };
 
-// 14: move zeros in a given array to the end maintaining the relative order of the non-zero elements
+// 14: Maximum contiguous sub-array product
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+        int localMin = nums[0], localMax = nums[0], maxProduct = nums[0];
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] > 0) {
+                localMin = min(localMin*nums[i], nums[i]);
+                localMax = max(localMax*nums[i], nums[i]);
+            } else {
+                int temp = localMax;
+                localMax = max(localMin*nums[i], nums[i]);
+                localMin = min(temp*nums[i], nums[i]);
+            }
+            if (localMax > maxProduct) {
+                maxProduct = localMax;
+            }
+        }
+        return maxProduct;
+    }
+};
+
+// 15: move zeros in a given array to the end maintaining the relative order of the non-zero elements
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
@@ -332,7 +357,7 @@ public:
     }
 };
 
-// 15: find the first unique element in a sorted array
+// 16: find the first unique element in a sorted array
 class Solution {
 public:
     int singleNonDuplicate(vector<int>& nums) {
@@ -358,7 +383,7 @@ public:
 };
 
 /*
- * 16: Given an array of integers nums, write a method that returns the "pivot" index of this array.
+ * 17: Given an array of integers nums, write a method that returns the "pivot" index of this array.
  * We define the pivot index as the index where the sum of the numbers to the left of the index is equal to the sum of the numbers to the right of the index.
  * If no such index exists, we should return -1. If there are multiple pivot indexes, you should return the left-most pivot index. 
  */
@@ -394,7 +419,7 @@ public:
     }
 };
 
-// 17: Largest Number At Least Twice of Others
+// 18: Largest Number At Least Twice of Others
 class Solution {
 public:
     int dominantIndex(vector<int>& nums) {
@@ -423,7 +448,7 @@ public:
     }
 };
 
-// 18: Plus one
+// 19: Plus one
 class Solution {
 public:
     vector<int> plusOne(vector<int>& digits) {
@@ -449,7 +474,7 @@ public:
     }
 };
 
-// 19: In a sorted array find a pair of nos that adds up to a certain target value.
+// 20: In a sorted array find a pair of nos that adds up to a certain target value.
 class Solution {
 public:
     vector<int> twoSum(vector<int>& numbers, int target) {
@@ -475,7 +500,7 @@ public:
     }
 };
 
-// Gn a sorted array and value X, find a pair whose sum is closest to X
+// 21: Gn a sorted array and value X, find a pair whose sum is closest to X
 class Solution {
 public:
     vector<int> twoSum(vector<int>& numbers, int target) {
@@ -506,7 +531,7 @@ public:
     }
 };
 
-// 20: Merge 2 sorted arrays
+// 22: Merge 2 sorted arrays
 class Solution {
 public:
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
@@ -533,7 +558,7 @@ public:
     }
 };
 
-// 21: Intersection of 2 arrays. The result should only include unique elements.
+// 23: Intersection of 2 arrays. The result should only include unique elements.
 // Need to filter duplicates so make use of the set but need not be sorted.
 class Solution {
 public:
@@ -557,7 +582,7 @@ public:
 };
 
 /*
- * Intersection of 2 arrays - the result need not contain unique elements.
+ * 24: Intersection of 2 arrays - the result need not contain unique elements.
  * What if the given array is already sorted? How would you optimize your algorithm?
  * What if nums1's size is small compared to nums2's size? Which algorithm is better?
  * What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
@@ -584,7 +609,7 @@ public:
     }
 };
 
-// 22: Binary search of sorted array looking for a target value
+// 25: Binary search of sorted array looking for a target value
 class Solution {
 public:
     int getMid(int start, int end) {
@@ -605,7 +630,7 @@ public:
     }
 }
 
-// 23: Search for an element in a sorted, rotated array with no duplicates
+// 26: Search for an element in a sorted, rotated array with no duplicates
 class Solution {
 public:
     int getMid(int start, int end) {
@@ -647,7 +672,7 @@ public:
     }    
 };
 
-// 24: Search in sorted rotated array and handle duplicates
+// 27: Search in sorted rotated array and handle duplicates
 class Solution {
 public:
     int getMid(int start, int end) {
@@ -691,7 +716,7 @@ public:
     }    
 };
 
-// 25: Find minimum element in sorted rotated array without any duplicates
+// 28: Find minimum element in sorted rotated array without any duplicates
 class Solution {
 public:
     int getMid(int start, int end) {
@@ -724,7 +749,7 @@ public:
     }
 };
 
-// 26: Best time to buy and sell stock
+// 29: Best time to buy and sell stock
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
