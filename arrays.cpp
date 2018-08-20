@@ -1125,41 +1125,6 @@ void mergeKSortedArrays(vector<int>* arr, int k)
     }
 }
 
-/**
- * Implement a method which takes an integer array and returns an integer array (of equal size) in
- * which each element is the product of every number in the input array with the exception of the
- * number at that index.
- *
- * Example:
- *   [3, 1, 4, 2] => [8, 24, 6, 12]
- */
-
-void selfExcludingProduct(int* arr, int size)
-{
-    int count = 0; //count of no. of zeros
-    int product = 1;
-    for (int i = 0; i < n; i++) {
-        if (arr[i] != 0) {
-            product *= arr[i];
-        } else {
-            count++;
-            if (count == 2) {
-                product = 0;
-                break;
-            }
-        }
-    }
-    for (int i = 0; i < n; i++) {
-        if (count == 1) {
-            arr[i] = (arr[i] == 0) ? product : 0;
-        } else if (count == 0) {
-            arr[i] = product/i;
-        } else {
-            arr[i] = 0;
-        }
-    }
-}
-
 double powerOfUtil(double b, int a)
 {
     if (a == 0 || b == 1) {
@@ -1185,23 +1150,6 @@ double pow(double b, int a)
         }
     }
 }
-
-//Find the self excluding sum without using the "-" operator
-void selfExcludingSum(int* arr, int size)
-{
-    //maintain 2 arrays of same size one working forward and the other working backward
-    //forward[i] = sum(0..i) and reverse[i] = sum(end..i+1)
-    //Update arr[i] = sum(forward[i-1] and reverse[i-1])
-    
-    //To get a negative number -- take 2's complement
-    //arr[i] = totalSum+(~arr[i]+1)
-    
-    //two's complement
-    // 8 => 0000 1000
-    // ~8 => 1111 0111
-    // add 1 => 1111 1000
-}
-
 
 //finding the most repeated element in an array given the size of the array (n) and the range of elements
 //{0...k} k <= n
