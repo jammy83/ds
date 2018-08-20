@@ -253,7 +253,7 @@ public:
     }
 };
 
-// 12: Min size sub-array sum with only positive integers
+// 12: Min size contiguous sub-array sum with only positive integers
 class Solution {
 public:
     int minSubArrayLen(int s, vector<int>& nums) {
