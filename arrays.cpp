@@ -701,6 +701,23 @@ public:
     }
 };
 
+// 26: Best time to buy and sell stock
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if (prices.empty() || prices.size() == 1) {
+            return 0;
+        }
+        int min = prices[0], maxProfit = INT_MIN;
+        for (int i = 1; i < prices.size(); i++) {
+            int diff = prices[i] - min;
+            maxProfit = diff > maxProfit ? diff : maxProfit;
+            min = prices[i] < min ? prices[i] : min;
+        }
+        return maxProfit == -1 ? 0 : maxProfit;
+    }
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
@@ -1106,37 +1123,6 @@ void selfExcludingSum(int* arr, int size)
 // Solution: sorted - use BS and unsorted find the sum and the original expected sum.
 // The difference is the missing element. Find abs diff and that will tell you the duplicate element.
 
-
-
-
-// Given an array, find the maximum difference between two array elements given the second
-// element when finding the difference comes after the first.
-// For example: array = [1,2,3,4,5,6,7]
-// We can take the difference between 2 and 1 (2-1), but not the different between 1 and 2 (1-2).
-// Another example: [1,5,8,7,9,-5,15,21] => maxDiff = 26 {-5, 21}
-// Alternative way of asking the same problem: "Best time to buy and sell stock"
-// Say you have an array for which the ith element is the price of a given stock on day i.
-// If you were only permitted to buy one share of the stock and sell one share of the stock,
-// design an algorithm to find the best times to buy and sell.
-void findMaxDiff(int* arr, int size, int& min, int& max)
-{
-    if (arr == NULL || size <= 1) {
-        return;
-    }
-    min = 0; max = 1; // index of the minimum and maximum value seen so far
-    int maxDiff = arr[max] - arr[min];
-    for (int i = 1; i < size; ++i) {
-        int diff = arr[i] - arr[min]
-        if (diff > maxDiff) {
-            maxDiff = diff;
-            max = i;
-        }
-        if (arr[i] < arr[min]) {
-            min = i;
-        }
-    }
-    cout << "Max Diff: " << maxDiff << endl;
-}
 
 /* Given a set of n people, find the celebrity.
  * Celebrity is a person who:
