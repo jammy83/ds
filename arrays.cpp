@@ -794,6 +794,26 @@ public:
     }
 };
 
+// same problem with o(1) space without division/2's complement
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int len = nums.size();
+        vector<int> result(len, 1);
+        if (len == 0) {
+            return result;
+        }
+        int frontPr = 1, backPr = 1;
+        for (int i = 0; i < len; i++) {
+            result[i] *= frontPr;
+            frontPr *= nums[i];
+            result[len-1-i] *= backPr;
+            backPr *= nums[len-1-i];
+        }
+        return result;
+    }
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
