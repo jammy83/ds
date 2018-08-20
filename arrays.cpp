@@ -253,7 +253,7 @@ public:
     }
 };
 
-// 12: Min size contiguous sub-array sum with only positive integers
+// 12: Min size contiguous sub-array sum with only positive integers summing to a target value
 class Solution {
 public:
     int minSubArrayLen(int s, vector<int>& nums) {
@@ -279,7 +279,30 @@ public:
     }
 };
 
-// 13: move zeros in a given array to the end maintaining the relative order of the non-zero elements
+// 13: Maximum contiguous sub-array sum
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+        int start = 0, maxSum = nums[0], runningSum = nums[0];
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] >= runningSum + nums[i]) {
+                start = i;
+                runningSum = nums[i];
+            } else {
+                runningSum += nums[i];
+            }
+            if (runningSum > maxSum) {
+                maxSum = runningSum;
+            }
+        }
+        return maxSum;
+    }
+};
+
+// 14: move zeros in a given array to the end maintaining the relative order of the non-zero elements
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
@@ -309,7 +332,7 @@ public:
     }
 };
 
-// 14: find the first unique element in a sorted array
+// 15: find the first unique element in a sorted array
 class Solution {
 public:
     int singleNonDuplicate(vector<int>& nums) {
@@ -335,7 +358,7 @@ public:
 };
 
 /*
- * 15: Given an array of integers nums, write a method that returns the "pivot" index of this array.
+ * 16: Given an array of integers nums, write a method that returns the "pivot" index of this array.
  * We define the pivot index as the index where the sum of the numbers to the left of the index is equal to the sum of the numbers to the right of the index.
  * If no such index exists, we should return -1. If there are multiple pivot indexes, you should return the left-most pivot index. 
  */
@@ -371,7 +394,7 @@ public:
     }
 };
 
-// 16: Largest Number At Least Twice of Others
+// 17: Largest Number At Least Twice of Others
 class Solution {
 public:
     int dominantIndex(vector<int>& nums) {
@@ -400,7 +423,7 @@ public:
     }
 };
 
-// 17: Plus one
+// 18: Plus one
 class Solution {
 public:
     vector<int> plusOne(vector<int>& digits) {
