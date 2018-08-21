@@ -191,35 +191,17 @@ void rotateArray(int* arr, int size, int d)
 }
 
 // 10: Remove all instance of a value in a given array and return the new length; order change is fine.
-/*
- * 1. Sort and remove instances and compact
- * 2. Maintain 2 indices - one ptr finds the occurrences of the value, 2nd ptr finds the #
- * swap with.
- */
+// Sort and remove instances and compact
 class Solution {
 public:
     int removeElement(vector<int>& nums, int val) {
-        // spl case 0 and 1 element
-        if (nums.empty() ||
-            (nums.size() == 1 && nums[0] == val)) {
-            return 0;
-        }
-        // end condition: start == end
-        int end = nums.size()-1, start = 0;
-        for (; start < end; start++) {
-            if (nums[start] == val) {
-                while (start < end) {
-                    if (nums[end--] != val) {
-                        nums[start] = nums[end+1];
-                        break;
-                    }
-                }
-                if (start == end) {
-                    return nums[start] == val ? start : start+1;
-                }
+        int j = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] != val) {
+                nums[j++] = nums[i];
             }
         }
-        return nums[start] == val ? start : start+1;
+        return j;
     }
 };
 
