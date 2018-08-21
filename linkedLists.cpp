@@ -426,28 +426,6 @@ public:
     }
 };
 
-// the lists are numbers represented in reverse
-node* LinkedList::addLists(node* l1, node* l2, int carry)
-{
-    if (l1 == NULL && l2 == NULL && carry == 0) {
-        return NULL;
-    }
-    int val = carry;
-    if (l1 != NULL) {
-        val += l1->key;
-    }
-    if (l2 != NULL) {
-        val += l2->key;
-    }
-    node* result = new node(val%10);
-    if (l1 != NULL || l2 != NULL) {
-        result->next = addLists((l1 ? l1->next : NULL),
-                                (l2 ? l2->next : NULL),
-                                (val > 10 ? 1 : 0));
-    }
-    return result;
-}
-
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
@@ -465,28 +443,6 @@ public:
         return false;
     }
 };
-
-node* LinkedList::findLoopBeginning(node* start)
-{
-    node* fast, *slow;
-    fast = slow = start;
-    while (fast != NULL && fast->next != NULL) {
-        slow = slow->next;
-        fast = fast->next->next;
-        if (slow == fast) {
-            break;
-        }
-    }
-    if (fast == NULL || fast->next == NULL) {
-        return NULL; // no loop
-    }
-    slow = start; // reset to beginning of the list
-    while (slow != fast) { // they collide next at the beginning of the loop
-        slow = slow->next;
-        fast = fast->next;
-    }
-    return slow;
-}
 
 class Solution {
 public:
@@ -516,91 +472,6 @@ public:
         return true;
     }
 };
-
-bool LinkedList::isPalindrome(node* start)
-{
-    //find the middle and reverse the linked list until middle point using a stack
-    //Now compare the rest of the list with the reversed items from the stack
-    node* fast, *slow;
-    fast = slow = start;
-    stack<node*> s;
-
-    while (fast != NULL && fast->next != NULL) {
-        s.push(slow);
-        slow = slow->next;
-        fast = fast->next->next;
-    }
-    // has odd no. of elements; skip the middle and point past it
-    if (fast != NULL) {
-        slow = slow->next;
-    }
-    while (slow != NULL && !s.empty()) {
-        node* item = s.top();
-        s.pop();
-        if (item->key != slow->key) {
-            return false;
-        }
-        slow = slow->next;
-    }
-    if (slow || !s.empty()) {
-        return false;
-    }
-    return true;
-}
-
-//linked list with a pointer to random item in the list
-struct {
-    int data;
-    RandomListNode* next;
-    RandomListNode* random;
-} RandomListNode;
-
-//Another solution: is to use a hashMap to store the
-//mapping between the random and random'.
-//First walk the original list and create a copy list
-//walk it again looking up the hashMap for every random
-//pointer the corresponding random' and updating the copy list
-RandomListNode* copyRandomList(RandomListNode* head)
-{
-    if (head == NULL) {
-        return NULL;
-    }
-    
-    RandomListNode* p = head;
-    
-    // copy every node and insert to list
-    while (p != NULL) {
-        RandomListNode* copy = new RandomListNode(p->data);
-        copy->next = p->next;
-        p->next = copy;
-        p = copy->next;
-    }
-    
-    // copy random pointer for each new node
-    p = head;
-    while (p != NULL) {
-        if (p->random != NULL) {
-            p->next->random = p->random->next;
-        } else {
-            p->next->random = NULL;
-        }
-        p = p->next->next;
-    }
-
-    // break list to two
-    p = head;
-    RandomListNode* newHead = head->next;
-    while (p != NULL) {
-        RandomListNode* temp = p->next;
-        p->next = temp->next;
-        if (temp->next != NULL) {
-            temp->next = temp->next->next;
-        }
-        p = p->next;
-    }
-    
-    return newHead;
-}
 
 //intersection point of two singly linked lists
 //Soln: Find the length of the 2 linked list and calculate the diff
@@ -779,6 +650,135 @@ public:
         prev->next = odd;
     }
 };
+
+// the lists are numbers represented in reverse
+node* LinkedList::addLists(node* l1, node* l2, int carry)
+{
+    if (l1 == NULL && l2 == NULL && carry == 0) {
+        return NULL;
+    }
+    int val = carry;
+    if (l1 != NULL) {
+        val += l1->key;
+    }
+    if (l2 != NULL) {
+        val += l2->key;
+    }
+    node* result = new node(val%10);
+    if (l1 != NULL || l2 != NULL) {
+        result->next = addLists((l1 ? l1->next : NULL),
+                                (l2 ? l2->next : NULL),
+                                (val > 10 ? 1 : 0));
+    }
+    return result;
+}
+
+node* LinkedList::findLoopBeginning(node* start)
+{
+    node* fast, *slow;
+    fast = slow = start;
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast) {
+            break;
+        }
+    }
+    if (fast == NULL || fast->next == NULL) {
+        return NULL; // no loop
+    }
+    slow = start; // reset to beginning of the list
+    while (slow != fast) { // they collide next at the beginning of the loop
+        slow = slow->next;
+        fast = fast->next;
+    }
+    return slow;
+}
+
+bool LinkedList::isPalindrome(node* start)
+{
+    //find the middle and reverse the linked list until middle point using a stack
+    //Now compare the rest of the list with the reversed items from the stack
+    node* fast, *slow;
+    fast = slow = start;
+    stack<node*> s;
+
+    while (fast != NULL && fast->next != NULL) {
+        s.push(slow);
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    // has odd no. of elements; skip the middle and point past it
+    if (fast != NULL) {
+        slow = slow->next;
+    }
+    while (slow != NULL && !s.empty()) {
+        node* item = s.top();
+        s.pop();
+        if (item->key != slow->key) {
+            return false;
+        }
+        slow = slow->next;
+    }
+    if (slow || !s.empty()) {
+        return false;
+    }
+    return true;
+}
+
+//linked list with a pointer to random item in the list
+struct {
+    int data;
+    RandomListNode* next;
+    RandomListNode* random;
+} RandomListNode;
+
+//Another solution: is to use a hashMap to store the
+//mapping between the random and random'.
+//First walk the original list and create a copy list
+//walk it again looking up the hashMap for every random
+//pointer the corresponding random' and updating the copy list
+RandomListNode* copyRandomList(RandomListNode* head)
+{
+    if (head == NULL) {
+        return NULL;
+    }
+    
+    RandomListNode* p = head;
+    
+    // copy every node and insert to list
+    while (p != NULL) {
+        RandomListNode* copy = new RandomListNode(p->data);
+        copy->next = p->next;
+        p->next = copy;
+        p = copy->next;
+    }
+    
+    // copy random pointer for each new node
+    p = head;
+    while (p != NULL) {
+        if (p->random != NULL) {
+            p->next->random = p->random->next;
+        } else {
+            p->next->random = NULL;
+        }
+        p = p->next->next;
+    }
+
+    // break list to two
+    p = head;
+    RandomListNode* newHead = head->next;
+    while (p != NULL) {
+        RandomListNode* temp = p->next;
+        p->next = temp->next;
+        if (temp->next != NULL) {
+            temp->next = temp->next->next;
+        }
+        p = p->next;
+    }
+    
+    return newHead;
+}
 
 //reversing linked lists pair-wise
 void LinkedList::reverseListPairwise(node** head)
