@@ -25,6 +25,8 @@ public:
         }
         int val = _nums.top();
         if (_minStack.top() == val) {
+            _minStack.pop();
+        }
         _nums.pop();
     }
     int top() {
@@ -42,7 +44,6 @@ class element {
 public:
     T _data;
     element<T> *_next;
-    
     element(T val) : _data(val), _next(NULL) {}
     ~element() { _next = NULL; }
 };
