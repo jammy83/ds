@@ -749,13 +749,13 @@ public:
         if (prices.empty() || prices.size() == 1) {
             return 0;
         }
-        int min = prices[0], maxProfit = INT_MIN;
+        int min = prices[0], maxProfit = 0;
         for (int i = 1; i < prices.size(); i++) {
             int diff = prices[i] - min;
             maxProfit = diff > maxProfit ? diff : maxProfit;
             min = prices[i] < min ? prices[i] : min;
         }
-        return maxProfit == -1 ? 0 : maxProfit;
+        return maxProfit;
     }
 };
 
