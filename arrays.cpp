@@ -814,6 +814,34 @@ public:
     }
 };
 
+// DNF
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        if (nums.empty() || nums.size() == 1) {
+            return;
+        }
+        int len = nums.size(), start = 0, end = len;
+        for (int i = 0; i < end; ) {
+            if (nums[i] == 2) {
+                int temp = nums[--end];
+                nums[end] = nums[i];
+                nums[i] = temp;
+            } else if (nums[i] == 0) {
+                if (start == i) {
+                    i++; start++;
+                    continue;
+                }
+                int temp = nums[start];
+                nums[start++] = nums[i];
+                nums[i] = temp;
+            } else {
+                i++;
+            }
+        }
+    }
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
@@ -1247,35 +1275,6 @@ bool edit(string s1, string s2)
 //Solution: Compute the euclidean distance of all the points to (5,5) and insert them
 //into the Indexed MIN priority queue. delMin() will return the item with
 //the least distance to (5,5).
-
-//Category: DNF: http://en.wikipedia.org/wiki/Dutch_national_flag_problem
-//Given an array find an efficient way to sort the list into {high, med, low}
-//Maintain a pointer for the high and low position and keep swapping.. middle elements
-//will naturally be of mid category
-void sortPriority(char* priorities)
-{
-    int cur = 0, high = 0, low = strlen(priorities)- 1;
-    char temp;
-    while (cur < low) {
-        if (priorities[cur] == 'H') {
-            if (cur == high) {
-                cur++; high++;
-                continue;
-            }
-            temp = priorities[high];
-            priorities[high] = priorities[cur];
-            priorities[cur] = temp;
-            high++;
-        } else if (priorities[cur] == 'L') {
-            temp = priorities[low];
-            priorities[low] = priorities[cur];
-            priorities[cur] = temp;
-            low--;
-        } else {
-            cur++;
-        }
-    }
-}
 
 //Sliding window maximum
 //http://articles.leetcode.com/2011/01/sliding-window-maximum.html
