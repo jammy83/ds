@@ -467,8 +467,7 @@ public:
         if (i >= 0) {
             digits[i]++;
         } else {
-            vector<int>::iterator itr = digits.begin();
-            digits.insert(itr, 1);
+            digits.insert(digits.begin(), 1);
         }
         return digits;
     }
