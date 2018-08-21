@@ -842,6 +842,54 @@ public:
     }
 };
 
+// valid palindrome in a string
+// "A man, a plan, a canal: Panama" - true; "0P" - false
+class Solution {
+public:
+    void processStr(string& s) {
+        for (int i = 0; i < s.size(); ) {
+            if (!isalnum(s[i])) {
+                s.erase(i, 1);
+            } else {
+                s[i] = tolower(s[i]);
+                i++;
+            }
+        }
+    }
+    bool isPalindrome(string s) {
+        processStr(s);
+        for (int i = 0, j = s.size()-1; i <= j; i++, j--) {
+            if (s[i] != s[j]) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+// Pascal's triangle
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        vector<int> result;
+        if (rowIndex == 0) {
+            result.push_back(1);
+            return result;
+        } else if (rowIndex == 1) {
+            result.push_back(1);
+            result.push_back(1);
+            return result;
+        }
+        result.push_back(1);
+        vector<int> prevRow = getRow(rowIndex-1);
+        for (int i = 1; i < rowIndex; i++) {
+            result.push_back(prevRow[i] + prevRow[i-1]);
+        }
+        result.push_back(1);
+        return result;
+    }
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
@@ -1362,41 +1410,6 @@ int getRunningMedian(int* arr, int size)
     }
 }
 
-//in-place palindrome check
-bool isPalindrome(string s)
-{
-    if (str.length() <= 1) {
-        return true;
-    }
-    return isPalindromeUtil(s, 0, s.length());
-}
-bool isPalindromeUtil(string str, int start, int end) {
-    
-    if (start >= end) {
-        return true;
-    }
-    return (str.at(start) == str.at(end) &&
-            isPalindromeUtil(str.substring(start + 1, end - 1), start + 1, end - 1) );
-}
-
-//alternate version
-bool isPalindrome(char* arr, int size)
-{
-    if (size == 0 || arr == nullptr) {
-        return false;
-    }
-    for (int i = 0, j = size-1; i < j; i++, j--) {
-        if (arr[i] != arr[j]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//Reverse polish notation (postfix notation): maintain a stack; as soon as you see an operand,
-//pop the top 2 elements off the stack. Think about sqrt() which takes only one operand.
-
-
 //Prime factorization
 void primeFactors(long int num)
 {
@@ -1417,29 +1430,6 @@ void primeFactors(long int num)
         factors.push_back(num);
     }
 }
-
-//Pascal's triangle
-class Solution {
-public:
-    vector<int> getRow(int rowIndex) {
-        vector<int> result;
-        if (rowIndex == 0) {
-            result.push_back(1);
-            return result;
-        } else if (rowIndex == 1) {
-            result.push_back(1);
-            result.push_back(1);
-            return result;
-        }
-        result.push_back(1);
-        vector<int> prevRow = getRow(rowIndex-1);
-        for (int i = 1; i < rowIndex; i++) {
-            result.push_back(prevRow[i] + prevRow[i-1]);
-        }
-        result.push_back(1);
-        return result;
-    }
-};
 
 //https://github.com/checkcheckzz/coding-questions#array
 //1. Given two arrays, find elements that are in the first array but not in the second
