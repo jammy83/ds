@@ -641,10 +641,8 @@ public:
         while (curr != mid) {
             ListNode *nextNode = curr->next;
             curr->next = s.top(); s.pop();
-            if (prev != nullptr) {
-                prev->next = curr;
-            }
-            prev = curr->next;
+            curr->next->next = nextNode;
+            prev = curr->next; // stack element
             curr = nextNode;
         }
         prev->next = odd;
