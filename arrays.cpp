@@ -223,7 +223,7 @@ public:
     }
 };
 
-// 11: Remove duplicates from a sorted array
+// 11: Remove duplicates from a sorted array in-place and return the new length
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
@@ -237,17 +237,11 @@ public:
             if (nums[i] == nums[j-1]) {
                 int dup = nums[i];
                 while (i < len && nums[++i] == dup) { }
-                if (i < len) {
-                    nums[j++] = nums[i];
-                } else {
+                if (i == len) {
                     return j;
                 }
-            } else {
-                if (j != i) {
-                    nums[j] = nums[i];
-                }
-                ++j;
             }
+            nums[j++] = nums[i];
         }
         return j;
     }
