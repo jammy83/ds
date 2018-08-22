@@ -865,6 +865,55 @@ public:
     }
 };
 
+// Jump game
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        if (nums.empty() || nums.size() == 1) {
+            return true;
+        }
+        set<int> visited;
+        pair<set<int>::iterator, bool> itr;
+        stack<int> toVisit;
+        if (nums[0] >= nums.size()-1) {
+            return true;
+        }
+        toVisit.push(0);
+        while (!toVisit.empty()) {
+            int index = toVisit.top();
+            toVisit.pop();
+            int steps = nums[index];
+            while (steps > 0) {
+                int pos = index + steps;
+                if (pos >= nums.size()-1) {
+                    return true;
+                }
+                itr = visited.insert(pos);
+                if (itr.second) {
+                    toVisit.push(pos);
+                }
+                --steps;
+            }
+        }
+        return false;
+    }
+};
+
+// Jump game: O(n) solution
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        if (nums.empty() || nums.size() == 1) {
+            return true;
+        }
+        int maxIndexReached = 0;
+        for (int i = 0; i <= maxIndexReached && maxIndexReached < nums.size()-1; i++) {
+            maxIndexReached = max(maxIndexReached, i + nums[i]);
+        }
+        return maxIndexReached >= nums.size()-1;
+    }
+};
+
 int max(int a, int b)
 {
     return (a >= b) ? a : b;
