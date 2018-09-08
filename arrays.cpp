@@ -411,9 +411,10 @@ public:
             if (nums[i] > nums[maxIndex]) {
                 sMaxIndex = maxIndex;
                 maxIndex = i;
-            } else if ((sMaxIndex == -1 && nums[i] < nums[maxIndex]) ||
-                       (nums[i] < nums[maxIndex] && nums[i] > nums[sMaxIndex])) {
-                sMaxIndex = i;
+            } else if (nums[i] < nums[maxIndex]) {
+                if (sMaxIndex == -1 || nums[i] > nums[sMaxIndex]) {
+                    sMaxIndex = i;
+                }
             }
         }
         if (sMaxIndex != -1 &&
@@ -594,7 +595,7 @@ public:
         if (start > end) {
             return -1;
         }
-        int mid = getMin(start, end);
+        int mid = getMid(start, end);
         if (target == nums[mid]) {
             return mid;
         } else if (target < nums[mid]) {
