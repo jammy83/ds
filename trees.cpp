@@ -164,18 +164,18 @@ public:
         inorderTraversalWork(root, result);
         return result;
     }
-    //iterative
+    // iterative
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int> result;
         stack<TreeNode*> s;
         TreeNode *curr = root;
         while (!s.empty() || curr != nullptr) {
             if (curr != nullptr) {
-                s.push(root);
+                s.push(curr);
                 curr = curr->left;
             } else {
                 TreeNode *node = s.top();
-                result.push_back(node); s.pop();
+                result.push_back(node->val); s.pop();
                 curr = node->right;
             }
         }
