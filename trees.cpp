@@ -6,127 +6,12 @@
 //
 //
 
-#include <stdio.h>
-#include <iostream>
-#include <stack>
-#include <queue>
-
-struct {
-    int _data;
-    LinkedListNode* _next;
-} LinkedListNode;
-
-struct {
-    int key;
-    treeNodeSpl* left;
-    treeNodeSpl* right;
-    treeNodeSpl* nextRight;
-} treeNodeSpl;
-
-// Define a tree node
-class node {
- public:
-    int key;
-    node* left;
-    node* right;
-    node* parent;
-    int rank; // no. of items <= this node's val
-
-    node(int val) : key(val), left(NULL), right(NULL), parent(NULL), rank(0) {}
-    ~node() {
-        left = right = parent = NULL;
-    }
-};
-
-// Define a tree
-class Tree {
- private:
-    node* root;
-    int items;
-
-    void destroyTree(node* start);
-    bool insertBST(node* n);
-    bool isFoldableUtil(node* n1, node* n2);
-    void calculateHorizontalDist(node* root, int dist, hashTable<int,int>& hT, int& min, int& max);
-
- public:
-    tree() : root(NULL), items(0) {}
-    ~tree() {
-        destroyTree(root);
-    }
-
-    bool isEmpty() { return (root == NULL); }
-    int size() {
-        return ( (root==NULL) ? 0 : (size(root->left) + 1 + size(root->right)) );
-        //return items;
-    }
-    // Operations
-    bool insertBST(int key);
-    node* searchBST(int key);
-
-    // For just binary trees traverse the tree keeping track of min and max
-    node* findMinBST(node* start);
-    node* findMaxBST(node* start);
-
-    // Traversals for any binary tree including BST
-    int traverseByLevelBFS();
-    void traverseByLevelDFS();
-    void traverseInOrder(node* start);
-    void traverseInOrderIterative(node* start);
-    void traversePreOrder(node* start);
-    void traversePreOrderItertive(node* start);
-    void traversePostOrder(node* start);
-    int traversePostOrderIterative(node* start); // returns max depth at root or height of the tree
-    void traverseLevelOrderZigZag(node* start);
-
-    bool checkIfBST(node* start);
-
-    // Height: applies to any binary tree (including BST)
-    int findHeight();
-    int findHeightWrtToAGivenNode(node* p);
-    int findMaxDepth(node* start);
-    bool checkIfBalanced(node* start);
-    int checkIfHeightBalanced(node* start);
-
-    // A simple inorder traversal will tell you this as well
-    node* findPredecessorInOrder(node* start);
-    node* findSuccessorInOrder(node* start);
-
-    //LCA of binary and BST
-    node* findLCABST(node* start, int key1, int key2);
-    bool findPath(node* start, int key, vector<node*> &path);
-    node* findLCA(node* start, int key1, int key2);
-    node* findLCAPerf(node* start, node* p, node* q);
-    node* findLCAwithParent(node* p, node* q);
-
-    //Rank
-    int getRankBST(int key);
-    int kthSmallestElementBST(int k);
-    
-    node* sortedArrayToBalancedBST(int* arr, int start, int end);
-    node* sortedListToBalancedBST(LinkedListNode** head, int start, int end);
-
-    bool isSubTree(node* t1, node* t2);
-    bool isSubTreeUtil(node* t1, node* t2);
-    bool matchTree(node* t1, node* t2);
-    void convertTreeToSumTree();
-    bool isFoldable();
-    void mirror();
-    void doubleTree();
-    bool hasPathSum(node* node, int sum);
-    void findPathWithSum(node* start, vector<node*> &v, int& sum, int target);
-    nodeDLL* convertTreeToDLL();
-
-    //Serialize/de-serialize
-    void serializeBinaryTree(node* root, FILE* fp);
-    void deserializeBinaryTree(node** root, FILE* fp);
-    node* deserializeBSTIterative(int* pre, int size);
-
-    void printBinaryTreeInVerticalOrder(node* root);
-
-    void inOrderTraversalWithoutStack(node* start); // threaded binary tree // not imeplemented
-    
-    void populateNextRight(treeNodeSpl* start);
+// Definition for binary tree
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 
 class Solution {
@@ -183,19 +68,30 @@ public:
     }
 };
 
-
-void Tree::destroyTree(node* start)
-{
-    if (start) {
-        if (start->left) {
-            destroyTree(start->left);
-        }
-        if (start->right) {
-            destroyTree(start->right);
-        }
-        delete start;
+class BSTIterator {
+public:
+    BSTIterator(TreeNode *root) {
+        pushAll(root);
     }
-}
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !s.empty();
+    }
+    /** @return the next smallest number */
+    int next() {
+        TreeNode *node = s.top(); s.pop();
+        pushAll(node->right);
+        return node->val;
+    }
+private:
+    void pushAll(TreeNode *node) {
+        while (node != nullptr) {
+            s.push(node);
+            node = node->left;
+        }
+    }
+    stack<TreeNode*> s;
+};
 
 bool Tree::insertBST(int key)
 {
