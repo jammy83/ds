@@ -93,6 +93,23 @@ private:
     stack<TreeNode*> s;
 };
 
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode *root, int target) {
+        TreeNode *curr = root;
+        while (curr != nullptr) {
+            if (curr->val == target) {
+                return curr;
+            } else if (curr->val > target) {
+                curr = curr->left;
+            } else {
+                curr = curr->right;
+            }
+        }
+        return nullptr;
+    }
+};
+
 bool Tree::insertBST(int key)
 {
     node* newNode = new node(key);
