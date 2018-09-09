@@ -149,6 +149,41 @@ public:
     }
 };
 
+class Solution {
+public:
+    void inorderTraversalWork(TreeNode *root, vector<int>& result) {
+        if (root == nullptr) {
+            return;
+        }
+        inorderTraversalWork(root->left, result);
+        result.push_back(root->val);
+        inorderTraversalWork(root->right, result);
+    }
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        inorderTraversalWork(root, result);
+        return result;
+    }
+    //iterative
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> s;
+        TreeNode *curr = root;
+        while (!s.empty() || curr != nullptr) {
+            if (curr != nullptr) {
+                s.push(root);
+                curr = curr->left;
+            } else {
+                TreeNode *node = s.top();
+                result.push_back(node); s.pop();
+                curr = node->right;
+            }
+        }
+        return result;
+    }
+};
+
+
 void Tree::destroyTree(node* start)
 {
     if (start) {
