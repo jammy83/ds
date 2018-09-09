@@ -110,61 +110,31 @@ public:
     }
 };
 
-bool Tree::insertBST(int key)
-{
-    node* newNode = new node(key);
-    if (node) {
-        items++;
-        return insert(node);
-    }
-    return false;
-}
-
-//using child pointers, going either left or right reduces the tree by half
-//when implemented using arrays, find the mid and compare against that to
-//chose the first or the second half of the array.
-bool Tree::insertBST(node* n)
-{
-    node* start = root;
-    node* last;
-    // try to find the position to insert the item
-    while (start != NULL) {
-        last = start;
-        if (n->key <= start->key) {
-            start = start->left;
-            start->rank++;
-        } else {
-            start = start->right;
+class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int target) {
+        TreeNode *curr = root, *prev = nullptr;
+        while (curr != nullptr) {
+            prev = curr;
+            if (target < curr->val) {
+                curr = curr->left;
+            } else if (target > curr->val) {
+                curr = curr->right;
+            }
         }
-    }
-    if (last == NULL) {
-        // tree is empty
-        root = n;
-    } else {
-        if (n->key <= last->key) {
-            last->left = n;
-            last->rank++;
+        TreeNode *node = new TreeNode(target);
+        if (prev != nullptr) { 
+            if (prev->val > target) {
+                prev->left = node;
+            } else {
+                prev->right = node;
+            }
         } else {
-            last->right = n;
+            root = node;
         }
+        return root;
     }
-    return true;
-}
-
-node* Tree::searchBST(int key)
-{
-    node* start = root;
-    while (start != NULL) {
-        if (start->key == key) {
-            return start;
-        } else if (key < start->key) {
-            start = start->left;
-        } else {
-            start = start->right;
-        }
-    }
-    return NULL;
-}
+};
 
 node* Tree::findMaxBST(node* start)
 {
