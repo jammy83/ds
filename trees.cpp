@@ -129,6 +129,26 @@ class Tree {
     void populateNextRight(treeNodeSpl* start);
 };
 
+class Solution {
+public:
+    bool isValidBSTWork(TreeNode *root, TreeNode *min, TreeNode *max) {
+        if ((min && root->val <= min->val) ||
+            (max && root->val >= max->val)) {
+            return false;
+        }
+        bool lTree = root->left ? isValidBSTWork(root->left, min, root) : true;
+        bool rTree = root->right ? isValidBSTWork(root->right, root, max) : true;
+        return lTree && rTree;
+    }
+    
+    bool isValidBST(TreeNode *root) {
+        if (root == nullptr) {
+            return true;
+        }
+        return isValidBSTWork(root, nullptr, nullptr);
+    }
+};
+
 void Tree::destroyTree(node* start)
 {
     if (start) {
