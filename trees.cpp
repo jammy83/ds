@@ -184,15 +184,6 @@ node* Tree::findMaxBST(node* start)
     return last;
 }
 
-node* Tree::findMinBST(node* start)
-{
-    node* last = NULL;
-    while (start != NULL) {
-        last = start;
-        start = start->left;
-    }
-    return last;
-}
 
 // Traversals using recursion.
 // Without recursion - use a stack to make use of LIFO property
