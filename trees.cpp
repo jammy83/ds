@@ -112,7 +112,7 @@ public:
 
 class Solution {
 public:
-    TreeNode* insertIntoBST(TreeNode* root, int target) {
+    TreeNode* insertIntoBST(TreeNode *root, int target) {
         TreeNode *curr = root, *prev = nullptr;
         while (curr != nullptr) {
             prev = curr;
@@ -133,6 +133,44 @@ public:
             root = node;
         }
         return root;
+    }
+};
+
+// using a parent pointer
+class Solution {
+public:
+    TreeNode* findMinBST(TreeNode *node) {
+        while (node->left != nullptr) {
+             node = node->left;
+        }
+        return node;
+    }
+    TreeNode* inorderSuccessorBST(TreeNode *root, TreeNode *node) {
+        // if there is a right subtree
+        if (node->right != nullptr) {
+            return findMinBST(node->right);
+        }
+        /////
+        TreeNode *p = node->parent;
+        while (p != nullptr && node == parent->right) {
+            node = p;
+            p = p->parent;
+        }
+        return p;
+        /////
+        TreeNode *succ = nullptr, *curr = root;
+        while (curr != nullptr) {
+            if (node->val < curr->val) {
+                succ = curr;
+                curr = curr->left;
+            } else if (node->val > curr->val) {
+                curr = curr->right;
+            } else {
+                break;
+            }
+        }
+        return succ;
+        /////
     }
 };
 
@@ -450,41 +488,6 @@ node* Tree::findPredecessorInOrder(node* start)
     /////////////////////////
 }
 
-node* Tree::findSuccessorInOrder(node* start)
-{
-    if (start == NULL) {
-        return NULL;
-    }
-    if (start->right) {
-        return findMinBST(start->right);
-    }
-
-    // with parent pointer
-    node* p = start->parent;
-    while (p != NULL && start == p->right) {
-        start = p;
-        p = p->parent;
-    }
-    return p;
-    //////////////////////
-
-    // recurse from the root
-    node* top = root;
-    node* s = NULL;
-    while (top != NULL) {
-        if (start->key > top->key) {
-            top = top->right;
-        } else if (start->key < top->key) {
-            // may or may not be in the left; could be just the root
-            s = top;
-            top = top->left;
-        } else {
-            break;
-        }
-    }
-    return s;
-    ////////////////////////
-}
 
 node* Tree::findLCABST(node* start, int key1, int key2)
 {
