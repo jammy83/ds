@@ -136,7 +136,6 @@ public:
     }
 };
 
-// using a parent pointer
 class Solution {
 public:
     TreeNode* findMinBST(TreeNode *node) {
@@ -174,16 +173,43 @@ public:
     }
 };
 
-node* Tree::findMaxBST(node* start)
-{
-    node* last = NULL;
-    while (start != NULL) {
-        last = start;
-        start = start->right;
+class Solution {
+public:
+    TreeNode* findMax(TreeNode *node) {
+        while (node->right != nullptr) {
+            node = node->right;
+        }
+        return node;
     }
-    return last;
-}
-
+    TreeNode* inorderPredecessorBST(TreeNode *root, TreeNode *node) {
+        if (root == nullptr || node == nullptr) {
+            return nullptr;
+        }
+        if (node->left != nullptr) {
+            return findMax(node->left);
+        }
+        ////////
+        TreeNode *p = node->parent;
+        while (p != nullptr && node == p->left) {
+            node = p;
+            p = p->parent;
+        }
+        return p;
+        ////////
+        TreeNode *pre = nullptr, *curr = root;
+        while (curr != nullptr) {
+            if (node->val < curr->val) {
+                curr = curr->left;
+            } else if (node->val > curr->val) {
+                pre = curr;
+                curr = curr->right;
+            } else {
+                break;
+            }
+        }
+        return pre;
+    }
+};
 
 // Traversals using recursion.
 // Without recursion - use a stack to make use of LIFO property
@@ -443,42 +469,6 @@ bool Tree::checkIfBalanced(node* start)
     }
     return false;
 }
-
-node* Tree::findPredecessorInOrder(node* start)
-{
-    if (start == NULL) {
-        return NULL;
-    }
-    if (start->left) {
-        return findMaxBST(start->left);
-    }
-    
-    // with parent pointer
-    node* p = start->parent;
-    while (p != NULL && start == p->left) {
-        start = p;
-        p = p->parent;
-    }
-    return p;
-    ///////////////////////
-
-    // recurse down the tree
-    node* top = root;
-    node* p = NULL;
-    while (top != NULL) {
-        if (start->key < top->key) {
-            top = top->left;
-        } else if (start->key > top->key) {
-            p = top;
-            top = top->right;
-        } else {
-            break;
-        }
-    }
-    return p;
-    /////////////////////////
-}
-
 
 node* Tree::findLCABST(node* start, int key1, int key2)
 {
