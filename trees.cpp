@@ -175,7 +175,7 @@ public:
 
 class Solution {
 public:
-    TreeNode* findMax(TreeNode *node) {
+    TreeNode* findMaxBST(TreeNode *node) {
         while (node->right != nullptr) {
             node = node->right;
         }
@@ -208,6 +208,38 @@ public:
             }
         }
         return pre;
+    }
+};
+
+// Delete node from BST
+class Solution {
+public:
+    TreeNode* findMinBST(TreeNode *node) {
+        while (node->left != nullptr) {
+             node = node->left;
+        }
+        return node;
+    }
+    TreeNode* deleteNode(TreeNode* root, int key) {
+       if (root == nullptr) {
+            return nullptr;
+        }
+        if (key < root->val) {
+            root->left = deleteNode(root->left, key);
+        } else if (key > root->val) {
+            root->right = deleteNode(root->right, key);
+        } else {
+            TreeNode *temp;
+            if (root->left == nullptr || root->right == nullptr) {
+                temp = root->left ? root->left : root->right;
+                delete(root);
+                return temp;
+            }
+            temp = findMinBST(root->right);
+            root->val = temp->val;
+            root->right = deleteNode(root->right, temp->val);
+        }
+        return root; 
     }
 };
 
