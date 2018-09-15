@@ -243,6 +243,28 @@ public:
     }
 };
 
+// check if Binary tree is height balanced
+class Solution {
+public:
+    int isBalancedWork(TreeNode* root) {
+        if (root == nullptr) {
+            return true;
+        }
+        int left = isBalancedWork(root->left);
+        int right = isBalancedWork(root->right);
+        if (left == -1 || right == -1 || abs(left-right) > 1) {
+            return -1;
+        }
+        return (left > right ? left : right) + 1;
+    }
+    bool isBalanced(TreeNode* root) {
+        if (root == nullptr) {
+            return true;
+        }
+        return isBalancedWork(root) != -1;
+    }
+};
+
 // Traversals using recursion.
 // Without recursion - use a stack to make use of LIFO property
 void Tree::traversePreOrder(node* start)
@@ -421,23 +443,6 @@ void Tree::traverseLevelOrderZigZag(node* start)
     }
 }
 
-bool Tree::checkIfBST(node* start, int min, int max)
-{
-    // Every node's value has to be within the range
-    // provided by the min, max values
-    if (start == NULL) {
-        return false;
-    }
-    if (start->key > max || start->key < min) {
-        return false;
-    }
-    if (!checkIfBST(start->left, min, start->key) ||
-        !checkIfBST(start->right, start->key, max)) {
-        return false;
-    }
-    return true;
-}
-
 int Tree::findHeight()
 {
     return findMaxDepth(root);
@@ -465,41 +470,6 @@ int Tree::findHeightWrtToAGivenNode(node* p)
         p = p->parent;
     }
     return height;
-}
-
-int Tree::checkIfHeightBalanced(node* start)
-{
-    if (start == NULL) {
-        return 0;
-    }
-    int left = checkIfHeightBalanced(start->left);
-    int right = checkIfHeightBalanced(start->right);
-    if (left == -1 || right == -1 || (abs(left - right) > 1)) {
-        return -1;
-    }
-    return (((left > right) ? left : right) + 1);
-}
-
-bool Tree::checkIfBalanced(node* start)
-{
-    if (start == NULL) {
-        return false;
-    }
-    // tree is balanced if the height of the left subtree and
-    // height of the right subtree does not differ by more than one.
-    int lh = findMaxDepth(start->left);
-    int rh = findMaxDepth(start->right);
-    if (abs(lh-rh) <= 1 &&
-        checkIfBalanced(start->left) &&
-        checkIfBalanced(start->right)) {
-        return true;
-    }
-    
-    //Efficient solution
-    if (checkIfHeightBalanced(start) != -1) {
-        return true;
-    }
-    return false;
 }
 
 node* Tree::findLCABST(node* start, int key1, int key2)
