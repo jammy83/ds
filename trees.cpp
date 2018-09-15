@@ -328,65 +328,43 @@ public:
     }
 };
 
-// Traversals using recursion.
-// Without recursion - use a stack to make use of LIFO property
-void Tree::traversePreOrder(node* start)
-{
-    if (start == NULL) {
-        return;
-    }
-    //Recursion
-    cout << start->key << endl;
-    traversePreOrder(start->left);
-    traversePreOrder(start->right);
-}
-
-void Tree::traversePreOrderItertive(node* start)
-{
-    if (start == NULL) {
-        return;
-    }
-    //Stack
-    stack<node*> s;
-    s.push(start);
-    while (!s.empty()) {
-        node* start = s.top();
-        s.pop();
-        cout << start->key << endl;
-        if (start->right) { s.push(start->right); }
-        if (start->left) { s.push(start->left); }
-    }
-}
-
-void Tree::traverseInOrder(node* start)
-{
-    if (start == NULL) {
-        return;
-    }
-    //Recursion
-    traverseInOrder(start->left);
-    cout << start->key << endl;
-    traverseInOrder(start->right);
-}
-
-// Inorder iterative
 class Solution {
 public:
-    vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> result;
-        stack<TreeNode*> s;
+    void preorderTraversalWork(TreeNode *root, vector<int>& result) {
+        if (root == nullptr) {
+            return;
+        }
+        /*
+        result.push_back(root->val);
+        preorderTraversalWork(root->left, result);
+        preorderTraversalWork(root->right, result);
+        */
         TreeNode *curr = root;
-        while (!s.empty() || curr != nullptr) {
+        stack<TreeNode*> s;
+        while (curr != nullptr || !s.empty()) {
             if (curr != nullptr) {
+                result.push_back(curr->val);
                 s.push(curr);
                 curr = curr->left;
             } else {
-                TreeNode *node = s.top();
-                result.push_back(node->val);
-                s.pop();
-                curr = node->right;
+                TreeNode *temp = s.top(); s.pop();
+                curr = temp->right;
             }
         }
+        /*
+        stack<TreeNode*> s;
+        s.push(curr);
+        while (!s.empty()) {
+            TreeNode* temp = s.top(); s.pop();
+            result.push_back(temp->val);
+            if (temp->right) { s.push(temp->right); }
+            if (temp->left)  { s.push(temp->left); }
+        }
+        */
+    }
+    vector<int> preorderTraversal(TreeNode *root) {
+        vector<int> result;
+        preorderTraversalWork(root, result);
         return result;
     }
 };
