@@ -296,6 +296,37 @@ public:
     }
 };
 
+// level order traversal of binary tree using DFS and printing bottom up
+class Solution {
+public:
+    // height can be deduced otherwise using a post-order iterative method or
+    // level order traversal using BFS
+    int maxHeight(TreeNode *root) {
+        if (root == nullptr) {
+            return 0;
+        }
+        int left = maxHeight(root->left);
+        int right = maxHeight(root->right);
+        return left > right ? left + 1 : right + 1;
+    }
+    void levelOrderBottomWork(TreeNode *root, vector<vector<int>>& result, int level) {
+        if (root == nullptr) {
+            return;
+        }
+        result[level-1].push_back(root->val);
+        levelOrderBottomWork(root->left, result, level-1);
+        levelOrderBottomWork(root->right, result, level-1);
+    }
+    vector<vector<int>> levelOrderBottom(TreeNode *root) {
+        int h = maxHeight(root);
+        vector<vector<int>> result;
+        for (int i = 0; i < h; ++i) {
+            result.push_back(vector<int>());
+        }
+        levelOrderBottomWork(root, result, h);
+        return result;
+    }
+};
 
 // Traversals using recursion.
 // Without recursion - use a stack to make use of LIFO property
@@ -398,28 +429,6 @@ int Tree::traversePostOrderIterative(node* start)
     return maxDepth;
 }
 
-//using recursion
-void Tree::traverseByLevelDFS()
-{
-    int height = findMaxDepth(root);
-    for (int i = 1; i <= height; i++) {
-        printLevel(root, i);
-        cout << endl;
-    }
-}
-void Tree::printLevel(node* start, int level)
-{
-    if (start == NULL) {
-        return;
-    }
-    if (level == 1) {
-        cout << start->key << " ";
-    } else {
-        printLevel(start->left, level-1);
-        printLevel(start->right, level-1);
-    }
-}
-
 void Tree::traverseLevelOrderZigZag(node* start)
 {
     if (start == NULL) {
@@ -445,24 +454,6 @@ void Tree::traverseLevelOrderZigZag(node* start)
         cout << endl;
         leftToRight = !leftToRight;
     }
-}
-
-int Tree::findHeight()
-{
-    return findMaxDepth(root);
-    //iterative - Do a post order traversal iteratively
-    // return traversePostOrderIterative(root);
-    // return traverseByLevelBFS();
-}
-
-int Tree::findMaxDepth(node* start)
-{
-    if (start == NULL) {
-        return 0;
-    }
-    int leftD = findMaxDepth(start->left);
-    int rightD = findMaxDepth(start->right);
-    return ((leftD > rightD) ? leftD : rightD) + 1);
 }
 
 //using parent pointer
