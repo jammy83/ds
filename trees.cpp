@@ -265,6 +265,38 @@ public:
     }
 };
 
+// leven order traversal of binary tree BFS
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        if (root == nullptr) {
+            return result;
+        }
+        queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            int count = q.size();
+            vector<int> level;
+            level.reserve(count);
+            while (count != 0) {
+                TreeNode *next = q.front(); q.pop();
+                level.push_back(next->val);
+                if (next->left != nullptr) {
+                    q.push(next->left);
+                }
+                if (next->right != nullptr) {
+                    q.push(next->right);
+                }
+                --count;
+            }
+            result.push_back(level);
+        }
+        return result;
+    }
+};
+
+
 // Traversals using recursion.
 // Without recursion - use a stack to make use of LIFO property
 void Tree::traversePreOrder(node* start)
@@ -364,34 +396,6 @@ int Tree::traversePostOrderIterative(node* start)
         }
     }
     return maxDepth;
-}
-
-// returns the height of the tree and prints the
-// nodes by level from left to right using BFS
-int Tree::traverseByLevelBFS()
-{
-    node* start = root;
-    if (start == NULL) {
-        return 0;
-    }
-    queue<node*> q;
-    q.push(start);
-    int height = 0;
-    // perform level order traversal
-    while (!q.empty()) {
-        int count = q.size(); // no. of nodes in the current level
-        height++;
-        while (count > 0) {
-            node* front = q.front();
-            q.pop();
-            cout << front->key << " ";
-            if (front->left) { q.push(front->left); }
-            if (front->right) { q.push(front->right); }
-            count--;
-        }
-        cout << endl;
-    }
-    return height;
 }
 
 //using recursion
