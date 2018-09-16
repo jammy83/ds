@@ -369,43 +369,40 @@ public:
     }
 };
 
-void Tree::traversePostOrder(node* start)
-{
-    if (start == NULL) {
-        return;
-    }
-    //Recursion
-    traversePostOrder(start->left);
-    traversePostOrder(start->right);
-    cout << start->key << endl;
-}
-
-int Tree::traversePostOrderIterative(node* start)
-{
-    //Stack
-    // Postorder traversal stack has a special property
-    // that the size of the stack equals the max depth at that level
-    stack<node*> s;
-    node* last = NULL;
-    int maxDepth = 0;
-    while (!s.empty() || start) {
-        if (start) {
-            s.push(start);
-            start = start->left;
-            if (s.size() > maxDepth) { maxDepth = s.size(); }
-        } else {
-            node* top = s.top();
-            if (top->right && last != top->right) {
-                start = top->right;
+class Solution {
+public:
+    void postorderTraversalWork(TreeNode *root, vector<int>& result) {
+        if (root == nullptr) {
+            return;
+        }
+        /*
+        postorderTraversalWork(root->left, result);
+        postorderTraversalWork(root->right, result);
+        result.push_back(root->val);
+        */
+        TreeNode *curr = root, *last = nullptr;
+        stack<TreeNode*> s;
+        while (curr != nullptr || !s.empty()) {
+            if (curr != nullptr) {
+                s.push(curr);
+                curr = curr->left;
             } else {
-                cout << top->key << endl;
-                s.pop();
-                last = top;
+                TreeNode *temp = s.top();
+                if (temp->right != nullptr && temp->right != last) {
+                    curr = temp->right;
+                } else {
+                    result.push_back(temp->val); s.pop();
+                    last = temp;
+                }
             }
         }
     }
-    return maxDepth;
-}
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        postorderTraversalWork(root, result);
+        return result;
+    }
+};
 
 void Tree::traverseLevelOrderZigZag(node* start)
 {
