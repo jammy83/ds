@@ -404,6 +404,28 @@ public:
     }
 };
 
+// LCA of a BST
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!p || !q) {
+            return nullptr;
+        }
+        while (root != nullptr) {
+            if (root->val < p->val && root->val < q->val) {
+                root = root->right;
+            } else if (root->val > p->val && root->val > q->val) {
+                root = root->left;
+            } else {
+                return root;
+            }
+        }
+        return nullptr;
+    }
+};
+
+// LCA  of a binary tree
+
 void Tree::traverseLevelOrderZigZag(node* start)
 {
     if (start == NULL) {
