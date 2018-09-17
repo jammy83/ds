@@ -424,7 +424,31 @@ public:
     }
 };
 
-// LCA  of a binary tree
+// LCA  of a binary tree if both p and q are present in the tree. Otherwise
+// search for the other when only one found explicitly.
+class Solution {
+public:
+    TreeNode* lowestCommonAncestorWork(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == nullptr) {
+            return nullptr;
+        }
+        if (root == p || root == q) {
+            return root;
+        }
+        TreeNode *lLca = lowestCommonAncestorWork(root->left, p , q);
+        TreeNode *rLca = lowestCommonAncestorWork(root->right, p , q);
+        if (lLca && rLca) {
+            return root;
+        }
+        return lLca != nullptr ? lLca : rLca;
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!root || !p || !q) {
+            return nullptr;
+        }
+        return lowestCommonAncestorWork(root, p, q);
+    }
+};
 
 void Tree::traverseLevelOrderZigZag(node* start)
 {
