@@ -511,45 +511,26 @@ public:
     }
 };
 
-//using parent pointer
-int Tree::findHeightWrtToAGivenNode(node* p)
-{
-    int height = 0;
-    while (p) {
-        ++height;
-        p = p->parent;
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums, int start, int end) {
+        if (start > end) {
+            return nullptr;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode *root = new TreeNode(nums[mid]);
+        root->left = sortedArrayToBST(nums, start, mid-1);
+        root->right = sortedArrayToBST(nums, mid+1, end);
+        return root;
     }
-    return height;
-}
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        if (nums.empty()) {
+            return nullptr;
+        }
+        return sortedArrayToBST(nums, 0, nums.size()-1);
+    }
+};
 
-node* Tree::findLCAwithParent(node* p, node* q)
-{
-    int h1 = findHeightWrtToAGivenNode(p);
-    int h2 = findHeightWrtToAGivenNode(q);
-    
-    // swap both nodes in case p is deeper than q.
-    if (h1 > h2) {
-        int temp = h1; h1 = h2; h2 = temp;
-        node* t = p; p = q; q = t;
-    }
-    // invariant: h1 <= h2.
-    int dh = h2 - h1;
-    for (int h = 0; h < dh && q != NULL; ++h) {
-        q = q->parent;
-    }
-    while (p && q) {
-        if (p == q) return p;
-        p = p->parent;
-        q = q->parent;
-    }
-    return NULL;  // p and q are not in the same tree
-}
-
-int Tree::getRankBST(int key)
-{
-    node* target = searchBST(key);
-    return ((target != NULL) ? target->rank : 0);
-}
 
 int Tree::kthSmallestElementBST(int k)
 {
@@ -568,21 +549,6 @@ int Tree::kthSmallestElementBST(int k)
         }
     }
     return -1;
-}
-
-//create a balanced tree given a sorted array of elements
-//Time complexity O(n)
-node* Tree::sortedArrayToBalancedBST(int* arr, int start, int end)
-{
-    if (start > end) return NULL;
-
-    int mid = start + (end-start) / 2; //avoids overflow
-    node* root = new node(arr[mid]);
-    if (root) {
-        root->left = sortedArrayToBalancedBST(arr, start, mid-1);
-        root->right = sortedArrayToBalancedBST(arr, mid+1, end);
-    }
-    return root;
 }
 
 //Naive solution: Always finding the middle element traversing n/2 elements each time
