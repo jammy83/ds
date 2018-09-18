@@ -477,6 +477,39 @@ void Tree::traverseLevelOrderZigZag(node* start)
     }
 }
 
+// Maximum height of the tree
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
+        int lheight = maxDepth(root->left);
+        int rheight = maxDepth(root->right);
+        return lheight > rheight ? lheight + 1 : rheight + 1; 
+    }
+};
+
+// Minimum height of the tree
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
+        int lheight = minDepth(root->left);
+        int rheight = minDepth(root->right);
+        // if one of the children is not present, it should still consider
+        // the height of the child that is NON-NULL and not return 0.
+        if (root->left == nullptr) {
+            return rheight + 1;
+        } else if (root->right == nullptr) {
+            return lheight + 1;
+        }
+        return lheight < rheight ? lheight + 1 : rheight + 1;
+    }
+};
+
 //using parent pointer
 int Tree::findHeightWrtToAGivenNode(node* p)
 {
