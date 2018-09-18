@@ -450,32 +450,33 @@ public:
     }
 };
 
-void Tree::traverseLevelOrderZigZag(node* start)
-{
-    if (start == NULL) {
-        return;
-    }
-    stack<node*> s;
-    s.push(start);
-    bool leftToRight = false;
-    while (!s.empty()) {
-        int count = s.size();
-        while (count > 0) {
-            node* curr = s.top(); s.pop();
-            cout << curr->key << " ";
-            if (leftToRight) {
-                if (curr->right) s.push(curr->right);
-                if (curr->left) s.push(curr->left);
-            } else {
-                if (curr->left) s.push(curr->left);
-                if (curr->right) s.push(curr->right);
-            }
-            count--;
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        if (root == nullptr) {
+            return result;
         }
-        cout << endl;
-        leftToRight = !leftToRight;
+        bool leftToRight = true;
+        queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            int size = q.size();
+            vector<int> output(size);
+            for (int i = 0; i < size; i++) {
+                TreeNode* temp = q.front(); q.pop();
+                int index = leftToRight ? i : (size-1-i);
+                cout << index;
+                output[index] = temp->val;
+                if (temp->left) q.push(temp->left);
+                if (temp->right) q.push(temp->right);
+            }
+            result.push_back(output);
+            leftToRight = !leftToRight;
+        }
+        return result; 
     }
-}
+};
 
 // Maximum height of the tree
 class Solution {
