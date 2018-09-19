@@ -511,6 +511,7 @@ public:
     }
 };
 
+// sorted array to balanced BST
 class Solution {
 public:
     TreeNode* sortedArrayToBST(vector<int>& nums, int start, int end) {
@@ -531,6 +532,37 @@ public:
     }
 };
 
+// sorted linked list to balanced BST
+class Solution {
+public:
+    int findLen(ListNode *head) {
+        int count = 0;
+        while (head != nullptr) { 
+            ++count;
+            head = head->next;
+        }
+        return count;
+    }
+    TreeNode* sortedListToBSTWork(ListNode **head, int start, int end) {
+        if (start > end) {
+            return nullptr;
+        } 
+        int mid = start + (end-start) / 2;
+        TreeNode *left = sortedListToBSTWork(head, start, mid-1);
+        TreeNode *root = new TreeNode((*head)->val);
+        root->left = left;
+        *head = (*head)->next;
+        root->right = sortedListToBSTWork(head, mid+1, end);
+        return root;
+    }
+    TreeNode* sortedListToBST(ListNode *head) {
+        if (head == nullptr) {
+            return nullptr;
+        }
+        int len = findLen(head);
+        return sortedListToBSTWork(&head, 0, len-1);
+    }
+};
 
 int Tree::kthSmallestElementBST(int k)
 {
@@ -549,26 +581,6 @@ int Tree::kthSmallestElementBST(int k)
         }
     }
     return -1;
-}
-
-//Naive solution: Always finding the middle element traversing n/2 elements each time
-//Time Complexity: O(nlogn)
-//Below is the bottom-up approach taken by just walking the linked list and
-//constructing the tree by linking them to its parent
-//Time Complexity: O(n)
-node* Tree::sortedListToBalancedBST(LinkedListnode** head, int start, int end)
-{
-    if (start > end) return NULL;
-
-    int mid = start + (end-start) / 2; //avoids overflow
-    node* leftChild = sortedListToBST(head, start, mid-1);
-    node* parent = new node((*head)->_data);
-    if (parent) {
-        parent->left = leftChild;
-        *head = (*head)->_next;
-        parent->right = sortedListToBST(head, mid+1, end);
-    }
-    return parent;
 }
 
 //What is a subtree? If the values matched?
