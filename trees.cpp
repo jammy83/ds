@@ -564,6 +564,31 @@ public:
     }
 };
 
+// Building a binary tree from inorder and postorder traversal
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& inorder, int start, int end, vector<int>& postorder,
+                       unordered_map<int,int>& map) {
+        if (postorder.empty() || start > end) {
+            return nullptr;
+        }
+        vector<int>::reverse_iterator itr = postorder.rbegin();
+        int i = map[*itr];
+        postorder.resize(postorder.size()-1);
+        TreeNode *root = new TreeNode(*itr);
+        root->right = buildTree(inorder, i+1, end, postorder, map);
+        root->left = buildTree(inorder, start, i-1, postorder, map);
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        unordered_map<int, int> map;
+        for (int i = 0; i < inorder.size(); i++) {
+            map[inorder[i]] = i;
+        }
+        return buildTree(inorder, 0, inorder.size()-1, postorder, map);
+    }
+};
+
 int Tree::kthSmallestElementBST(int k)
 {
     node* start = root;
