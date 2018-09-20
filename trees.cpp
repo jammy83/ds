@@ -491,17 +491,21 @@ public:
         }
         set<TreeNode*> map;
         pair<set<TreeNode*>::iterator, bool> result;
-        while (p != nullptr && q != nullptr) {
-            result = map.insert(p);
-            if (result.second == false) {
-                return p;
+        while (p != nullptr|| q != nullptr) {
+            if (p != nullptr) {
+                result = map.insert(p);
+                if (result.second == false) {
+                    return p;
+                }
+                p = p->parent;
             }
-            p = p->parent;
-            result = map.insert(q);
-            if (result.second == false) {
-                return q;
+            if (q != nullptr) {
+                result = map.insert(q);
+                if (result.second == false) {
+                    return q;
+                }
+                q = q->parent;
             }
-            q = q->parent;
         }
         return nullptr;
     }
