@@ -450,6 +450,39 @@ public:
     }
 };
 
+// LCA of a binary tree given the parent pointers
+class Solution {
+    int getDepth(TreeNode *node) {
+        int depth = 0;
+        while (node != nullptr) {
+            ++depth;
+            node = node->parent;
+        }
+        return depth;
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == nullptr) {
+            return nullptr;
+        }
+        int h1 = getDepth(p);
+        int h2 = getDepth(q);
+        if (h2 > h1) {
+            swap(p, q);
+        }
+        int diff = abs(h1-h2);
+        while (diff-- > 0 && p != nullptr) {
+            p = p->parent;
+        }
+        while (p != nullptr && q != nullptr && p != q) {
+            p = p->parent;
+            p = q->parent;
+        }
+        return p;
+    }
+};
+
+// LCA optimized for close ancestors
+
 class Solution {
 public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
