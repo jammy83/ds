@@ -452,6 +452,7 @@ public:
 
 // LCA of a binary tree given the parent pointers
 class Solution {
+public:
     int getDepth(TreeNode *node) {
         int depth = 0;
         while (node != nullptr) {
@@ -481,7 +482,30 @@ class Solution {
     }
 };
 
-// LCA optimized for close ancestors
+// LCA optimized for close ancestors with parent pointers
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == nullptr || !p || !q) {
+            return nullptr;
+        }
+        set<TreeNode*> map;
+        pair<set<TreeNode*>::iterator, bool> result;
+        while (p != nullptr && q != nullptr) {
+            result = map.insert(p);
+            if (result.second == false) {
+                return p;
+            }
+            p = p->parent;
+            result = map.insert(q);
+            if (result.second == false) {
+                return q;
+            }
+            q = q->parent;
+        }
+        return nullptr;
+    }
+};
 
 class Solution {
 public:
