@@ -625,6 +625,7 @@ public:
     }
 };
 
+// https://stackoverflow.com/questions/33062228/why-it-is-impossible-to-construct-binary-tree-with-pre-order-post-order-and-lev
 // Building a binary tree from inorder and postorder traversal
 class Solution {
 public:
@@ -647,6 +648,31 @@ public:
             map[inorder[i]] = i;
         }
         return buildTree(inorder, 0, inorder.size()-1, postorder, map);
+    }
+};
+
+// Build a binary tree from inorder and pre-order traversal
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder, int start, int end,
+                       unordered_map<int, int>& map) {
+        if (preorder.empty() || start > end) {
+            return nullptr;
+        }
+        vector<int>::iterator itr = preorder.begin();
+        int index = map[*itr];
+        TreeNode *root = new TreeNode(*itr);
+        preorder.erase(preorder.begin());
+        root->left = buildTree(preorder, inorder, start, index-1, map);
+        root->right = buildTree(preorder, inorder, index+1, end, map);
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        unordered_map<int, int> map;
+        for (int i = 0; i < inorder.size(); i++) {
+            map[inorder[i]] = i;
+        }
+        return buildTree(preorder, inorder, 0, inorder.size()-1, map);
     }
 };
 
