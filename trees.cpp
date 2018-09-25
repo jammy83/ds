@@ -676,6 +676,33 @@ public:
     }
 };
 
+// Build a full binary tree from pre-order and post-order
+class Solution {
+public:
+    TreeNode* constructFromPrePostWork(vector<int>& pre, vector<int>& post, int start, int end,
+                                       unordered_map<int, int>& mapPost) {
+        if (pre.empty() || start > end) {
+            return nullptr;
+        }
+        vector<int>::iterator itr = pre.begin();
+        TreeNode *root = new TreeNode(*itr);
+        int index = mapPost[*++itr]; cout << index;
+        pre.erase(pre.begin());
+        if (index <= end) {
+            root->left = constructFromPrePostWork(pre, post, start, index, mapPost);
+            root->right = constructFromPrePostWork(pre, post, index+1, end, mapPost);
+        }
+        return root;
+    }
+    TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+        unordered_map<int, int> m;
+        for (int i = 0; i < post.size(); i++) {
+            m[post[i]] = i;
+        }
+        return constructFromPrePostWork(pre, post, 0, pre.size()-1, m);
+    }
+};
+
 int Tree::kthSmallestElementBST(int k)
 {
     node* start = root;
