@@ -265,7 +265,7 @@ public:
     }
 };
 
-// leven order traversal of binary tree BFS
+// level order traversal of binary tree BFS
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
@@ -726,6 +726,27 @@ public:
             last->right = tmp;
         }
         flatten(root->right);
+    }
+};
+
+// Binary tree right-side view
+class Solution {
+public:
+    void rightSideViewWork(TreeNode* root, int level, int& max, vector<int>& result) {
+        if (root == nullptr) {
+            return;
+        }
+        if (level > max) {
+            result.push_back(root->val);
+            max = level;
+        }
+        rightSideViewWork(root->right, level+1, max, result);
+        rightSideViewWork(root->left, level+1, max, result);
+    }
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> result; int maxLevel = 0;
+        rightSideViewWork(root, 1, maxLevel, result);
+        return result;
     }
 };
 
