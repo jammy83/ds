@@ -703,6 +703,32 @@ public:
     }
 };
 
+// flatten a binary tree to a linked list in-place
+// alternative soln would be to use level order traversal and a prev node pointer and updating prev->right to 
+// the next item popped. But that consumes memory for the queue
+// O(1) space: recursive soln
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if (root == nullptr ||
+            (root->left == nullptr && root->right == nullptr)) {
+            return;
+        }
+        if (root->left != nullptr) {
+            flatten(root->left);
+            TreeNode *tmp = root->right;
+            root->right = root->left;
+            root->left = nullptr;
+            TreeNode *last = root->right;
+            while (last->right != nullptr) {
+                last = last->right;
+            }
+            last->right = tmp;
+        }
+        flatten(root->right);
+    }
+};
+
 int Tree::kthSmallestElementBST(int k)
 {
     node* start = root;
