@@ -750,6 +750,92 @@ public:
     }
 };
 
+// Print boundary of binary tree
+class Solution {
+public:
+    void printBoundaryLeft(TreeNode *root, vector<int>& result) {
+        if (root == nullptr) {
+            return;
+        }
+        if (root->left) {
+            result.push_back(root->val);
+            printBoundaryLeft(root->left, result);
+        } else if (root->right) {
+            result.push_back(root->val);
+            printBoundaryLeft(root->right, result);
+        }
+        // don't push leaf nodes
+    }
+    void printLeaves(TreeNode *root, vector<int>& result) {
+        if (root == nullptr) {
+            return;
+        }
+        printLeaves(root->left, result);
+        if (root->left == nullptr && root->right == nullptr) {
+            result.push_back(root->val);
+        }
+        printLeaves(root->right, result);
+    }
+    void printBoundaryRight(TreeNode *root, vector<int>& result) {
+        // bottom-up
+        if (root == nullptr) {
+            return;
+        }
+        if (root->right) {
+            printBoundaryRight(root->right, result);
+            result.push_back(root->val);
+        } else if (root->left) {
+            printBoundaryLeft(root->left, result);
+            result.push_back(root->val);
+        }
+        // don't push leaf nodes
+    }
+    vector<int> printBoundaryBinaryTree(TreeNode *root) {
+        vector<int> result;
+        if (root == nullptr) {
+            return result;
+        }
+        printBoundaryLeft(root, result); // top-down of leftmost nodes
+        printLeaves(root->left, result); // leaves of left sub-tree
+        printLeaves(root->right, result); // leaves of right sub-tree
+        printBoundaryRight(root, result); // bottom-up rightmost nodes
+        return result;
+    }
+};
+
+// Print nextRight pointer
+/**
+ * Definition for binary tree with next pointer.
+ * struct TreeLinkNode {
+ *  int val;
+ *  TreeLinkNode *left, *right, *next;
+ *  TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void connectWork(TreeLinkNode *root) {
+        if (root == nullptr) {
+            return;
+        }
+        if (root->left) {
+            root->left->next = root->right;
+        }
+        if (root->right) {
+            root->right->next = root->next ? root->next->left : nullptr;
+        }
+        connectWork(root->left);
+        connectWork(root->right);
+    }
+    void connect(TreeLinkNode *root) {
+        if (root == nullptr) {
+            return;
+        }
+        root->next = nullptr;
+        return connectWork(root);
+    }
+};
+
 int Tree::kthSmallestElementBST(int k)
 {
     node* start = root;
@@ -1055,26 +1141,3 @@ void Tree::calculateHorizontalDist(node* root, int dist, multimap<int, int>& map
     printBinaryTreeInVerticalOrder(root->left, dist-1, map);
     printBinaryTreeInVerticalOrder(root->right, dist+1, map);
 }
-
-//connect nodes in the same level using 'nextRight' pointer
-void Tree::populateNextRight(treeNodeSpl* start)
-{
-    if (start == NULL) {
-        return;
-    }
-    if (start->left) {
-        start->left->nextRight = start->right;
-    }
-    if (start->right) {
-        start->right->nextRight = (start->nextRight) ?
-                                  start->nextRight->left : NULL;
-    }
-    populateNextRight(start->left);
-    populateNextRight(start->right);
-}
-
-int main()
-{
-    return 0;
-}
-
