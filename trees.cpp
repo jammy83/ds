@@ -803,7 +803,7 @@ public:
     }
 };
 
-// Print nextRight pointer
+// Print nextRight pointer of a complete binary tree
 /**
  * Definition for binary tree with next pointer.
  * struct TreeLinkNode {
@@ -833,6 +833,40 @@ public:
         }
         root->next = nullptr;
         return connectWork(root);
+    }
+};
+
+// print nextRight pointer of any binary tree
+class Solution {
+public:
+    TreeLinkNode* findNext(TreeLinkNode *node) {
+        while (node != nullptr) {
+            TreeLinkNode *result = node->left ? node->left : node->right;
+            if (result != nullptr) {
+                return result;
+            }
+            node = node->next;
+        }
+        return nullptr;
+    }
+    void connect(TreeLinkNode *root) {
+        if (root == nullptr) {
+            return;
+        }
+        root->next = nullptr;
+        while (root != nullptr) {
+            TreeLinkNode *curr = root;
+            while (curr != nullptr) {
+                if (curr->left) {
+                    curr->left->next = curr->right ? curr->right : findNext(curr->next);
+                }
+                if (curr->right) {
+                    curr->right->next = findNext(curr->next);
+                }
+                curr = curr->next;
+            }
+            root = root->left ? root->left : (root->right ? root->right : findNext(root->next));
+        }
     }
 };
 
