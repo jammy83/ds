@@ -836,7 +836,7 @@ public:
     }
 };
 
-// print nextRight pointer of any binary tree
+// print nextRight pointer of any binary tree iteratively
 class Solution {
 public:
     TreeLinkNode* findNext(TreeLinkNode *node) {
@@ -867,6 +867,21 @@ public:
             }
             root = root->left ? root->left : (root->right ? root->right : findNext(root->next));
         }
+    }
+};
+
+// check if a binary tree is symmetric
+class Solution {
+public:
+    bool isSymmetricWork(TreeNode *l, TreeNode *r) {
+        return ((l == nullptr && r == nullptr) ||
+                (l != nullptr && r != nullptr && l->val == r->val &&
+                isSymmetricWork(l->left, r->right) &&
+                isSymmetricWork(l->right, r->left)));
+    }
+    bool isSymmetric(TreeNode *root) {
+        return (root == nullptr ||
+                isSymmetricWork(root->left, root->right));
     }
 };
 
