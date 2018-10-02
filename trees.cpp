@@ -885,6 +885,34 @@ public:
     }
 };
 
+// Inorder traversal of a binary tree with O(1) space
+class Solution {
+public:
+    vector<int> InorderTraversal(TreeNode *root) {
+        TreeNode *prev = nullptr, *curr = root;
+        vector<int> result;
+        while (curr != nullptr) {
+            TreeNode *next = nullptr;
+            if (curr->parent == prev) { // processing the left sub-tree
+                if (curr->left != nullptr) {
+                    next = curr->left;
+                } else {
+                    result.push_back(curr->val);
+                    next = curr->right != nullptr ? curr->right : curr->parent;
+                }
+            } else if (curr->left == prev) { // done with the left sub-tree
+                result.push_back(curr->val);
+                next = curr->right != nullptr ? curr->right : curr->parent;
+            } else { // done with both children
+                next = curr->parent;
+            }
+            prev = curr;
+            curr = next;
+        }
+        return result;
+    }
+};
+
 int Tree::kthSmallestElementBST(int k)
 {
     node* start = root;
