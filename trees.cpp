@@ -945,6 +945,44 @@ public:
     }
 };
 
+// Implement a binary tree locking with parent pointers
+class TreeNode {
+public:
+    bool lock() {
+        if (numLockedDescendants > 0 || locked) {
+            return false;
+        }
+        for (TreeNode *p = parent; p != nullptr; p = p->parent) {
+            if (p->locked) {
+                retun false;
+            }
+        }
+        locked = true;
+        for (TreeNode *p = parent; p != nullptr; p = p->parent) {
+            p->numDescendants++;
+        }
+        return true;
+    }
+    bool unlock() {
+        if (locked) {
+            locked = false;
+            for (TreeNode *p = parent; p != nullptr; p = p->parent) {
+                p->numDescendants--;
+            }
+        }
+    }
+    bool isLocked() const {
+        return locked;
+    }
+private:
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode *parent;
+    bool locked;
+    int numLockedDescendants;
+};
+
 int Tree::kthSmallestElementBST(int k)
 {
     node* start = root;
