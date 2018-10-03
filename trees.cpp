@@ -983,6 +983,22 @@ private:
     int numLockedDescendants;
 };
 
+//print if the tree, starting at the root, leads to a given sum
+class Solution {
+public:
+    bool Tree::hasPathSum(TreeNode* root, int sum) {
+        // return true if we run out of tree and sum==0
+        if (root == nullptr) {
+            return (sum == 0);
+        } else {
+            // otherwise check both subtrees
+            int subSum = sum - root->val;
+            return(hasPathSum(root->left, subSum) ||
+                   hasPathSum(root->right, subSum));
+        }
+    }
+};
+
 int Tree::kthSmallestElementBST(int k)
 {
     node* start = root;
