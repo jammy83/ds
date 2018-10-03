@@ -68,6 +68,66 @@ public:
     }
 };
 
+// Inorder traversal of a binary tree with O(1) space with parent pointers
+class Solution {
+public:
+    vector<int> InorderTraversal(TreeNode *root) {
+        TreeNode *prev = nullptr, *curr = root;
+        vector<int> result;
+        while (curr != nullptr) {
+            TreeNode *next = nullptr;
+            if (curr->parent == prev) { // processing the left sub-tree
+                if (curr->left != nullptr) {
+                    next = curr->left;
+                } else {
+                    result.push_back(curr->val);
+                    next = curr->right != nullptr ? curr->right : curr->parent;
+                }
+            } else if (curr->left == prev) { // done with the left sub-tree
+                result.push_back(curr->val);
+                next = curr->right != nullptr ? curr->right : curr->parent;
+            } else { // done with both children
+                next = curr->parent;
+            }
+            prev = curr;
+            curr = next;
+        }
+        return result;
+    }
+};
+
+// Threaded binary tree: the right child of the leaf node points to the in-order successor and the left child of the leaf 
+// node points to the in-order predecessor of the binary tree
+// Use threaded binary tree to do inorder traversal with O(1) space
+class Solution {
+     vector<int> InorderTraversal(TreeNode *root) {
+         vector<int> result;
+         TreeNode *curr = root;
+         while (curr != nullptr) {
+             if (curr->left == nullptr) {
+                 result.push_back(curr->val);
+                 curr = curr->right;
+             } else {
+                 // connect successor with the predecessor (rightmost of the left sub-tree)
+                 TreeNode *pre = curr->left;
+                 while (pre->right != nullptr && pre->right != curr) {
+                     pre = pre->right;
+                 }
+                 if (pre == nullptr) { // make the connection to use later
+                     pre->right = curr;
+                     curr = curr->left;
+                 } else {
+                     // already connected, so done with the left sub-tree. Undo and move on.
+                     result.push_back(curr->val);
+                     pre->right = nullptr;
+                     curr = curr->right;
+                 }
+             }
+         }
+         return result;    
+     }
+};
+
 class BSTIterator {
 public:
     BSTIterator(TreeNode *root) {
@@ -882,34 +942,6 @@ public:
     bool isSymmetric(TreeNode *root) {
         return (root == nullptr ||
                 isSymmetricWork(root->left, root->right));
-    }
-};
-
-// Inorder traversal of a binary tree with O(1) space
-class Solution {
-public:
-    vector<int> InorderTraversal(TreeNode *root) {
-        TreeNode *prev = nullptr, *curr = root;
-        vector<int> result;
-        while (curr != nullptr) {
-            TreeNode *next = nullptr;
-            if (curr->parent == prev) { // processing the left sub-tree
-                if (curr->left != nullptr) {
-                    next = curr->left;
-                } else {
-                    result.push_back(curr->val);
-                    next = curr->right != nullptr ? curr->right : curr->parent;
-                }
-            } else if (curr->left == prev) { // done with the left sub-tree
-                result.push_back(curr->val);
-                next = curr->right != nullptr ? curr->right : curr->parent;
-            } else { // done with both children
-                next = curr->parent;
-            }
-            prev = curr;
-            curr = next;
-        }
-        return result;
     }
 };
 
