@@ -925,7 +925,7 @@ public:
                 }
                 curr = curr->next;
             }
-            root = root->left ? root->left : (root->right ? root->right : findNext(root->next));
+            root = findNext(root);
         }
     }
 };
@@ -981,6 +981,33 @@ private:
     TreeNode *parent;
     bool locked;
     int numLockedDescendants;
+};
+
+// find the kth node in a inorder traversal with each node containing the no. of nodes rooted at that node
+/**
+ * Definition for binary tree with no. of elements in that subtree.
+ * struct TreeLinkNode {
+ *  int val;
+ *  int size;
+ *  TreeLinkNode *left, *right;
+ *  TreeLinkNode(int x) : val(x), size(0), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    TreeNode* findKthNodeBinaryTree(TreeNode *root, int k) {
+        while (root != nullptr) {
+            int leftSize = root->left ? root->left->size : 0;
+            if (leftSize + 1 < k) {
+                k -= (leftSize + 1);
+                root = root->right;
+            } else if (leftSize == k-1) {
+                return root;
+            } else {
+                root = root->left;
+            }
+        }
+        return nullptr;
+    }
 };
 
 //print if the tree, starting at the root, leads to a given sum
