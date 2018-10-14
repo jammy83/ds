@@ -103,12 +103,6 @@ public:
     MyQueue() { }
     /** Push element x to the back of queue. */
     void push(int x) {
-        if (_nums.empty()) {
-            while (!_rnums.empty()) {
-                _nums.push(_rnums.top());
-                _rnums.pop();
-            }
-        }
         _nums.push(x);
     }
     /** Removes the element from in front of queue and returns that element. */
