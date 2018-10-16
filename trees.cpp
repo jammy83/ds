@@ -1184,7 +1184,6 @@ bool Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
     if (start == NULL) {
         return false;
     }
-
     v.push_back(start);
     sum += start->key;
     if (sum == target) {
@@ -1244,68 +1243,6 @@ nodeDLL* Tree::convertTreeToDLL()
         }
     }
     return head;
-}
-//pre-order traversal with "-1" to denote lack of a child
-void Tree::serializeBinaryTree(node* root, FILE *fp)
-{
-    if (root == NULL) {
-        fprintf(fp, "%d ", -1);
-        return;
-    }
-    fprintf(fp, "%d ", root->key);
-    serializeBinaryTree(root->left, fp);
-    serializeBinaryTree(root->right, fp);
-}
-
-//pre-oder traversal
-void Tree::deserializeBinaryTree(node** root, FILE *fp)
-{
-    int val = 0;
-    if (!fscanf(fp, "%d ", &val) || val == -1) {
-        return;
-    }
-    *root = new node(val);
-    if (!*root) {
-        return;
-    }
-    deserializeBinaryTree(*root->left, fp);
-    deserializeBinaryTree(*root->righ, fp);
-}
-
-//de-serialize a BST from a pre-order traversal output
-node* Tree::deserializeBSTIterative(int* pre, int size)
-{
-    if (size < 0) {
-        return NULL;
-    }
-    stack<node*> s;
-    node* root = new node(pre[0]);
-    if (!root) {
-        return NULL;
-    }
-    s.push(root);
-
-    for (int i = 1, node* temp = NULL, *last = NULL; i < size; i++) {
-        while (!s.empty() && pre[i] > (temp = s.top())) {
-            s.pop();
-            last = temp;
-        }
-        if (last == NULL) {
-            node* top = s.top();
-            top->left = new node(pre[i]);
-            if (!top->left) {
-                return NULL:
-            }
-            s.push(top->left);
-        } else {
-            last->right = new node(pre[i]);
-            if (!last->right) {
-                return NULL;
-            }
-            s.push(last->right);
-        }
-    }
-    return root;
 }
 
 // Do an inorder traversal. Note that the horizontal distance from the root
