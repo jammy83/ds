@@ -1010,6 +1010,29 @@ class Solution {
     }
 };
 
+// reconstruct a binary tree with preorder traversal and nullptr to denote no child.
+class Solution {
+public:
+    TreeNode *reconstructBinaryTreePreorderWork(vector<int*>& preorder, int& index) {
+        if (index == preorder.size()) {
+            return nullptr;
+        }
+        int *node = preorder[index++];
+        if (node == nullptr) {
+            return nullptr;
+        }
+        TreeNode *root = new TreeNode(*node);
+        root->left = reconstructBinaryTreePreorderWork(preorder, index);
+        root->right = reconstructBinaryTreePreorderWork(preorder, index);
+        return root;
+    }
+    TreeNode *reconstructBinaryTreePreorder(vector<int*>& preorder) {
+        int index = 0;
+        reconstructBinaryTreePreorder(preorder, index);
+    }
+};
+
+---------------------------------------------------------------
 //print if the tree, starting at the root, leads to a given sum
 class Solution {
 public:
