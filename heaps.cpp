@@ -35,3 +35,26 @@ public:
         return result;
     }
 };
+
+//sort an almost sorted array
+// push k+1 elements into the min heap and sort
+class Solution {
+    vector<int> sortedAlmostSortedArray(istringstream s, int k) {
+        vector<int> result;
+        priority_queue<int, vector<int>, greater<int>> minHeap;
+        for (int i = 0; i < k && *s >> x; ++i) {
+            minHeap.push(x);
+        }
+        while (*s >> x) {
+            minHeap.push(x);
+            result.push_back(minHeap.top());
+            minHeap.pop();
+        }
+        while (!minHeap.empty()) {
+            result.push_back(minHeap.top());
+            minHeap.pop();
+        }
+        return result;
+    }   
+};
+    
