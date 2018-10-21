@@ -57,4 +57,26 @@ class Solution {
         return result;
     }   
 };
-    
+
+// sort an increasing decreasing array
+class Solution {
+    vector<int> sortIncDecArray(const vector<int>& a) {
+        vector<vector<int>> arrays;
+        bool increasing = true;
+        int start = 0;
+        for (int i = 1; i <= a.size(); i++) {
+            if (i == a.size() ||
+                (a[i-1] < a[i] && !increasing) ||
+                (a[i-1] > a[i] && increasing)) {
+                if (increasing) {
+                    arrays.push_back(a.begin() + start, a.begin() + i);
+                } else {
+                    arrays.push_back(a.rbegin() + a.size() - i, a.rbegin() + a.size() - start);
+                }
+                start = i;
+                increasing = !increasing;
+            }
+        }
+        return mergeSortedArrays(arrays);
+    }
+};
