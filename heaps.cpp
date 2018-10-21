@@ -65,7 +65,7 @@ class Solution {
     }
 };
  
-//sort an almost sorted array
+// sort an almost sorted array
 // push k+1 elements into the min heap and sort
 class Solution {
     vector<int> sortedAlmostSortedArray(istringstream s, int k) {
@@ -110,43 +110,43 @@ class Solution {
     }
 };
 
-//Running median (incoming stream of data)
-//Stratergy is to be able to retrieve the middle element and the one before
-//(for even no. of elements) in O(1) time
-void insertNumber(int num)
-{
-    if (maxHeap.isEmpty()) {
-        maxHeap.insert(num);
-        return;
+// Running median
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {}
+    void addNum(int num) {
+        if (minHeap.empty()) {
+            minHeap.emplace(num);
+        } else {
+            if (num >= minHeap.top()) {
+                minHeap.emplace(num);
+            } else {
+                maxHeap.emplace(num);
+            }
+        }
+        reHeap();
     }
-    if (num <= maxHeap.getMax()) {
-        maxHeap.insert(num);
-    } else {
-        minHeap.insert(num);
+    // median of the stream is the avg of 2 middle elements in case 
+    // of event set of numbers and the middle element in case of odd set
+    // It is computed as the avg of max from the smaller set and min from
+    // the larger set of elements.
+    double findMedian() {
+        if (minHeap.size() == maxHeap.size()) {
+            return (minHeap.top()+maxHeap.top()) / 2;
+        }
+        return minHeap.top();
     }
-    int min = minHeap.size();
-    int max = maxHeap.size();
-    if (min == max || (max > min && (max-min == 1))) {
-        return;
+private:
+    priority_queue<double, vector<double>, less<double>> maxHeap;
+    priority_queue<double, vector<double>, greater<double>> minHeap;
+    void reHeap() {
+        if (minHeap.size() > maxHeap.size() + 1) {
+            maxHeap.emplace(minHeap.top());
+            minHeap.pop();
+        } else if (maxHeap.size() > minHeap.size()) {
+            minHeap.emplace(maxHeap.top());
+            maxHeap.pop();
+        }
     }
-    if (max > min) {
-        minHeap.insert(maxHeap.getMax());
-        maxHeap.delMax();
-    } else {
-        maxHeap.insert(minHeap.getMin());
-        minHeap.delMin();
-    }
-}
-int getRunningMedian(int* arr, int size)
-{
-    minPQ minHeap;
-    maxPQ maxHeap;
-    if (maxHeap.isEmpty()) {
-        return 0;
-    }
-    if (maxHeap.size() == minHeap.size()) {
-        return (maxHeap.getMax()+minHeap.getMin())/2;
-    } else {
-        return maxHeap.getMax();
-    }
-}
+};
