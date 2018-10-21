@@ -150,3 +150,32 @@ private:
         }
     }
 };
+
+// Implement stack using heap
+class myStack {
+public:
+    void push(int num) {
+        maxHeap.emplace(valueWithRank{num, timestamp++});
+    }
+    int pop() {
+        if (maxHeap.empty()) {
+            return -1;
+        }
+        int value = maxHeap.top().val;
+        maxHeap.pop();
+        return value;
+    }
+    int peek {
+        return maxHeap.top().val;
+    }
+private:
+    struct valueWithRank {
+        bool operator<(const valueWithRank& rhs) {
+            return rank < rhs.rank;
+        }
+        int val;
+        int rank;
+    };
+    priority_queue<valueWithRank, vector<valueWithRank>> maxHeap;
+    int timestamp;
+};
