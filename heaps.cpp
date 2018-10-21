@@ -37,7 +37,13 @@ public:
 };
 
 // merge K sorted arrays
-struct 
+struct vectorComp {
+    bool operator<(const vectorComp& rhs) const {
+        return *current > rhs.current;
+    }
+    vector<int>::iterator current;
+    vector<int>::iterator end;
+}
 class Solution {
     vector<int> mergeSortedArrays(const vector<vector<int>>& arrays) {
         priority_queue<vectorComp, vector<vectorComp>> minHeap;
@@ -103,3 +109,44 @@ class Solution {
         return mergeSortedArrays(arrays);
     }
 };
+
+//Running median (incoming stream of data)
+//Stratergy is to be able to retrieve the middle element and the one before
+//(for even no. of elements) in O(1) time
+void insertNumber(int num)
+{
+    if (maxHeap.isEmpty()) {
+        maxHeap.insert(num);
+        return;
+    }
+    if (num <= maxHeap.getMax()) {
+        maxHeap.insert(num);
+    } else {
+        minHeap.insert(num);
+    }
+    int min = minHeap.size();
+    int max = maxHeap.size();
+    if (min == max || (max > min && (max-min == 1))) {
+        return;
+    }
+    if (max > min) {
+        minHeap.insert(maxHeap.getMax());
+        maxHeap.delMax();
+    } else {
+        maxHeap.insert(minHeap.getMin());
+        minHeap.delMin();
+    }
+}
+int getRunningMedian(int* arr, int size)
+{
+    minPQ minHeap;
+    maxPQ maxHeap;
+    if (maxHeap.isEmpty()) {
+        return 0;
+    }
+    if (maxHeap.size() == minHeap.size()) {
+        return (maxHeap.getMax()+minHeap.getMin())/2;
+    } else {
+        return maxHeap.getMax();
+    }
+}
