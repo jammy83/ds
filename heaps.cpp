@@ -36,6 +36,29 @@ public:
     }
 };
 
+// merge K sorted arrays
+struct 
+class Solution {
+    vector<int> mergeSortedArrays(const vector<vector<int>>& arrays) {
+        priority_queue<vectorComp, vector<vectorComp>> minHeap;
+        for (const vector<int>& arr : arrays) {
+            if (!arr.empty()) {
+                minHeap.emplace_back(vectorComp{arr.begin(), arr.end()});    
+            }
+        }
+        vector<int> result;
+        while (!minHeap.empty()) {
+            vectorComp t = minHeap.top();
+            minHeap.pop();
+            result.push_back(*t.current);
+            if (t.current != t.end) {
+                minHeap.emplace_back(vectorComp{next(t.current), t.end});
+            }
+        }
+        return result;
+    }
+};
+ 
 //sort an almost sorted array
 // push k+1 elements into the min heap and sort
 class Solution {
