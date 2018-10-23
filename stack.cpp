@@ -278,6 +278,31 @@ class myQueue {
     deque<int> _d;
 };
 
+// sort a stack in the descending order
+class Solution {
+public:
+    void Sort(stack<int>& s) {
+        if (s.empty()) {
+            return;
+        }
+        int val = s.top();
+        s.pop();
+        Sort(s);
+        insert(val, s);
+    }
+private:
+    void insert(int val, stack<int>& s) {
+        if (s.empty() || s.top() <= val) {
+            s.push(val);
+        } else {
+            int x = s.top();
+            s.pop();
+            insert(val, s);
+            s.push(x);
+        }
+    }    
+};
+
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
