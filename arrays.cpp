@@ -1351,51 +1351,6 @@ bool edit(string s1, string s2)
 //into the Indexed MIN priority queue. delMin() will return the item with
 //the least distance to (5,5).
 
-//Sliding window maximum
-//http://articles.leetcode.com/2011/01/sliding-window-maximum.html
-//Soln 1: Indexed max priority queue and
-//Soln 2: double-ended queue(deque,http://en.wikipedia.org/wiki/Double-ended_queue#Applications)
-//Soln 3: Using a regualr queue implementation that supports pop_front(), push_back()
-//        and getMax()/getMin() - achieved using 2 queues
-//b[i] stores the max value from arr[i..i+w-1]
-void slidingWindowMax(int *arr, int size, int w, int* b)
-{
-    //using indexed max priority queue
-    IndexedMaxPQ pq;
-    for (int i = 0; i < w; i++) {
-        pq.insert(i, arr[i]);
-    }
-    for (int i = w; i < size; i++) {
-        b[i-w] = pq.maxKey();
-        pq.delete(i-w);
-        pq.insert(i, arr[i]);
-    }
-    b[size-w] = pq.maxKey();
-
-    //using deque
-    //Add the new element onto the back and pop off the element
-    //in the left edge from the front
-    //challenge: make sure the largest element always is at the front
-    deque<int> q; // store the indices
-    for (int i = 0; i < w; i++) {
-        while (!q.empty() && arr[i] >= arr[q.back()]) {
-            //remove redundant elements from the queue
-            //q.g [10, 5, 3] and new element is '11'. No need to maintain 10,5,3
-            q.pop_back();
-        }
-        q.push_back(i);
-    }
-    for (int i = w; i < size; i++) {
-        b[i-w] = arr[q.front()];
-        while (!q.empty() && arr[i] >= arr[q.back()])
-            q.pop_back();
-        while (!q.empty() && q.front() <= i-w)
-            q.pop_front();
-        q.push_back(i);
-    }
-    b[n-w] = arr[q.front()];
-}
-
 //Prime factorization
 void primeFactors(long int num)
 {
