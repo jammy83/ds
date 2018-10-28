@@ -303,6 +303,42 @@ private:
     }    
 };
 
+// Sliding window maximum
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        vector<int> maxs;
+        if (nums.empty()) {
+            return maxs;
+        }
+        for (int i = 0; i < k; i++) {
+            enqueue(nums[i]);
+        }
+        for (int i = k; i < nums.size(); i++) {
+            if (!d.empty()) {
+                maxs.push_back(d.front());
+            }
+            dequeue(nums[i-k]);
+            enqueue(nums[i]);
+        }
+        maxs.push_back(d.front());
+        return maxs;
+    }
+private:
+    void enqueue(int val) {
+        while (!d.empty() && d.back() < val) {
+            d.pop_back();
+        }
+        d.push_back(val);
+    }
+    void dequeue(int val) {
+        if (!d.empty() && d.front() == val) {
+            d.pop_front();
+        }
+    }
+    deque<int> d;
+};
+
 //--------------------------------------------------------------------------------------------------------
 // Vector operations
 // push_back(), pop_back(), back(), front(), empty(), at(), capacity(), size(), erase(index)
