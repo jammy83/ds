@@ -1032,7 +1032,6 @@ public:
     }
 };
 
----------------------------------------------------------------
 //print if the tree, starting at the root, leads to a given sum
 class Solution {
 public:
@@ -1049,6 +1048,32 @@ public:
     }
 };
 
+// Convert a BST/binary tree to sorted (circular) DLL 
+class Solution {
+public:
+    TreeNode* convertTreetoDLLWork(TreeNode *curr, TreeNode*& prev, TreeNode*& head) {
+        if (curr == nullptr) {
+            return;
+        }
+        convertTreeToDLLWork(curr->left, prev, head);
+        curr->left = prev;
+        if (prev != nullptr) {
+            prev->right = curr;    
+        } else {
+            head = curr;
+        }
+        prev = curr;
+        convertTreeToDLLwork(curr->right, prev, head);
+    }
+    TreeNode* convertTreetoDLL(TreeNode *root) {
+        TreeNode *head = nullptr, *prev = nullptr;
+        convertTreeToDLLWork(root, prev, head);
+        head->left = prev;
+        prev->right = head;
+        return head;
+    }
+};
+---------------------------------------------------------------
 int Tree::kthSmallestElementBST(int k)
 {
     node* start = root;
@@ -1227,45 +1252,6 @@ bool Tree::findPathWithSum(node* start, vector<node*> &v, int& sum, int target)
     v.pop_back();
     
     return false;
-}
-
-struct {
-    int key;
-    nodeDLL* prev;
-    nodeDLL* next;
-} nodeDLL;
-
-// do inorder traversal of a binary tree to convert it to a DLL
-nodeDLL* Tree::convertTreeToDLL()
-{
-    node* start = root;
-    if (start == NULL) {
-        return NULL;
-    }
-    nodeDLL *head = NULL, *prev = NULL;
-    stack<node*> s;
-    while (!s.empty() || start != NULL) {
-        if (start) {
-            s.push(start);
-            start = start->left;
-        } else {
-            node* top = s.top(); s.pop();
-            nodeDLL* item = new nodeDLL(top->key);
-            if (item == NULL) {
-                return NULL;
-            }
-            if (prev != NULL) {
-                prev->next = item;
-            } else {
-                head = item;
-            }
-            item->prev = prev;
-            item->next = NULL; //safe to set this if this is the last node
-            prev = item;
-            start = top->right;
-        }
-    }
-    return head;
 }
 
 // Do an inorder traversal. Note that the horizontal distance from the root
