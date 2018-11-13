@@ -853,6 +853,24 @@ public:
     }
 };
 
+// square root of the element
+class Solution {
+public:
+    int squareRoot(int k) {
+        int start = 0, end = k;
+        while (start <= end) {
+            long mid = start + (end - start) / 2;
+            long midSquared = mid * mid;
+            if (midSquared <= k) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+        return start - 1;
+    }
+};
+
 // DNF
 class Solution {
 public:
