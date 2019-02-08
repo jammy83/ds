@@ -211,21 +211,14 @@ public:
     int removeDuplicates(vector<int>& nums) {
         if (nums.empty()) {
             return 0;
-        } else if (nums.size() == 1) {
-            return 1;
         }
-        int len = nums.size(), j = 1;
-        for (int i = 1; i < len; i++) {
-            if (nums[i] == nums[j-1]) {
-                int dup = nums[i];
-                while (i < len && nums[++i] == dup) { }
-                if (i == len) {
-                    return j;
-                }
+        int wIndex = 1;
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] != nums[wIndex - 1]) {
+                nums[wIndex++] = nums[i];    
             }
-            nums[j++] = nums[i];
         }
-        return j;
+        return wIndex;
     }
 };
 
