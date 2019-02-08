@@ -229,19 +229,16 @@ public:
         int sum = 0, len = INT_MAX, start = 0;
         for (int i = 0; i < nums.size(); i++) {
             sum += nums[i];
-            if (sum == s && (i-start) < len) {
-                len = i-start;
-            } else if (sum > s) {
-                // move start forward
+            if (sum > s) {
                 while (sum > s && start < i) {
                     sum -= nums[start++];
                 }
                 if (sum < s) {
                     sum += nums[--start];
                 }
-                if (sum >= s && (i-start) < len) {
-                    len = i-start;
-                }
+            }
+            if (sum >= s) {
+                len = min(len, i-start);
             }
         }
         return len == INT_MAX ? 0 : len+1;
