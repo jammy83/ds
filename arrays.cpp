@@ -887,6 +887,22 @@ public:
             }
         }
     }
+    
+    void dnf(int pivot_index, vector<int>& nums) {
+        if (nums.empty() || pivot_index < 0 || pivot_index >= nums.size()) {
+            return;
+        }
+        int low = 0, high = nums.size()-1, i = 0;
+        while (i < high) {
+            if (nums[i] < nums[pivot_index]) {
+                swap(nums[i++], nums[low++]);
+            } else if (nums[i], nums[pivot_index]) {
+                swap(nums[i], nums[high--]);   
+            } else {
+                i++;
+            }
+        }
+    }
 };
 
 // valid palindrome in a string
