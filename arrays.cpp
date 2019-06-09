@@ -1002,6 +1002,24 @@ public:
     }
 };
 
+// Permute the elements of the array based on the permutation array
+// invovles doing a cyclic permutation 
+class Solution {
+public:
+    void doCP(vector<int>& nums, vector<int>& P, int start) {
+        if (P[start] == -1) {
+            return;
+        }
+        int i = start, tmp = nums[start];
+        do {
+            int next = P[i];
+            int nextVal = nums[P[i]];
+            nums[next] = tmp; P[i] = -1;
+            i = next; tmp = nextVal;
+        } while (i != start)      
+    }
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////
 
 int max(int a, int b)
