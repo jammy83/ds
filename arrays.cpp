@@ -1020,6 +1020,35 @@ public:
     }
 };
 
+// Find next permutation - can involve duplicate elements
+class Solution {
+public:
+    /*
+     * 1. First find the longest decreasing sequence
+     * 2. Swap the index before the longest sequence with the next
+          highest from the longest sequence.
+     * 3. Reverse the longest decreasing sequence
+    */
+    void nextPermutation(vector<int>& nums) {
+        if (nums.empty() || nums.size() == 1) {
+            return;
+        }
+        int i = nums.size()-1;
+        for ( ; i > 0 && nums[i] <= nums[i-1]; i--) { }
+        if (i == 0) {
+            reverse(nums.begin(), nums.end());
+            return;
+        }
+        i--; // go the index before longest decreasing sequence
+        for (int j = nums.size() - 1; j > i; j--) {
+            if (nums[j] > nums[i]) {
+                swap(nums[i], nums[j]);
+                break;
+            }
+        }
+        reverse(nums.begin()+i+1, nums.end());
+    }
+};
 ///////////////////////////////////////////////////////////////////////////////////////
 
 int max(int a, int b)
