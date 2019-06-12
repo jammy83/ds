@@ -1049,6 +1049,43 @@ public:
         reverse(nums.begin()+i+1, nums.end());
     }
 };
+
+// Sample offline data
+class Solution {
+    void randomSampling(vector<int>& nums, int k) {
+        default_random_engine seed;
+        for (int i = 0; i < k; i++) {
+            swap(nums[i], nums[uniform_int_distribution<int>{i, 
+                                       static_cast<int>(nums.size())-1}(seed)]);
+        }
+    }
+};
+
+// Sample online data
+class Solution {
+    vector<int> onlineRandomSampling(istringstream* sin, int k) {
+        vector<int> running_sample;
+        int x;
+        for (int i = 0; i < k && *sin >> x; i++) {
+            running_sample.emplace_back(x);
+        }
+        default_random_engine seed;
+        int count = k;
+        while (*sin >> x) {
+            ++count;
+            /*
+             * find a random num between 0 and count-1. If the number is within
+             * 0 and k-1, then replace it with x. Otherwise incoming x is ignored
+             */
+            int index = uniform_int_distribution{0, count-1}(seed);
+            if (index < k) {
+                running_sample[index] = x;
+            }
+        }
+        return running_sample;
+    }
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////
 
 int max(int a, int b)
