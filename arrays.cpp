@@ -1050,7 +1050,7 @@ public:
     }
 };
 
-// Sample offline data
+// Sample offline data - O(n) space and time complexity and O(k) to generate the samples
 class Solution {
     void randomSampling(vector<int>& nums, int k) {
         default_random_engine seed;
@@ -1061,7 +1061,7 @@ class Solution {
     }
 };
 
-// Sample online data
+// Sample online data - O(k) time and space complexity
 class Solution {
     vector<int> onlineRandomSampling(istringstream* sin, int k) {
         vector<int> running_sample;
@@ -1086,6 +1086,7 @@ class Solution {
     }
 };
 
+// random perumation with elements [0,..n-1]
 class Solution {
     vector<int> computeRandomPermutation(int n)
     {
@@ -1095,6 +1096,12 @@ class Solution {
         return permutation;
     }
 };
+
+// create a random subset of n elements. we can make use of the random
+// sampling to create the random subset but it will take O(n) space and time
+// complexity to create the elements. And then O(k) to compute the random
+// subset. Use hash table to reduce the space and time complexity to O(k) when
+// k << n.
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
