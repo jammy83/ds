@@ -1086,6 +1086,16 @@ class Solution {
     }
 };
 
+class Solution {
+    vector<int> computeRandomPermutation(int n)
+    {
+        vector<int> permutation(n);
+        iota(permutation.begin(), permutation.end(), 0);
+        randomSampling(permutation, n);
+        return permutation;
+    }
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////
 
 int max(int a, int b)
