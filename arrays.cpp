@@ -1006,17 +1006,20 @@ public:
 // invovles doing a cyclic permutation 
 class Solution {
 public:
-    void doCP(vector<int>& nums, vector<int>& P, int start) {
-        if (P[start] == -1) {
-            return;
+    void doCP(vector<int>& nums, vector<int>& P) {
+        for (int j = 0; j < nums.size(); j++) {
+            int i = j, val = nums[i];
+            while (P[i] >= 0) {
+                int index = P[i];
+                int tmp = nums[P[i]];
+                nums[P[i]] = val; P[i] -= nums.size();
+                i = index; val = tmp;
+            }
+            // restore permutation array
+            for (int e : P) {
+                e += nums.size();    
+            }
         }
-        int i = start, tmp = nums[start];
-        do {
-            int next = P[i];
-            int nextVal = nums[P[i]];
-            nums[next] = tmp; P[i] = -1;
-            i = next; tmp = nextVal;
-        } while (i != start)      
     }
 };
 
