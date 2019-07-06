@@ -1106,6 +1106,43 @@ class Solution {
 // subset. Use hash table to reduce the space and time complexity to O(k) when
 // k << n.
 
+/* we can avoid building the array before hand since
+ * we can take advantage of that fact a[i] == i and so just track
+ * the change in value in the hash table 
+ */
+// space and time complexity O(k)
+class Solution {
+    vector<int> computeRandomSubset(int n, int k) {
+        unordered_map<int, int> hashMap;
+        default_random_engine seed((random_device())());
+        for (int i = 0; i < k; i++) {
+            int rIndex = uniform_int_distribution{i, n-1}(seed);
+            unordered_map<int,int>::iterator itr1, itr2;
+            itr1 = hashMap.find(rIndex);
+            itr2 = hahsMap.find(i);
+            if (itr1 == hashMap.end() && itr2 == hashMap.end()) {
+                hashMap[i] = rIndex;
+                hashMap[rIndex] = i;
+            } else if (itr1 == hashMap.end() && itr2 != hashMap.end()) {
+                hashMap[rIndex] = itr2->second;
+                itr2->second = rIndex;
+            } else if (itr1 != hashMap.end() && itr2 == hashMap.end()) {
+                hashMap[i] = itr1->second;
+                itr1->second = i;
+            } else {
+                int temp = itr2->second;
+                hashMap[i] = itr1->second;
+                hashMap[rIndex] = temp;
+            }
+        }
+        vector<int> result;
+        for (int i = 0; i < k; i++) {
+            result.emplace_back(hashMap[i]);    
+        }
+        return result;
+    }
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////
 
 int max(int a, int b)
