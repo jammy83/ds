@@ -381,16 +381,12 @@ public:
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if (l1 == nullptr && l2 == nullptr) {
-            return nullptr;
+        if (l1 == nullptr || l2 == nullptr) {
+            return (l1 == nullptr) ? l2 : l1;
         }
-        if (l1 == nullptr) {
-            return l2;
-        } else if (l2 == nullptr) {
-            return l1;
-        }
-        ListNode *newPrev = nullptr, *newHead = nullptr, *curr = nullptr;
-        while (l1 != nullptr && l2 != nullptr) {
+        ListNode *prev, *head, *curr;
+        prev = head = curr = nullptr;
+        while (l1 && l2) {
             if (l1->val <= l2->val) {
                 curr = l1;
                 l1 = l1->next;
@@ -398,15 +394,15 @@ public:
                 curr = l2;
                 l2 = l2->next;
             }
-            if (newHead == nullptr) {
-                newHead = curr;
+            if (head == nullptr) {
+                head = curr;
             } else {
-                newPrev->next = curr;
+                prev->next = curr;
             }
-            newPrev = curr;
+            prev = curr;
         }
-        newPrev->next = l1 != nullptr ? l1 : l2;
-        return newHead;
+        prev->next = l1 != nullptr ? l1 : l2;
+        return head;
     }
 };
 
