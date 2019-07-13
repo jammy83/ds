@@ -56,7 +56,7 @@ class LinkedList {
     bool insertInOrderCyclic(node** aNode, int val);
     void frontBackSplit(node* head, node** first, node** second);
 
- private:mc v
+ private:
     void insert(node** head, node* newItem);
     node* removeElements(node *head, int val);
     void reverseList(node** head);
@@ -424,19 +424,21 @@ public:
 
 class Solution {
 public:
-    bool hasCycle(ListNode *head) {
-        if (head == nullptr || head->next == nullptr) {
-            return false;
-        }
-        ListNode *slow = head, *fast = head->next->next;
-        while (fast != nullptr && fast->next != nullptr) {
-            if (slow == fast) {
-                return true;
-            }
+    ListNode* hasCycle(ListNode *head) {
+        ListNode *slow = head, *fast = head;
+        while (fast && fast->next && fast->next->next) {
             slow = slow->next;
             fast = fast->next->next;
+            if (slow == fast) { // cycle; the nodes are already apart by the length of the cycle 'C'
+                slow = head;
+                while (slow != fast) {
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                return slow; // start of the cycle
+            }
         }
-        return false;
+        return nullptr;
     }
 };
 
