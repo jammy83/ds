@@ -357,23 +357,17 @@ public:
     }
 };
 
-// Approach 2: Reverse the pointers in one pass
 class Solution {
 public:
-   ListNode* reverseList(ListNode* head) {
-        if (head == nullptr || head->next == nullptr) {
-            return head;
-        }
-        ListNode *curr = head->next, *prev = head;
-        prev->next = nullptr;
-        while (curr != nullptr) {
-            ListNode *nextNode = curr->next;
+    ListNode* reverseList(ListNode* head) {
+        ListNode *prev = nullptr, *curr = head;
+        while (curr) {
+            ListNode *next = curr->next;
             curr->next = prev;
             prev = curr;
-            curr = nextNode;
+            curr = next;
         }
-        head = prev;
-        return head;
+        return prev;
     }
 };
 
