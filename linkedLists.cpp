@@ -371,6 +371,54 @@ public:
     }
 };
 
+//reverse a linked list between m & n where  1 <= m <= n
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if (head == nullptr || m == 0 || n == 0 || n <= m) {
+            return head;
+        }
+        int cnt = 1;
+        ListNode *curr = head, *prev = nullptr, *start = nullptr, *prevStart = nullptr;
+        while (curr != nullptr && cnt <= n) {
+            ListNode *nextNode = curr->next;
+            if (cnt == m) {
+                start = curr;
+                prevStart = prev;
+            } else if (cnt > m) {
+                curr->next = prev;
+            }
+            prev = curr;
+            curr = nextNode; cnt++;
+        }
+        if (prevStart != nullptr) {
+            prevStart->next = prev;
+        } else {
+            head = prev;
+        }
+        start->next = curr;
+        return head;
+    }
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if (head == nullptr || m == n) {
+            return head;
+        }
+        ListNode *dummyHead = new ListNode(0);
+        dummyHead->next = head;
+        int count = 1;
+        ListNode *sublistPrev = dummyHead, *sublistItr = nullptr;
+        for (; sublistPrev != nullptr && count++ < m; sublistPrev = sublistPrev->next) {}
+        sublistItr = sublistPrev->next;
+        while (m++ < n) {
+            ListNode *temp = sublistItr->next;
+            sublistItr->next = temp->next;
+            temp->next = sublistPrev->next;
+            sublistPrev->next = temp;
+        }
+        return dummyHead->next;
+    }
+};
+
 // Merge 2 sorted lits
 class Solution {
 public:
@@ -569,36 +617,6 @@ public:
             curr = sortedEnd->next;
         }
         sortedEnd->next = nullptr;
-        return head;
-    }
-};
-
-//reverse a linked list between m & n where  1 <= m <= n
-class Solution {
-public:
-    ListNode* reverseBetween(ListNode* head, int m, int n) {
-        if (head == nullptr || m == 0 || n == 0 || n <= m) {
-            return head;
-        }
-        int cnt = 1;
-        ListNode *curr = head, *prev = nullptr, *start = nullptr, *prevStart = nullptr;
-        while (curr != nullptr && cnt <= n) {
-            ListNode *nextNode = curr->next;
-            if (cnt == m) {
-                start = curr;
-                prevStart = prev;
-            } else if (cnt > m) {
-                curr->next = prev;
-            }
-            prev = curr;
-            curr = nextNode; cnt++;
-        }
-        if (prevStart != nullptr) {
-            prevStart->next = prev;
-        } else {
-            head = prev;
-        }
-        start->next = curr;
         return head;
     }
 };
