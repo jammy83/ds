@@ -3,66 +3,6 @@
 //  
 //
 //  Created by Janani Natarajan on 11/25/14.
-//
-//
-
-#include <iostream>
-#include <cmath>
-
-class node {
- public:
-    int key;
-    node *next;
-
-    node(int val) : key(val), next(nullptr) {}
-    ~node() {
-        next = nullptr;
-    }
-};
-
-class nodeDLL {
- public:
-    int key;
-    nodeDLL *prev;
-    nodeDLL *next;
-
-    nodeDLL(int val) : key(val), prev(nullptr), next(nullptr) {}
-    ~nodeDLL() {
-        prev = next = nullptr;
-    }
-};
-
-class LinkedList {
- private:
-    node *head;
- 
- public:
-    LinkedList() : head(nullptr) {}
-    ~LinkedList();
-    void insert(int val);
-    bool insertInOrder(int val);
-    void printList();
-    void reverseList();
-    bool isPalindrome(node* start);
-    node* findLoopBeginning(node* start);
-    // the lists are numbers represented in reverse
-    node* addLists(node* l1, node* l2, int carry);
-    node* partitionList(node* start, int val);
-    int findKtoLastElement(int k);
-    void removeDups();
-    void deleteNode(node* item);
-    void reverseListPairwise();
-    node* getIntersectionPoint(LinkedList& l1, LinkedList& l2);
-    bool insertInOrderCyclic(node** aNode, int val);
-    void frontBackSplit(node* head, node** first, node** second);
-
- private:
-    void insert(node** head, node* newItem);
-    node* removeElements(node *head, int val);
-    void reverseList(node** head);
-    void reverseListPairwise(node** head);
-    int getLength(LinkedList& l);
-};
 
 LinkedList::~LinkedList()
 {
@@ -371,7 +311,7 @@ public:
 class Solution {
 public:
     ListNode* reverseBetween(ListNode* head, int m, int n) {
-        if (head == nullptr || m == 0 || n == 0 || n <= m) {
+        if (head == nullptr || m == n) {
             return head;
         }
         int cnt = 1;
