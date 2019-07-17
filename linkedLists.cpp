@@ -267,6 +267,7 @@ public:
 };
 
 // Delete a node in a linked list given only access to that node.
+// The node to delete can't be the last node in the list.
 class Solution {
 public:
     void deleteNode(ListNode* node) {
