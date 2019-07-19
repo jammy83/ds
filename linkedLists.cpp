@@ -209,11 +209,8 @@ public:
         if (node == nullptr || node->next == nullptr) {
             return;
         }
-        ListNode *nextNode = node->next;
-        node->val = nextNode->val;
-        node->next = nextNode->next;
-        nextNode->next = nullptr;
-        delete nextNode;
+        node->val = node->next->val;
+        node->next = node->next->next;
     }
 };
 
