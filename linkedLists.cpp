@@ -65,58 +65,29 @@ void LinkedList::insert(node** start, node* newItem)
     *start = newItem;
 }
 
-//remove all elements of a given value
-node* removeElements(node* head, int val)
-{
-     node *prev = nullptr, *curr = head;
-     while (curr != nullptr) {
-         node *nextNode = curr->next;
-             if (curr->val == val) {
-                if (prev != nullptr) {
-                    prev->next = nextNode;
-                } else {
-                    head = nextNode;
-                }
-                delete curr;
-            } else {
-                prev = curr;
-            }
-            curr = nextNode;
-        }
-        return head;
-    }
-}
-
-// delete dups in a sorted list such that each element appear only once
+// remove all elements of a given value
 class Solution {
 public:
-    ListNode* deleteDuplicates(ListNode* head) {
-        if (head == nullptr) {
-            return nullptr;
-        } else if (head->next == nullptr) {
-            return head;
-        }
-        ListNode *curr = head->next, *prev = head;
-        while (curr != nullptr) {
-            ListNode *nextNode = curr->next;
-            if (curr->val == prev->val) {
-                prev->next = nextNode;
-                delete curr;
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode* prev = nullptr, *curr = head;
+        while (curr) {
+            ListNode *next = curr->next;
+            if (curr->val == val) {
+                if (prev) {
+                    prev->next = next;
+                } else {
+                    head = next;
+                }
             } else {
                 prev = curr;
             }
-            curr = nextNode;
+            curr = next;
         }
         return head;
     }
 };
 
-/*
- * Given a sorted linked list, delete all nodes that have duplicate numbers, 
- * leaving only *distinct* numbers from the original list.
- * Input: 1->2->3->3->4->4->5
- * Output: 1->2->5
- */
+// delete dups in a sorted list such that each element appear only once
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
@@ -135,6 +106,14 @@ public:
         return head;
     }
 };
+
+/*
+ * Given a sorted linked list, delete all nodes that have duplicate numbers, 
+ * leaving only *distinct* numbers from the original list.
+ * Input: 1->2->3->3->4->4->5
+ * Output: 1->2->5
+ */
+
 
 // remove duplicates in a unsorted linked list
 class Solution {
