@@ -113,7 +113,29 @@ public:
  * Input: 1->2->3->3->4->4->5
  * Output: 1->2->5
  */
-
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode *prev = nullptr, *curr = head;
+        while (curr) {
+            if (curr->next && curr->val == curr->next->val) {
+                int target = curr->val;
+                while (curr && curr->val == target) {
+                    if (prev) {
+                        prev->next = curr->next;
+                    } else {
+                        head = curr->next;
+                    }
+                    curr = curr->next;
+                }
+            } else {
+                prev = curr;
+                curr = curr->next;
+            }
+        }
+        return head;
+    }
+};
 
 // remove duplicates in a unsorted linked list
 class Solution {
@@ -220,38 +242,6 @@ public:
                 prevItem = curr;
                 curr = nextNode;
             }
-        }
-        return head;
-    }
-};
-
-// Reverse the linked list
-// Approach 1: using a stack
-class Solution {
-public:
-    ListNode* reverseList(ListNode* head) {
-        stack<int> vals;
-        ListNode *curr = head;
-        while (curr != nullptr) {
-            vals.push(curr->val);
-            ListNode *nextNode = curr->next;
-            curr->next = nullptr;
-            delete curr;
-            curr = nextNode;
-        }
-        head = nullptr;
-        ListNode* prev = nullptr;
-        while (!vals.empty()) {
-            if (head == nullptr) {
-                head = new ListNode(vals.top());
-                vals.pop();
-                prev = head;
-                continue;
-            }
-            curr = new ListNode(vals.top());
-            vals.pop();
-            prev->next = curr;
-            prev = curr;
         }
         return head;
     }
