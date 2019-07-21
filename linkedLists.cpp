@@ -452,21 +452,17 @@ public:
 class Solution {
 public:
     ListNode* oddEvenList(ListNode* head) {
-        if (head == nullptr || head->next == nullptr || head->next->next == nullptr) {
+        if (head == nullptr) {
             return head;
         }
-        //atleast 3 elements
-        ListNode *odd = head, *even = nullptr, *prevOdd = nullptr, *evenHead = head->next;
-        while (odd != nullptr) {
-            even = odd->next;
-            odd->next = even != nullptr ? even->next : nullptr;
-            prevOdd = odd;
+        ListNode *odd = head, *even = head->next, *evenHead = even;
+        while (even && even->next) {
+            odd->next = even->next;
             odd = odd->next;
-            if (even != nullptr) {
-                even->next = odd != nullptr ? odd->next : nullptr;
-            }
+            even->next = odd->next;
+            even = even->next;
         }
-        prevOdd->next = evenHead;
+        odd->next = evenHead;
         return head;
     }
 };
