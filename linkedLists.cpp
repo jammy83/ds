@@ -591,59 +591,6 @@ node* LinkedList::addLists(node* l1, node* l2, int carry)
     return result;
 }
 
-node* LinkedList::findLoopBeginning(node* start)
-{
-    node* fast, *slow;
-    fast = slow = start;
-    while (fast != NULL && fast->next != NULL) {
-        slow = slow->next;
-        fast = fast->next->next;
-        if (slow == fast) {
-            break;
-        }
-    }
-    if (fast == NULL || fast->next == NULL) {
-        return NULL; // no loop
-    }
-    slow = start; // reset to beginning of the list
-    while (slow != fast) { // they collide next at the beginning of the loop
-        slow = slow->next;
-        fast = fast->next;
-    }
-    return slow;
-}
-
-bool LinkedList::isPalindrome(node* start)
-{
-    //find the middle and reverse the linked list until middle point using a stack
-    //Now compare the rest of the list with the reversed items from the stack
-    node* fast, *slow;
-    fast = slow = start;
-    stack<node*> s;
-
-    while (fast != NULL && fast->next != NULL) {
-        s.push(slow);
-        slow = slow->next;
-        fast = fast->next->next;
-    }
-    // has odd no. of elements; skip the middle and point past it
-    if (fast != NULL) {
-        slow = slow->next;
-    }
-    while (slow != NULL && !s.empty()) {
-        node* item = s.top();
-        s.pop();
-        if (item->key != slow->key) {
-            return false;
-        }
-        slow = slow->next;
-    }
-    if (slow || !s.empty()) {
-        return false;
-    }
-    return true;
-}
-
 //linked list with a pointer to random item in the list
 struct {
     int data;
