@@ -400,6 +400,33 @@ public:
     }
 };
 
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if (head == nullptr || k == 0) {
+            return head;
+        }
+        int count = 1;
+        ListNode *tail = head;
+        while (tail->next) {
+            ++count, tail = tail->next;
+        }
+        tail->next = head;
+        k = k % count;
+        if (k == 0) {
+            return head;
+        }
+        int steps = count - k;
+        ListNode *newTail = head, *newHead = nullptr;
+        while (--steps) {
+            newTail = newTail->next;
+        }
+        newHead = newTail->next;
+        newTail->next = nullptr;
+        return newHead;
+    }
+};
+
 //intersection point of two singly linked lists
 //Soln: Find the length of the 2 linked list and calculate the diff
 //Move the longer list to that point and start comparing the 2 list
