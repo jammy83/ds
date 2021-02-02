@@ -1,0 +1,68 @@
+// Print matrix in spiral order
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> d;
+        int mbegin = 0, mend = matrix.size(), nbegin = 0, nend = matrix[0].size(); // m rows, n cols
+        do {
+            printBoundary(d, matrix, mbegin, mend, nbegin, nend);
+            mbegin++; mend--;
+            nbegin++; nend--;
+        } while (mbegin < mend && nbegin < nend);
+        return d;
+    }
+    void printBoundary(vector<int>& d, vector<vector<int>>& matrix,
+                       int mbegin, int mend,
+                       int nbegin, int nend) {
+        for (int m = mbegin, n = nbegin; n < nend; n++) { //top row
+            d.push_back(matrix[m][n]);
+        }
+        for (int m = mbegin+1, n = nend-1; m < mend; m++) { //rightmost col
+            d.push_back(matrix[m][n]);
+        }
+        for (int m = mend-1, n = nend-2;
+             mbegin != mend-1 && n >= nbegin; n--) { //bottom row (r->l)
+            d.push_back(matrix[m][n]);
+        }
+        for (int m = mend-2, n = nbegin;
+             nbegin != nend-1 && m > mbegin; m--) { //first col (b->t)
+            d.push_back(matrix[m][n]);
+        }
+    }
+};
+
+//Diagonal traversal (reversing direction) of matrix
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        if (matrix.empty()) {
+            return result;
+        }
+        int N = matrix.size(), M = matrix[0].size();
+        bool up = true;
+        for (int i = 0, j = 0; i < N && j < M; ) {
+            int r = i, c = j; // gn an index print the diagonal
+            while (r >= 0 && r < N && c >= 0 && c < M) {
+                result.push_back(matrix[r][c]);
+                i = r, j = c;
+                if (!up) {
+                    r++, c--;
+                } else {
+                    c++, r--;
+                }
+            }
+            up = !up;
+            // matrix[i][j] is the last index pushed
+            if (!up) {
+                i += (j == M-1) ? 1 : 0;
+                j += (j < M-1)  ? 1 : 0;
+            } else {
+                j += (i == N-1) ? 1 : 0;
+                i += (i < N-1)  ? 1 : 0;
+            }
+            // i,j points to the next head
+        }
+        return result;
+    }
+};
