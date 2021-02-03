@@ -460,3 +460,61 @@ public:
         return cnt;
     }
 };
+
+//Given 2 binary strings, return their as a binary string
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        string result;
+        char c = '0';
+        if (a.empty() || b.empty()) {
+            return (a.empty()) ? b : a;
+        }
+        int i = a.length()-1, j = b.length()-1;
+        for (; i >= 0 && j >= 0; i--, j--) {
+            char val = '0', newc = '0';
+            if ((a[i] == '0' && b[j] == '1') ||
+                (a[i] == '1' && b[j] == '0')) {
+                val = '1';
+            } else if (a[i] == '0' && b[j] == '0') {
+                val = '0';
+            } else {
+                val = '0';
+                newc = '1';
+            }
+            if (c == '1' && val == '0') {
+                val = '1';
+            } else if (c == '1' && val == '1') {
+                val = '0';
+                newc = '1';
+            }
+            c = newc;
+            result.insert(result.begin(), val);
+        }
+        if (c == '1' && (i >= 0 || j >= 0)) {
+            while (c == '1' && i >= 0) {
+                char val = (a[i] == '0') ? '1' : '0';
+                c = (a[i] == '0') ? '0' : '1';
+                result.insert(result.begin(), val);
+                i--;
+            }
+            while (c == '1' && j >= 0) {
+                char val = (b[j] == '0') ? '1' : '0';
+                c = (b[j] == '0') ? '0' : '1';
+                result.insert(result.begin(), val);
+                j--;
+            }
+        }
+        if (c == '0' && (i >=0 || j >=0)) {
+            if (i >= 0) {
+                result.insert(0, a.substr(0, i+1));
+            } else {
+                result.insert(0, b.substr(0, j+1));
+            }
+        }
+        if (i < 0 && j < 0 && c == '1') {
+            result.insert(result.begin(), '1');
+        }
+        return result;
+    }
+};
