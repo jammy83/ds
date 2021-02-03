@@ -1,3 +1,49 @@
+//Two Sum II - input array is sorted
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        vector<int> result;
+        for (int i = 0, j = numbers.size()-1; i < j; ) {
+            int sum = numbers[i] + numbers[j];
+            if (sum == target) {
+                result.push_back(i+1);
+                result.push_back(j+1);
+                break;
+            }
+            if (sum > target) {
+                j--;
+            } else {
+                i++;
+            }
+        }
+        return result;
+    }
+};
+
+//Array partition - sum of min(a,b) is maximum
+class Solution {
+public:
+    int arrayPairSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int sum = 0, i = 0;
+        while (i+1 < nums.size()) {
+            sum += min(nums[i], nums[i+1]);
+            i += 2;
+        }
+        return (i < nums.size()) ? sum+nums[i] : sum;
+    }
+};
+
+//Reverse string
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        for (int i = 0, j = s.size()-1; i < j; i++, j--) {
+            swap(s[i], s[j]);
+        }
+    }
+};
+
 // Print matrix in spiral order
 class Solution {
 public:
