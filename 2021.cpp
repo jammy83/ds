@@ -1,3 +1,26 @@
+// Min size subArray sum
+class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        int len = INT_MAX, total = 0;
+        for (int i = 0, left = 0; i < nums.size(); i++) {
+            total += nums[i];
+            if (total > s) {
+                while (total > s && left < i) {
+                    total -= nums[left++];
+                }
+                if (total < s) {
+                    total += nums[--left];
+                }
+            }
+            if (total >= s) {
+                len = min(len, i-left);
+            }
+        }
+        return len == INT_MAX ? 0: len+1;
+    }
+};
+
 //Two Sum II - input array is sorted
 class Solution {
 public:
