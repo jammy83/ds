@@ -1,3 +1,46 @@
+//Reverse words in a string. Handle leading/tailing whitespaces and remove extra whitespaces in between
+class Solution {
+public:
+    void reverseString(string& s, int start, int end) {
+        for (int i = start, j = end; i < j; i++, j--) {
+            swap(s[i], s[j]);
+        }
+    }
+    string reverseWords(string s) {
+        reverseString(s, 0, s.length()-1);
+        int left = -1;
+        for (int i = 0; i < s.length(); i++) {
+            if (s[i] != ' ' && left == -1) {
+                left = i;
+            } else if (s[i] == ' ' && left != -1) {
+                reverseString(s, left, i-1);
+                left = -1;
+            }
+        }
+        if (left != -1) {
+            reverseString(s, left, s.length()-1);
+        }
+        reduce(s);
+        return s;
+    }
+    void trim(string& s) { // removes the leading spaces from the string
+        const auto strBegin = s.find_first_not_of(" ");
+        if (strBegin == string::npos)
+            return;
+        const auto strEnd = s.find_last_not_of(" ");
+        s = s.substr(strBegin, strEnd-strBegin+1);
+    }
+    void reduce(string& s) {
+        trim(s); // remove leading whitespace
+        auto begin = s.find_first_of(" ");
+        while (begin != string::npos) {
+            const auto end = s.find_first_not_of(" ", begin);
+            s.replace(begin, end-begin, " ");
+            begin = s.find_first_of(" ", begin+1);
+        }
+    }
+};
+
 // Min size subArray sum
 class Solution {
 public:
