@@ -1,3 +1,15 @@
+//Rotate string - check if rotation of A can result in B
+class Solution {
+public:
+    bool rotateString(string A, string B) {
+        if (A.length() != B.length()) {
+            return false;
+        }
+        string t = B + B;
+        return (t.find(A) != string::npos) ? true : false;
+    }
+};
+
 //Set Matrix zeroes
 class Solution {
 public:
