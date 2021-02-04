@@ -1,3 +1,40 @@
+//Permutation string - check if one is a permutation of the other
+class Solution {
+public:
+    bool permutation(string s1, string s2) {
+        if (s1.length() != s2.length()) {
+            return false;
+        }
+        multiset<char> hash; // allows duplicates but orders for faster lookup.
+        for (char c : s1) {
+            hash.insert(c);
+        }
+        for (char c : s2) {
+            hash.erase(hash.find(c));
+        }
+        return hash.empty();
+    }
+    //O(n) space but lookups faster with multiset unlike doing lookups and erase operations in s2
+};
+
+//Palindrome permutation
+class Solution {
+public:
+    // A permutation of a string can be a palindrome if each of the characters occurs equal no. of times 
+    // if the string length is even. If odd, there is only one element that has not occurred again in 's'.
+    bool canPermutePalindrome(string s) {
+        unordered_set<char> hash;
+        pair<set<char>::iterator, bool> ret;
+        for (char c : s) {
+            ret = hash.insert(c);
+            if (ret.second == false) {
+                hash.erase(c);
+            }
+        }
+        return (hash.size() <= 1);
+    }
+};
+
 //Rotate string - check if rotation of A can result in B
 class Solution {
 public:
