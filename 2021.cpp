@@ -1,3 +1,28 @@
+//Reverse words in a string III
+class Solution {
+public:
+    void reverseString(string& s, int start, int end) {
+        for (int i = start, j = end; i < j; i++, j--) {
+            swap(s[i], s[j]);
+        }
+    }
+    string reverseWords(string s) {
+        int left = -1;
+        for (int i = 0; i < s.length(); i++) {
+            if (s[i] != ' ' && left == -1) {
+                left = i;
+            } else if (s[i] == ' ' && left != -1) {
+                reverseString(s, left, i-1);
+                left = -1;
+            }
+        }
+        if (left != -1) {
+            reverseString(s, left, s.length()-1);
+        }
+        return s;
+    }
+};
+
 //Reverse words in a string. Handle leading/tailing whitespaces and remove extra whitespaces in between
 class Solution {
 public:
