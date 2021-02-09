@@ -1,3 +1,41 @@
+//Valid Palindrome - II
+class Solution {
+public:
+    bool isPalindrome(string s, int start, int end) {
+        for (int i = start, j = end; i < j; i++, j--) {
+            if (s[i] != s[j]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    bool validPalindrome(string s) {
+        for (int i = 0, j = s.length()-1; i < j; i++, j--) {
+            if (s[i] != s[j]) {
+                return (isPalindrome(s, i+1, j) || isPalindrome(s, i, j-1));
+            }
+        }
+        return true;
+    }
+};
+
+//Valid Palindrome
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        for (int i = 0, j = s.length()-1; i < j; i++, j--) {
+            while (i < j && !isalnum(s[i]))
+                i++;
+            while (i < j && !isalnum(s[j]))
+                j--;
+            if (tolower(s[i]) != tolower(s[j])) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
 //Permutation in string - check if permutation of s1 is a substring of s2.
 //Use of bitset is a viable option when there are no duplicate characters, otherwise use an array to track the occurrences
 class Solution {
@@ -71,7 +109,7 @@ public:
     // if the string length is even. If odd, there is only one element that has not occurred again in 's'.
     bool canPermutePalindrome(string s) {
         unordered_set<char> hash;
-        pair<set<char>::iterator, bool> ret;
+        pair<unordered_set<char>::iterator, bool> ret;
         for (char c : s) {
             ret = hash.insert(c);
             if (ret.second == false) {
