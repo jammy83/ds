@@ -64,7 +64,7 @@ public:
     //O(n) space but lookups faster with multiset unlike doing lookups and erase operations in s2
 };
 
-//Palindrome permutation
+//Palindrome permutation - check if a permutation of a string could form a palindrome
 class Solution {
 public:
     // A permutation of a string can be a palindrome if each of the characters occurs equal no. of times 
