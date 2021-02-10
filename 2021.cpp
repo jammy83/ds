@@ -452,6 +452,33 @@ public:
     }
 };
 
+//Pascal's triangle - II (bottom-up)
+class Solution {
+public:
+    int getIndex(int i, int j, map<pair<int, int>, int>& m) {
+        if (j == 0 || i == j)
+            return 1;
+        else {
+            auto itr = m.find(make_pair(i,j));
+            if (itr != m.end())
+                return itr->second;
+            else {
+                int val = getIndex(i-1, j-1, m) + getIndex(i-1, j, m);
+                m[make_pair(i,j)] = val;
+                return val;
+            }
+        }
+    }
+    vector<int> getRow(int rowIndex) {
+        vector<int> result;
+        map<pair<int, int>, int> m;
+        for (int j = 0; j <= rowIndex; j++) {
+            result.push_back(getIndex(rowIndex, j, m));    
+        }
+        return result;
+    }
+};
+
 //Pascal's triangle
 class Solution {
 public:
