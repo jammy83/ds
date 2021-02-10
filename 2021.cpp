@@ -1,3 +1,24 @@
+//Rotate array
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        if (nums.empty())
+            return;
+        k = k % nums.size();
+        int count = 0;
+        for (int i = 0; count < nums.size(); i++) {
+            int j = i, orig = nums[j];
+            do {
+                int next = (j+k)%nums.size(), temp = nums[next];
+                nums[next] = orig;
+                orig = temp;
+                j = next;
+                count++;
+            } while (i != j);
+        }
+    }
+};
+
 //Palindromic substrings
 class Solution {
 public:
