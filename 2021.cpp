@@ -1,3 +1,25 @@
+//Permute the elements of an array - EOP book
+#include <boost/dynamic_bitset>
+class Solution {
+public:
+    void applyPermutation(vector<int>& nums, vector<int>& p) {
+        if (nums.empty())
+            return;
+        dynamic_bitset<> b(nums.size());
+        for (int i = 0; b.count() < nums.size(); i++) {
+            int j = i, orig = nums[j];
+            do {
+                if (!b.test(j)) {
+                    int next = p[j];
+                    swap(nums[next], orig);
+                    b.set(j);
+                    j = next;
+                }
+            } while (i != j);
+        }
+    }
+};
+
 //Rotate array
 class Solution {
 public:
@@ -9,9 +31,8 @@ public:
         for (int i = 0; count < nums.size(); i++) {
             int j = i, orig = nums[j];
             do {
-                int next = (j+k)%nums.size(), temp = nums[next];
-                nums[next] = orig;
-                orig = temp;
+                int next = (j+k)%nums.size();
+                swap(nums[next], orig);
                 j = next;
                 count++;
             } while (i != j);
