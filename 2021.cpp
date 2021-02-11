@@ -1,3 +1,34 @@
+//Longest common prefix
+#include <algorithm>
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        if (strs.empty())
+            return "";
+        int len = INT_MAX;
+        for (string str : strs)
+            len = min(len, (int)str.length()); // this is the max possible length of the prefix
+        int low = 1, high = len;
+        while (low <= high) {
+            int mid = (low+high) / 2;
+            if (isCommonPrefix(strs, mid))
+                low = mid + 1; // prefix can be longer. search the other half
+            else
+                high = mid - 1; // prefix must be shorter since no common match found
+        }
+        return strs[0].substr(0, (low+high)/2);
+    }
+    bool isCommonPrefix(vector<string>& strs, int len) {
+        string prefix = strs[0].substr(0, len);
+        for (string str : strs) {
+            if (str.rfind(prefix, 0) == string::npos) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
 //Permute the elements of an array - EOP book
 #include <boost/dynamic_bitset>
 class Solution {
