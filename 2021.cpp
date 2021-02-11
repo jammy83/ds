@@ -1,3 +1,29 @@
+//Max consecutive ones II - flip atmost one of the zeroes to get the max consecutive ones
+#include <algorithm>
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int count = INT_MIN, len = 0, right = 0;
+        bool track = false;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] == 0) {
+                if (!track) {
+                    track = true;
+                    len++;
+                } else {
+                    count = max(count, len);
+                    len = right + 1; right = 0;
+                }
+            } else {
+                len++;
+                if (track)
+                    right++;
+            }
+        }
+        return max(count, len);
+    }
+};
+
 //Longest common prefix
 #include <algorithm>
 class Solution {
