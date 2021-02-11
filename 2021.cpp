@@ -1,3 +1,20 @@
+//SQRT of a number - BST problem : when looking for an integer whose square is close to the number given
+class Solution {
+public:
+    int mySqrt(int x) {
+        int low = 0, high = x;
+        while (low <= high) {
+            long mid = low + (high-low)/2;
+            long val = mid*mid;
+            if (val <= x)
+                low = mid + 1;
+            else 
+                high = mid - 1;
+        }
+        return low-1;
+    }
+};
+
 //Search in a rotated sorted array
 class Solution {
 public:
