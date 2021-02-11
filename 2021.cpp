@@ -1,3 +1,22 @@
+//Guess number higher or lower - play a guessing game to pick number higher or lower
+class Solution {
+public:
+    int guessNumber(int n) {
+        int low = 1, high = n;
+        while (low <= high) {
+            int mid = low+ (high-low)/2;
+            int res = guess(mid);
+            if (res == 0)
+                return mid;
+            else if (res == 1)
+                low = mid+1;
+            else 
+                high = mid-1;
+        }
+        return -1;
+    }
+};
+
 //Simple BST to search for a number in a given array
 class Solution {
 public:
