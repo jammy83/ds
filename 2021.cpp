@@ -15,6 +15,31 @@ public:
     }
 };
 
+//Find the min element in a sorted cyclical/rotated sorted array
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int low = 0, high = nums.size()-1;
+        if (nums.size() == 1 || nums[low] < nums[high])
+            return nums[0];
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            if (nums[low] <= nums[mid]) {
+                if (mid+1 <= high && nums[mid] > nums[mid+1])
+                    return nums[mid+1];
+                else
+                    low = mid+1;
+            } else if (nums[mid] < nums[high]) {
+                if (mid-1 >= low && nums[mid-1] > nums[mid])
+                    return nums[mid];
+                else
+                    high = mid-1;
+            }
+        }
+        return -1;
+    }
+};
+
 //Search in a rotated sorted array
 class Solution {
 public:
