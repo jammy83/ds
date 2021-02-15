@@ -48,6 +48,22 @@ public:
     }
 };
 
+//Search a 2D matix where the rows and columns are individually sorted
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        for (int row = 0, col = matrix[0].size()-1; row < matrix.size() && col >= 0; ) {
+            if (matrix[row][col] == target)
+                return true;
+            if (target > matrix[row][col])
+                row++;
+            else
+                col--;
+        }
+        return false;
+    }
+};
+
 //SQRT of a number - BST problem : when looking for an integer whose square is close to the number given
 class Solution {
 public:
