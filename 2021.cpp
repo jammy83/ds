@@ -1,3 +1,19 @@
+//Find peak element (or) Peak index in a mountain array
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        return search(nums, 0, nums.size()-1);
+    }
+    int search(vector<int>& nums, int low, int high) {
+        if (low == high)
+            return low;
+        int mid = low + (high-low)/2;
+        if (nums[mid] > nums[mid+1])
+            return search(nums, low, mid);
+        return search(nums, mid+1, high);
+    }
+};
+
 //Search in a 2d matrix with sorted rows 
 class Solution {
 public:
