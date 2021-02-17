@@ -1,3 +1,42 @@
+//First occurrence of an element in a sorted array
+class Solution {
+public:    
+    int searchFirstOf(vector<int>& nums, int k) {
+        int result = -1, low = 0, high = nums.size()-1;
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] < k)
+                low = mid + 1;
+            else if (nums[mid] > k)
+                high = mid - 1;
+            else {
+                result = mid;
+                high = mid - 1;
+            }                
+        }
+        return result;
+    }
+};
+
+//First bad version
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int low = 1, high = n;
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            if (isBadVersion(mid)) {
+                if (low == mid)
+                    return low;
+                high = mid;
+            }
+            else
+                low = mid+1;
+        }
+        return -1;
+    }
+};
+
 //Find peak element (or) Peak index in a mountain array
 class Solution {
 public:
