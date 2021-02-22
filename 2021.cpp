@@ -178,7 +178,7 @@ public:
     int guessNumber(int n) {
         int low = 1, high = n;
         while (low <= high) {
-            int mid = low+ (high-low)/2;
+            int mid = low + (high-low)/2;
             int res = guess(mid);
             if (res == 0)
                 return mid;
@@ -247,21 +247,25 @@ public:
         int len = INT_MAX;
         for (string str : strs)
             len = min(len, (int)str.length()); // this is the max possible length of the prefix
-        int low = 1, high = len;
+        string prefix;
+        int low = 0, high = len;
         while (low <= high) {
-            int mid = (low+high) / 2;
-            if (isCommonPrefix(strs, mid))
+            int mid = low + (high-low)/2;
+            if (isCommonPrefix(strs, low, mid)) {
+                prefix += strs[0].substr(low, mid-low+1);
                 low = mid + 1; // prefix can be longer. search the other half
-            else
+            } else
                 high = mid - 1; // prefix must be shorter since no common match found
         }
-        return strs[0].substr(0, (low+high)/2);
+        return prefix;
     }
-    bool isCommonPrefix(vector<string>& strs, int len) {
-        string prefix = strs[0].substr(0, len);
+    bool isCommonPrefix(vector<string>& strs, int begin, int end) {
+        string prefix = strs[0];
         for (string str : strs) {
-            if (str.rfind(prefix, 0) == string::npos) {
-                return false;
+            for (int j = begin; j <= end; j++) {
+                if (str[j] != prefix[j]) {
+                    return false;
+                }
             }
         }
         return true;
