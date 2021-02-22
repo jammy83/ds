@@ -1,3 +1,40 @@
+//First and last occurrence of an element in a sorted array
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> result {INT_MAX, INT_MIN};
+        int low = 0, high = nums.size()-1;
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] < target)
+                low = mid + 1;
+            else if (nums[mid] > target)
+                high = mid - 1;
+            else {
+                result[0] = min(result[0], mid);
+                result[1] = max(result[1], mid);
+                high = mid - 1;
+            }                
+        }
+        if (result[0] == INT_MAX)
+            return {-1, -1};
+        //search for the last position of the element in "right" side of the array beyond "max" position
+        low = result[1], high = nums.size()-1;
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] < target)
+                low = mid + 1;
+            else if (nums[mid] > target)
+                high = mid - 1;
+            else {
+                result[1] = max(result[1], mid);
+                low = mid + 1;
+            }                
+        }
+        return result;
+    }
+};
+
 //First occurrence of an element in a sorted array
 class Solution {
 public:    
