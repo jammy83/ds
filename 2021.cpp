@@ -1,3 +1,55 @@
+//Find K closest elements
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        vector<int> result;
+        if (x < arr[0]) {
+            copy(arr.begin(), arr.begin()+k, back_inserter(result));
+            return result;
+        }
+        if (x > arr[arr.size()-1]) {
+            copy(arr.end()-k, arr.end(), back_inserter(result));
+            return result;
+        }
+        // closest elements lie between [l-k-1, l+k-1]
+        int l = findClosestElement(arr, x), r = l+1, count = 0;
+        while (l >= 0 && r < arr.size() && count < k) {
+            if (abs(arr[l]-x) <= abs(arr[r]-x))
+                result.push_back(arr[l--]);
+            else
+                result.push_back(arr[r++]);
+            count++;
+        }
+        while (r < arr.size() && count !=k) {
+            result.push_back(arr[r++]);
+            count++;
+        }
+        while (l >= 0 && count != k) {
+            result.push_back(arr[l--]);
+            count++;
+        }
+        sort(result.begin(), result.end());
+        return result;
+    }
+    //Find the element closest (<=) to x
+    int findClosestElement(vector<int> nums, int x) {
+        int low = 0, high = nums.size() - 1;
+        while (low < high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] <= x && nums[mid+1] > x) //requires mid, mid+1 to be present for this comp
+                return mid;
+            if (nums[mid] > x)
+                high = mid - 1;
+            else
+                low = mid + 1;
+        }
+        //low==high
+        if (low != nums.size() && nums[low] <= x) //closest element, so check for '<='
+            return low;
+        return -1;
+    }
+};
+
 //First and last occurrence of an element in a sorted array
 class Solution {
 public:
