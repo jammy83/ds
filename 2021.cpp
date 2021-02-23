@@ -33,6 +33,19 @@ public:
     }
     //Find the element closest (<=) to x
     int findClosestElement(vector<int> nums, int x) {
+        int low = 0, high = nums.size() - 1, result = -1;
+        while (low < high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] <= x) {
+                low = mid + 1;
+                result = mid;
+            } else
+                high = mid - 1;
+        }
+        return result;
+    }
+    /*
+    int findClosestElement(vector<int> nums, int x) {
         int low = 0, high = nums.size() - 1;
         while (low < high) {
             int mid = low + (high-low)/2;
@@ -47,7 +60,7 @@ public:
         if (low != nums.size() && nums[low] <= x) //closest element, so check for '<='
             return low;
         return -1;
-    }
+    }*/
 };
 
 //First and last occurrence of an element in a sorted array
