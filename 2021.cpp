@@ -1,3 +1,21 @@
+//Search for the element equal to its index in a sorted array with distinct integers
+class Solution {
+public:
+    int search(vector<int>nums) {
+        int low = 0, high = nums.size()-1;
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] == mid)
+                return mid;
+            if (nums[mid] > mid)
+                high = mid - 1;
+            else
+                low = mid + 1;
+        }
+        return -1;
+    }
+};
+
 //Find the first element greater than a given number in a sorted array
 class Solution {
 public:
