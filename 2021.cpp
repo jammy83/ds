@@ -1,3 +1,20 @@
+//Find the first element greater than a given number in a sorted array
+class Solution {
+public:
+    int findFirstLargeOf(vector<int> nums, int x) {
+        int low = 0, high = nums.size() - 1, result = -1;
+        while (low < high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] > x) {
+                result = mid;
+                high = mid - 1;
+            } else
+                low = mid + 1;
+        }
+        return result;
+    }
+};
+
 //Find K closest elements
 class Solution {
 public:
