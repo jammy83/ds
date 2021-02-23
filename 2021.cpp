@@ -1,3 +1,34 @@
+//Find min and max simultaneously in an array by reducing the no. of comparisons
+class Solution {
+public: 
+    vector<int> findMinMax(vector<int>& nums) {
+        vector<int> result(2);
+        if (nums.size() <= 1)
+            return {nums.front(), nums.front()};
+        if (nums[0] > nums[1]) {
+            result[0] = nums[1];
+            result[1] = nums[0];
+        } else {
+            result[0] = nums[0];
+            result[1] = nums[1];
+        }
+        for (int i = 2;i+1 < nums.size(); i += 2) {
+            if (nums[i] > nums[i+1]) {
+                result[1] = max(result[1], nums[i]);
+                result[0] = min(result[0], nums[i+1]);
+            } else {
+                result[1] = max(result[1], nums[i+1]);
+                result[0] = min(result[0], nums[i]);
+            }
+        }
+        if (nums.size() % 2) {
+            result[0] = min(result[0], nums.back());
+            result[1] = max(result[1], nums.back());
+        }
+        return result;
+    }
+};
+
 //Search for the element equal to its index in a sorted array with distinct integers
 class Solution {
 public:
