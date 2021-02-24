@@ -1,3 +1,48 @@
+//Given a static array with unknown size, search for a target value and return its index
+class Solution {
+public:
+    int search(const ArrayReader& reader, int target) {
+        //find the left and right boundaries of the target to apply BST
+        int low = 0, high = 1;
+        //define the right boundary
+        while (reader.get(high) < target) {
+            low = high;
+            high <<= 1;
+        }
+        return ApplyBST(reader, low, high, target);
+    }
+    int ApplyBST(const ArrayReader& reader, int low, int high, int target) {
+        while (low <= high) {
+            int mid = low + (high-low)/2;
+            int val = reader.get(mid);
+            if (val == target)
+                return mid;
+            if (val < target)
+                low = mid + 1;
+            else
+                high = mid - 1; 
+        }
+        return -1;
+    }
+};
+
+//Given a BST, find the value that is closest to the target
+class Solution {
+public:
+    int closestValue(TreeNode* root, double target) {
+        TreeNode* curr = root;
+        int result = curr->val;
+        while (curr != nullptr) {
+            result = abs(curr->val-target) < abs(result-target) ? curr->val : result;
+            if (curr->val <= target)
+                curr = curr->right;
+            else
+                curr = curr->left;
+        }
+        return result;
+    }
+};
+
 //Find min and max simultaneously in an array by reducing the no. of comparisons
 class Solution {
 public: 
