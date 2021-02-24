@@ -1,4 +1,4 @@
-//Given a static array with unknown size, search for a target value and return its index
+//Given a static sorted array with unknown size, search for a target value and return its index
 class Solution {
 public:
     int search(const ArrayReader& reader, int target) {
