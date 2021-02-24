@@ -1,4 +1,29 @@
-//Intersection of 2 arrays
+//Intersection of 2 arrays - II - with duplicates and unsorted
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        unordered_multiset<int> s;
+        vector<int>* nums;
+        if (nums1.size() < nums2.size()) {
+            copy(nums1.begin(), nums1.end(), inserter(s, s.begin()));
+            nums = &nums2;
+        } else {
+            copy(nums2.begin(), nums2.end(), inserter(s, s.begin()));
+            nums = &nums1;
+        }
+        vector<int> result;
+        for (auto itr = nums->begin(); itr != nums->end(); ++itr) {
+            unordered_multiset<int>::iterator sitr = s.find(*itr);
+            if (sitr != s.end()) {
+                result.push_back(*itr);
+                s.erase(sitr);
+            }
+        }
+        return result;
+    }
+};
+
+//Intersection of 2 arrays - with duplicates & unsorted. Result should not contain dups.
 class Solution {
 public:
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
