@@ -458,6 +458,21 @@ public:
         }
         return -1;
     }
+    //Alternative solution:
+    int findMin(vector<int>& nums) {
+        int low = 0, high = nums.size()-1;
+        if (nums.size() == 1 || nums[low] < nums[high])
+            return nums[0];
+        while (low < high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] > nums[high])
+                low = mid + 1;
+            else
+                high = mid;
+        }
+        //low==high
+        return nums[low];
+    }
 };
 
 //Search in a rotated sorted array
