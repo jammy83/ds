@@ -1,3 +1,56 @@
+//Median of 2 sorted arrays of same or varying lengths
+//Refer to: https://medium.com/@hazemu/finding-the-median-of-2-sorted-arrays-in-logarithmic-time-1d3f2ecbeb46
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        if (nums1.size() <= nums2.size())
+            return findMedianWork(nums1.data(), nums1.size(), nums2.data(), nums2.size());
+        return findMedianWork(nums2.data(), nums2.size(), nums1.data(), nums1.size());
+    }
+    double findMedianWork(int a[], int n, int b[], int m) {
+        int leftHalfLen = (n+m+1)/2;
+        // Since A is guaranteed to be the shorter array, 
+        // we know it can contribute 0 or all of its values.
+        int aMinCount = 0, aMaxCount = n;
+        while (aMinCount <= aMaxCount) {
+            int aCount = aMinCount + ((aMaxCount - aMinCount) / 2);
+            int bCount = leftHalfLen - aCount;
+            if (aCount > 0 && a[aCount - 1] > b[bCount]) // comp x with y' 
+                aMaxCount = aCount - 1; // Decrease A's contribution size; x lies in the right half.
+            else if (aCount < n && b[bCount - 1] > a[aCount]) { // comp y with x'
+                // Decrease B's contribution size, i.e. increase A's contribution size; 
+                // y lies in the right half.
+                aMinCount = aCount + 1;
+            } else {
+                // Both x and y are not beyond the left half. We found the right aCount.
+                // If n+m is odd, the median is the greater of x and y.
+                int leftHalfEnd = 
+                    (aCount == 0)             // A not contributing?
+                        ? b[bCount - 1]       // aCount = 0 implies bCount > 0
+                        : (bCount == 0)       // B is not contributing?
+                            ? a[aCount - 1]   // bCount = 0 implies aCount > 0
+                            : max(a[aCount - 1], b[bCount - 1]); 
+                if ((n+m)%2)
+                    return leftHalfEnd;
+
+                // n+m is even. To compute the median, we need to find 
+                // the first element in the right half as well, which will be the smaller 
+                // of A[aCount] and B[bCount]. Remember that aCount could be equal
+                // to A.Length, bCount could be equal to B.Length (if all the values 
+                // of A or B are in the left half).
+                int rightHalfStart = 
+                    (aCount == n)          // A is all in the left half?
+                        ? b[bCount]        // aCount = aLen implies bCount < B.Length 
+                        : (bCount == m)    // B is all in the left half?
+                            ? a[aCount]    // bCount = B.Length implies aCount < A.Length 
+                            : min(a[aCount], b[bCount]);
+                return (leftHalfEnd + rightHalfStart) / 2.0;
+            }
+        }
+        return 0.0;
+    }
+};
+
 //Intersection of 2 arrays - II - with duplicates and unsorted
 class Solution {
 public:
