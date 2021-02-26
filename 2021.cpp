@@ -1,3 +1,27 @@
+//Logger rate limiter
+class Logger {
+public:
+    /** Initialize your data structure here. */
+    Logger() {
+        m.clear();
+        interval = 10;
+    }    
+    /** Returns true if the message should be printed in the given timestamp, otherwise returns false.
+        If this method returns false, the message will not be printed.
+        The timestamp is in seconds granularity. */
+    bool shouldPrintMessage(int timestamp, string message) {
+        auto itr = m.find(message);
+        if (itr == m.end() ||
+            (itr != m.end() && ((timestamp-itr->second) >= interval))) {
+            m[message] = timestamp;
+            return true;
+        }
+        return false;
+    }
+    map<string, int> m;
+    int interval;
+};
+
 //Contains Duplicates II
 class Solution {
 public:
