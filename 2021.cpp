@@ -1,3 +1,35 @@
+//Two sum - find 2 numbers that add to target given an unsorted array, contains dups
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_multimap<int, int> m;
+        int idx = 0;
+        for (int num : nums)
+            m.insert(make_pair(num,idx++));
+        for (auto itr = m.begin(); itr != m.end(); itr++) {
+            auto ret = m.find(target - (itr->first));
+            if (ret != m.end() && ret->second != itr->second)
+                return {itr->second, ret->second};
+        }
+        return {};
+    }
+};
+
+//Find the single non-repeating number in an array
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        unordered_set<int> s;
+        pair<unordered_set<int>::iterator, bool> ret;
+        for (int num: nums) {
+            ret = s.insert(num);
+            if (ret.second == false)
+                s.erase(num);
+        }
+        return *s.begin();
+    }
+};
+
 //Check if an array of integers contains any duplicates
 class Solution {
 public:
