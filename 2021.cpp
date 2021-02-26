@@ -1,3 +1,19 @@
+//Check if an array of integers contains any duplicates
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_set<int> s;
+        for (int num: nums) {
+            pair<unordered_set<int>::iterator, bool> ret;
+            ret = s.insert(num);
+            if (ret.second == false) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
 //Compute pow(x,n) in logn time
 class Solution {
 public:
