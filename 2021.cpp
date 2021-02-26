@@ -1,3 +1,26 @@
+//Minimum index sum of 2 lists
+class Solution {
+public:
+    vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+        map<string, int> m2;
+        map<int, vector<string>> choices;
+        for (int i = 0; i < list2.size(); i++)
+            m2[list2[i]] = i;
+        for (int i = 0; i < list1.size(); i++) {
+            auto itr = m2.find(list1[i]);
+            if (itr != m2.end()) {
+                int sum = i+itr->second;
+                auto citr = choices.find(sum);
+                if (citr == choices.end())
+                    choices[sum] = {list1[i]};
+                else
+                    citr->second.push_back(list1[i]);
+            }
+        }
+        return choices.begin()->second;
+    }
+};
+
 //Happy number
 class Solution {
 public:
