@@ -1,3 +1,22 @@
+//Contains Duplicates II
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        map<int/*val*/, int/*index*/> m;
+        for (int i = 0; i < nums.size(); i++) {
+            auto itr = m.find(nums[i]);
+            if (itr == m.end())
+                m[nums[i]] = i;
+            else {
+                if (abs(itr->second-i) <= k)
+                    return true;
+                m[nums[i]] = i;
+            }
+        }
+        return false;
+    }
+};
+
 //First unique character in a string
 class Solution {
 public:
