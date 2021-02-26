@@ -1,3 +1,28 @@
+//First unique character in a string
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        unordered_map<char, pair<int/*index*/, int/*count*/>> m;
+        for (int i = 0; i < s.length(); i++) {
+            auto itr = m.find(s[i]);
+            if (itr == m.end())
+                m[s[i]] = make_pair(i, 1);
+            else {
+                pair<int,int>& p = itr->second;
+                p.second += 1;
+                m[s[i]] = p;
+            }
+        }
+        int index = INT_MAX;
+        for (auto itr = m.begin(); itr != m.end(); ++itr) {
+            pair<int,int>& p = itr->second;
+            if (p.second == 1)
+                index = min(index, p.first);
+        }
+        return index == INT_MAX ? -1 : index;
+    }
+};
+
 //Minimum index sum of 2 lists
 class Solution {
 public:
