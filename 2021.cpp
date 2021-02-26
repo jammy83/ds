@@ -474,6 +474,30 @@ public:
         return nums[low];
     }
 };
+//Find min element in a rotated sorted array (II) with duplicates
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int low = 0, high = nums.size()-1;
+        if (nums.size() == 1 || nums[low] < nums[high])
+            return nums[0];
+        while (low < high) {
+            int mid = low + (high-low)/2;
+            if (nums[mid] > nums[high])
+                low = mid + 1;
+            else if (nums[mid] < nums[high])
+                high = mid;
+            else //nums[mid]==nums[high]
+                high -= 1;
+            /* value of mid and high are the same, we can't be sure where the inflection point is
+             * e.g) {3,3,1,3} or {10,1,10,10,10} illustrates the min element can be to the left or
+             * right of the mid when nums[mid]==nums[high]
+             */
+        }
+        //low==high
+        return nums[low];
+    }
+};
 
 //Search in a rotated sorted array
 class Solution {
