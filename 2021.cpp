@@ -1,3 +1,24 @@
+//Compute pow(x,n) in logn time
+class Solution {
+public:
+    double myPow(double x, int n) {
+        long n1 = n;
+        if (n < 0) {
+            n1 = -n1;
+            x= 1/x;
+        }
+        return fastPow(x,n1);
+    }
+    double fastPow(double x, long n) {
+        if (n==0)
+            return 1.0;
+        double half = fastPow(x, n/2);
+        if (n%2 == 0)
+            return half * half;
+        return half * half * x;
+    }
+};
+
 //Median of 2 sorted arrays of same or varying lengths
 //Refer to: https://medium.com/@hazemu/finding-the-median-of-2-sorted-arrays-in-logarithmic-time-1d3f2ecbeb46
 class Solution {
