@@ -1,3 +1,29 @@
+//Happy number
+class Solution {
+public:
+    bool isHappy(int n) {
+        set<int> s;
+        pair<set<int>::iterator, bool> ret;
+        do {
+            int sq = getSquare(n);
+            ret = s.insert(sq);
+            if (ret.second == false)
+                return false;
+            n = sq;
+        } while(n != 1);
+        return true;
+    }
+    int getSquare(int n) {
+        int sq = 0;
+        do {
+            int d = n%10;
+            sq += d*d;
+            n /= 10;
+        } while(n != 0);
+        return sq;
+    }
+};
+
 //Two sum - find 2 numbers that add to target given an unsorted array, contains dups
 class Solution {
 public:
