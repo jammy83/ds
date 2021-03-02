@@ -1,3 +1,19 @@
+// Jewels and stones
+class Solution {
+public:
+    int numJewelsInStones(string jewels, string stones) {
+        set<char> j;
+        for (char c : jewels)
+            j.insert(c);
+        int count = 0;
+        for (char c : stones) {
+            if (j.find(c) != j.end())
+                ++count;
+        }
+        return count;
+    }
+};
+
 //Top K frequent elements
 //Note: read up on quickselect and Median of medians
 class Solution {
