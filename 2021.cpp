@@ -1,3 +1,21 @@
+//Group anagrams
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> m;
+        for (string str: strs) {
+            string sstr(str);
+            sort(sstr.begin(), sstr.end());
+            m[sstr].emplace_back(str);
+        }
+        vector<vector<string>> result;
+        for (auto itr = m.begin(); itr != m.end(); ++itr) {
+            result.push_back(itr->second);
+        }
+        return result;
+    }
+};
+
 //valid anagram
 class Solution {
 public:
