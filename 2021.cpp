@@ -1,3 +1,33 @@
+//Top K frequent elements
+//Note: read up on quickselect and Median of medians
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> m;
+        for (int num: nums)
+            m[num] += 1;
+        priority_queue<Node, vector<Node>, Comp> q;
+        for (auto itr = m.begin(); itr != m.end(); ++itr)
+            q.push({itr->first, itr->second});
+        vector<int> result;
+        while (k > 0) {
+            const Node& n = q.top();
+            result.push_back(n.val); q.pop();
+            k--;
+        }
+        return result;
+    }
+    struct Node {
+        int val;
+        int count;    
+    };
+    struct Comp {
+        bool operator()(const Node& a, const Node& b) {
+            return a.count < b.count;
+        }    
+    };
+};
+
 //Group anagrams
 class Solution {
 public:
