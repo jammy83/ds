@@ -77,14 +77,19 @@ public:
         unordered_map<int, int> m;
         for (int num: nums)
             m[num] += 1;
-        priority_queue<Node, vector<Node>, Comp> q;
-        for (auto itr = m.begin(); itr != m.end(); ++itr)
-            q.push({itr->first, itr->second});
+        int count = 0;
+        priority_queue<Node, vector<Node>, Comp> q; //min-heap, maintaining only K elements
+        for (auto itr = m.begin(); itr != m.end(); ++itr) {
+            if (count++ < k)
+                q.push({itr->first, itr->second});
+            else if (q.top().count < itr->second) {
+                q.pop(); //replace
+                q.push({itr->first, itr->second});
+            }                
+        }
         vector<int> result;
-        while (k > 0) {
-            const Node& n = q.top();
-            result.push_back(n.val); q.pop();
-            k--;
+        while (!q.empty()) {
+            result.push_back(q.top().val); q.pop();
         }
         return result;
     }
@@ -94,7 +99,7 @@ public:
     };
     struct Comp {
         bool operator()(const Node& a, const Node& b) {
-            return a.count < b.count;
+            return a.count > b.count; // creating a min heap
         }    
     };
 };
