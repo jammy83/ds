@@ -1,3 +1,58 @@
+//Three sum
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        set<vector<int>> result;
+        if (nums.empty() || nums.size() <= 2)
+            return {};
+        unordered_map<int/*val*/, int/*index*/> m;
+        for (int i = 0; i < nums.size(); i++)
+            m[nums[i]] = i; // only unique elements wil be present
+        unordered_set<int> dups;
+        for (int i = 0; i < nums.size()-1; i++) {
+            if (dups.insert(nums[i]).second) { // not a dup element
+                for (int j = i+1; j < nums.size(); j++) {
+                    int complement = -nums[i]-nums[j];
+                    auto itr = m.find(complement);
+                    if (itr != m.end() && itr->second != i && itr->second != j) {
+                        vector<int> triplet = {nums[i], nums[j], complement};
+                        sort(triplet.begin(), triplet.end());
+                        result.insert(triplet);
+                    }
+                }
+            }
+        }
+        return vector<vector<int>>(begin(result), end(result));
+    }
+};
+//Time: O(n^2), space: O(m) - m unique elements of nums & n - total size of nums.
+
+//Valid abbreviation
+class ValidWordAbbr {
+public:
+    ValidWordAbbr(vector<string>& dictionary) {
+        m.clear();
+        for (string s : dictionary)
+            m[getAbbr(s)].insert(s);
+    }
+    string getAbbr(string s) {
+        int n = s.length();
+        if (n <= 2)
+            return s;
+        return (s[0] + to_string(n-2) + s[n-1]);
+    }
+    bool isUnique(string word) {
+        auto itr = m.find(getAbbr(word));
+        if (itr == m.end())
+            return true;
+        set<string>& s = itr->second;
+        if (s.size() == 1 && s.find(word) != s.end())
+            return true;
+        return false;
+    }
+    map<string, set<string>> m;
+};
+
 // Jewels and stones
 class Solution {
 public:
