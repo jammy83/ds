@@ -1,3 +1,27 @@
+//Longest substring without repeating characters
+//In "fsfetwenwe" string, notice that longest substring is "sfetw" and any substring starting before 'e'
+//at index 3 (and after index 1) need not be examined as it will be shorter with a dup 'e' at 6.
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int/*index*/> m;
+        size_t length = 0, startIdx = 0;
+        pair<unordered_map<char, int>::iterator, bool> ret;
+        for (size_t i = 0; i < s.length(); i++) {
+            ret = m.insert(make_pair(s[i], i));
+            if (ret.second == false) { //failed to insert
+                if (ret.first->second >= startIdx) {
+                    //dup is in the subarray being validated
+                    length = max(length, i-startIdx);
+                    startIdx = ret.first->second + 1;
+                }
+                ret.first->second = i;
+            }
+        }
+        return max(length, s.length()-startIdx);
+    }
+};
+
 //Three sum
 class Solution {
 public:
