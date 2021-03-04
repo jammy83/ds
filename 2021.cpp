@@ -1,3 +1,28 @@
+//Longest consecutive sequence
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> s(nums.begin(), nums.end());
+        int maxLength = 0, left = 0, right = 0;
+        while (!s.empty()) {
+            int num = *(s.begin());
+            s.erase(num);
+            left = num-1;
+            while (s.find(left) != s.end()) {
+                s.erase(left);
+                left--;
+            }
+            right = num+1;
+            while (s.find(right) != s.end()) {
+                s.erase(right);
+                right++;
+            }
+            maxLength = max(maxLength, right-left-1); //since left,right goes 1 beyond whats found
+        }
+        return maxLength;
+    }
+};
+
 //Longest substring without repeating characters
 //In "fsfetwenwe" string, notice that longest substring is "sfetw" and any substring starting before 'e'
 //at index 3 (and after index 1) need not be examined as it will be shorter with a dup 'e' at 6.
