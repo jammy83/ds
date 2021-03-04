@@ -1,3 +1,39 @@
+//Power of 3
+class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        if (n < 1)
+            return false;
+        while (n % 3 == 0)
+            n /= 3;
+        return n == 1;
+        //return (int)(log10(n) / log10(3)) % 1 == 0;
+        //return Integer.toString(n, 3).matches("^10*$");
+        //return n > 0 && 1162261467 % n == 0;
+    }
+};
+
+//Moving average
+class MovingAverage {
+public:
+    /** Initialize your data structure here. */
+    MovingAverage(int size) {
+        window = size;
+    }
+    
+    double next(int val) {
+        q.push_back(val);
+        if (q.size() > window)
+            q.pop_front();
+        int sum = 0;
+        for (auto itr = q.begin(); itr != q.end(); ++itr)
+            sum += *itr;
+        return (double)sum/q.size();
+    }
+    deque<int> q;
+    int window;
+};
+
 //Randomized Set
 class RandomizedSet {
 public:
