@@ -1,3 +1,24 @@
+//Kth largest element in a stream
+class KthLargest {
+public:
+    KthLargest(int k, vector<int>& nums) {
+        x = k;
+        for (int num: nums) {
+            q.push(num);
+            if (q.size() > x) 
+                q.pop();
+        }
+    }
+    int add(int val) {
+        q.push(val);
+        if (q.size() > x) 
+            q.pop();
+        return q.top();
+    }
+    priority_queue<int, vector<int>, greater<int>> q;
+    int x;        
+};
+
 //Power of 3
 class Solution {
 public:
@@ -190,15 +211,11 @@ public:
         unordered_map<int, int> m;
         for (int num: nums)
             m[num] += 1;
-        int count = 0;
         priority_queue<Node, vector<Node>, Comp> q; //min-heap, maintaining only K elements
         for (auto itr = m.begin(); itr != m.end(); ++itr) {
-            if (count++ < k)
-                q.push({itr->first, itr->second});
-            else if (q.top().count < itr->second) {
+            q.push({itr->first, itr->second});
+            if (q.size() > k)
                 q.pop(); //replace
-                q.push({itr->first, itr->second});
-            }                
         }
         vector<int> result;
         while (!q.empty()) {
