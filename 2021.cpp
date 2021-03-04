@@ -1676,37 +1676,22 @@ public:
 class Solution {
 public:
     int thirdMax(vector<int>& nums) {
-        unordered_set<int> s(nums.begin(), nums.end());
-        nums.assign(s.begin(), s.end());
-        if (nums.empty()) {
+        if (nums.empty())
             return -1;
-        } else if (nums.size() == 1) {
-            return nums[0];
-        } else if (nums.size() == 2) {
-            return ((nums[0] == nums[1]) ? nums[0] : max(nums[0], nums[1]));
+        unordered_set<int> s(nums.begin(), nums.end());
+        if (s.size() == 1)
+            return *s.begin();
+        if (s.size() == 2) {
+            auto itr = s.begin(); advance(itr, 1);
+            return max(*s.begin(), *itr);
         }
-        //return nums[nums.size()-3]; if using a set instead of unordered_set
-        int max1 = nums[0], max2 = nums[1], max3 = nums[2];
-        if (max2 > max1)
-            swap(max1, max2);
-        if (max3 > max1)
-            swap(max1, max3);
-        if (max3 > max2)
-            swap(max2, max3);
-        for (int i = 3; i < nums.size(); i++) {
-            int num = nums[i];
-            if (num > max1) {
-                max3 = max2;
-                max2 = max1;
-                max1 = num;
-            } else if (num > max2) {
-                max3 = max2;
-                max2 = num;
-            } else if (num > max3) {
-                max3 = num;
-            }
+        priority_queue<int, vector<int>, greater<int>> q; //min-heap
+        for (auto itr = s.begin(); itr != s.end(); itr++) {
+            q.push(*itr);
+            if (q.size() > 3)
+                q.pop();
         }
-        return max3;
+        return q.top();
     }
 };
 
