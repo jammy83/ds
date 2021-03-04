@@ -1,3 +1,31 @@
+//Randomized Set
+class RandomizedSet {
+public:
+    /** Initialize your data structure here. */
+    RandomizedSet() {
+        s.clear();
+        srand(time(nullptr));
+    }
+    
+    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
+    bool insert(int val) {
+        return s.insert(val).second;
+    }
+    
+    /** Removes a value from the set. Returns true if the set contained the specified element. */
+    bool remove(int val) {
+        return s.erase(val) > 0;
+    }
+    
+    /** Get a random element from the set. */
+    int getRandom() {
+        auto itr = s.begin();
+        advance(itr, rand() % s.size());
+        return *itr;
+    }
+    unordered_set<int> s;
+};
+
 //Longest consecutive sequence
 class Solution {
 public:
