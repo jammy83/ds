@@ -1,6 +1,7 @@
 //Find the Kth largest element in an array
 class Solution {
 public:
+    /* Using priority queue/heap
     int findKthLargest(vector<int>& nums, int k) {
         priority_queue<int, vector<int>, greater<int>> q; //min-heap
         for (int num : nums) {
@@ -9,6 +10,35 @@ public:
                 q.pop();
         }
         return q.top();
+    }
+    */
+    //Using quickselect algorithm. Avg case O(n); worst case O(n^2)
+    int findKthLargest(vector<int>& nums, int k) {
+        int low = 0, high = nums.size()-1;
+        int x = nums.size() - k; //kth largest is the (size - k)th smallest
+        default_random_engine gen((random_device())());
+        while (low <= high) {
+            int pivot = uniform_int_distribution<int> {low,high}(gen);
+            int newPivot = partition(low, high, pivot, nums);
+            if (newPivot == x)
+                return nums[x];
+            if (newPivot < x)
+                low = newPivot + 1;
+            else
+                high = newPivot - 1;
+        }
+        return -1;
+    }
+    int partition(int low, int high, int pivot, vector<int>& nums) {
+        int pval = nums[pivot];
+        int wIndex = low;
+        swap(nums[pivot], nums[high]); //move pivot element to the end
+        for (int i = low; i <= high; i++) {
+            if (nums[i] < pval)
+                swap(nums[i], nums[wIndex++]);
+        }
+        swap(nums[wIndex], nums[high]);
+        return wIndex;
     }
 };
 
