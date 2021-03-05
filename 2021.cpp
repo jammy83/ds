@@ -1,3 +1,83 @@
+//Merge K sorted lists
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.empty())
+            return nullptr;
+        priority_queue<ListNode*, vector<ListNode*>, compare> q;
+        for (ListNode* l : lists) {
+            if (l != nullptr)
+                q.push(l);
+        }
+        if (q.empty())
+            return nullptr;
+        ListNode *head, *prev;
+        head = prev = q.top(); q.pop();
+        if (prev->next) {
+            q.push(prev->next);
+        }
+        while (!q.empty()) {
+            prev->next = q.top(); q.pop();
+            prev = prev->next;
+            if (prev->next)
+                q.push(prev->next);
+        }
+        return head;
+    }
+    struct compare {
+        bool operator()(const ListNode* l, const ListNode* r) {
+            return l->val > r->val;
+        }
+    };
+};
+
+//Merge 2 sorted lists
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (l1 == nullptr || l2 == nullptr)
+            return (l1 == nullptr) ? l2 : l1;
+        ListNode *head, *next, *prev;
+        head = next = nullptr;
+        while (l1 != nullptr && l2 != nullptr) {
+            if (l1->val <= l2->val) {
+                next = l1; l1 = l1->next;
+            } else {
+                next = l2; l2 = l2->next;
+            }
+            if (head == nullptr) {
+                head = prev = next;
+            } else {
+                prev->next = next;
+                prev = next;
+            }
+        }
+        if (prev != nullptr)
+            prev->next = (l1 != nullptr) ? l1 : l2;
+        return head;
+    }
+};
+
 //Find the Kth largest element in an array
 class Solution {
 public:
