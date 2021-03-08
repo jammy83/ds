@@ -1,3 +1,42 @@
+//Median from data stream
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {}
+    void addNum(int num) {
+        if (minQ.empty())
+            minQ.push(num);
+        else {
+            if (num >= minQ.top())
+                minQ.push(num);
+            else
+                maxQ.push(num);
+        }
+        //Re-heap
+        if (minQ.size() > maxQ.size() + 1) {
+            maxQ.push(minQ.top());
+            minQ.pop();
+        } else if (maxQ.size() > minQ.size()) {
+            minQ.push(maxQ.top());
+            maxQ.pop();
+        }
+    }
+    double findMedian() {
+        if (maxQ.size() == minQ.size())
+            return (double)(maxQ.top()+minQ.top())/2;
+        return minQ.top();
+    }
+    priority_queue<int, vector<int>> maxQ;
+    priority_queue<int, vector<int>, greater<int>> minQ;
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
+
 //Merge K sorted lists
 /**
  * Definition for singly-linked list.
