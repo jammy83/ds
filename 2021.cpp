@@ -1,3 +1,45 @@
+//Sliding window median
+//Solution uses 2 multisets since deletion and re-heapifying operation is costly with priority_queue
+class Solution {
+public:
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+        vector<double> result;
+        multiset<int> minSet, maxSet;
+        for (int i = 0; i < nums.size(); i++) {
+            //add number
+            if (minSet.empty())
+                minSet.insert(nums[i]);
+            else {
+                if (nums[i] > *minSet.begin())
+                    minSet.insert(nums[i]);
+                else
+                    maxSet.insert(nums[i]);
+            }
+            //maintain the sliding window
+            if (i >= k) {
+                if (nums[i-k] >= *minSet.begin())
+                    minSet.erase(minSet.find(nums[i-k]));
+                else
+                    maxSet.erase(maxSet.find(nums[i-k]));
+            }
+            //re-heap
+            if (minSet.size() > maxSet.size()+1) {
+                maxSet.insert(*minSet.begin());
+                minSet.erase(minSet.begin());
+            } else if (maxSet.size() > minSet.size()) {
+                minSet.insert(*maxSet.rbegin());
+                maxSet.erase(prev(maxSet.end()));
+            }
+            //find median   
+            if (i + 1 >= k) {
+                double median = (k&1) ? *minSet.begin() : ((double)*minSet.begin()+(double)*maxSet.rbegin())/2;
+                result.push_back(median);
+            }
+        }
+        return result;
+    }
+};
+
 //Median from data stream
 class MedianFinder {
 public:
