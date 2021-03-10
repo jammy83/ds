@@ -1506,27 +1506,26 @@ public:
 };
 
 //Permutation in string - check if permutation of s1 is a substring of s2.
-//Use of bitset is a viable option when there are no duplicate characters, otherwise use an array to track the occurrences
+//Use of bitset is a viable option when there are no duplicate characters,
+//otherwise use an array to track the occurrences
+//sliding window computation for s2 speeds up the computation
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-        if (s1.empty() || s2.empty() || s2.length() < s1.length()) {
+        if (s1.empty() || s2.empty() || s2.length() < s1.length())
             return false;
+        vector<int> h1(26,0), h2(26,0);
+        for (int i = 0; i < s1.length(); i++) {
+            h1[s1[i] - 'a']++;
+            h2[s2[i] - 'a']++;
         }
-        vector<int> h1(26,0);
-        for (char c : s1) {
-            h1[c - 'a']++;
-        }
-        for (int i = 0; i <= s2.length() - s1.length(); i++) {
-            vector<int> h2(26,0);
-            for (int j = 0; j < s1.length(); j++) {
-                h2[s2[i + j] - 'a']++;
-            }
-            if (h1 == h2) {
+        for (int i = 0; i < s2.length() - s1.length(); i++) {
+            if (h1 == h2)
                 return true;
-            }
+            h2[s2[i+s1.length()] - 'a']++;
+            h2[s2[i] - 'a']--;
         }
-        return false;
+        return (h1 == h2);
     }
 };
 class Solution {
