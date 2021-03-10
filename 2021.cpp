@@ -1,3 +1,45 @@
+//Sliding window maximum
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        vector<int> result;
+        for (int i = 0; i < k; i++)
+            add(nums[i]);
+        for(int i = k; i < nums.size(); i++) {
+            result.push_back(q.front());
+            add(nums[i]);
+            remove(nums[i-k]);
+        }
+        result.push_back(q.front());
+        return result;
+    }
+    void add(int n) {
+        while (!q.empty() && q.back() < n)
+            q.pop_back();
+        q.push_back(n);
+    }
+    void remove(int n) {
+        if (!q.empty() && q.front() == n)
+            q.pop_front();
+    }
+    deque<int> q;
+};
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        multiset<int> s;
+        vector<int> result;
+        for (int i = 0; i < nums.size(); i++) {
+            s.insert(nums[i]);
+            if (s.size() > k)
+                s.erase(s.find(nums[i-k]));
+            if (s.size() >= k)
+                result.push_back(*s.rbegin());
+        }
+        return result;
+    }
+}
+
 //Implement a stack API using heap
 class MyStack {
 public:
