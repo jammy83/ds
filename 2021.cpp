@@ -1,3 +1,41 @@
+//Implement a stack API using heap
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+    MyStack() {
+        index = 0;
+    }
+    /** Push element x onto stack. */
+    void push(int x) {
+        q.push({x, index++});
+    }
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        if (q.empty())
+            return -1;
+        int val = q.top().val;
+        q.pop();
+        return val;
+    }
+    /** Get the top element. */
+    int top() {
+        return q.top().val;
+    }
+    /** Returns whether the stack is empty. */
+    bool empty() {
+       return q.empty(); 
+    }
+    struct node {
+        int val;
+        int in;
+        bool operator< (const node& b) const {
+            return in < b.in;
+        }
+    };
+    priority_queue<node, vector<node>> q; // max queue
+    int index;
+};
+
 //Sliding window median
 //Solution uses 2 multisets since deletion and re-heapifying operation is costly with priority_queue
 class Solution {
