@@ -245,19 +245,20 @@ public:
     /** Initialize your data structure here. */
     MovingAverage(int size) {
         window = size;
+        sum = 0;
     }
-    
     double next(int val) {
         q.push_back(val);
-        if (q.size() > window)
+        sum += val;
+        if (q.size() > window) {
+            sum -= q.front();
             q.pop_front();
-        int sum = 0;
-        for (auto itr = q.begin(); itr != q.end(); ++itr)
-            sum += *itr;
+        }
         return (double)sum/q.size();
     }
     deque<int> q;
     int window;
+    int sum;
 };
 
 //Randomized Set
