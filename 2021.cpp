@@ -1,3 +1,80 @@
+//4Sum
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(begin(nums), end(nums));
+        return kSum(nums, target, 0, 4);
+    }
+    vector<vector<int>> kSum(vector<int>& nums, int target, int start, int k) {
+        vector<vector<int>> res;
+        if (start == nums.size() || nums[start] * k > target || target > nums.back() * k)
+            return res;
+        if (k == 2)
+            return twoSum(nums, target, start);
+        for (int i = start; i < nums.size(); ++i) {
+            if (i == start || nums[i - 1] != nums[i]) {
+                for (auto &set : kSum(nums, target - nums[i], i + 1, k - 1)) {
+                    res.push_back({nums[i]});
+                    res.back().insert(end(res.back()), begin(set), end(set));
+                }
+            }
+        }
+        return res;
+    }
+    //TwoSum: sorted array, one pass hash table lookup solution
+    vector<vector<int>> twoSum(vector<int>& nums, int target, int start) {
+        vector<vector<int>> res;
+        unordered_set<int> s;
+        for (auto i = start; i < nums.size(); ++i) {
+            if (res.empty() || res.back()[1] != nums[i]) {
+                if (s.count(target - nums[i]))
+                    res.push_back({target - nums[i], nums[i]});
+            }
+            s.insert(nums[i]);
+        }
+        return res;
+    }
+};
+
+//Sudoku checker
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        //validate row
+        for (int i = 0; i < board.size(); i++) {
+            if (validate(board, i, i, 0, board[0].size()-1) == false)
+                return false;
+        }
+        //validate col
+        for (int j = 0; j < board[0].size(); j++) {
+            if (validate(board, 0, board.size()-1, j, j) == false)
+                return false;
+        }
+        //validate 3*3 matrix
+        for (int i = 0; i < board.size(); i+=3) {
+            for (int j = 0; j < board[0].size(); j+=3) {
+                if (validate(board, i, i+3-1, j, j+3-1) == false)
+                    return false;
+            }
+        }
+        return true;
+    }
+    bool validate(vector<vector<char>>& board, int row, int rend, int col, int cend) {
+        bitset<10> bitMap;
+        for (int i = row; i <= rend; i++) {
+            for (int j = col; j <= cend; j++) {
+                if (board[i][j] != '.') {
+                    int val = (int)board[i][j] - '0';
+                    if (bitMap.test(val))
+                        return false;
+                    bitMap.set(val);
+                }
+            }
+        }
+        return true;
+    }
+};
+
 //Sliding window maximum
 class Solution {
 public:
