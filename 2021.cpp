@@ -1,3 +1,41 @@
+//Find the majority element which occurs >= 50%
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int elem, count = 0;
+        for (int num: nums) {
+            if (count == 0) {
+                elem = num;
+                ++count;
+            } else if (elem == num) {
+                ++count;
+            } else
+                --count;
+        }
+        return elem;
+    }
+};
+
+//Find duplicate subtree
+class Solution {
+public:
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        dfs(root);
+        return result;
+    }
+    string dfs(TreeNode *node) {
+        if (node == nullptr)
+            return "$";
+        string hash = to_string(node->val) + "," + dfs(node->left) + "," + dfs(node->right);
+        m[hash]++;
+        if (m[hash] == 2)
+            result.push_back(node);
+        return hash;
+    }
+    unordered_map<string, int> m;
+    vector<TreeNode*> result;
+};
+
 //4Sum
 class Solution {
 public:
