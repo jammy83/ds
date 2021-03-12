@@ -1,3 +1,17 @@
+//Schedule to minimize waiting times given service time
+class Solution {
+public:
+    int minWaitingTime(vector<int> service_time) {
+        int total_time = 0, prev = 0;
+        for (int i = 1; i < service_time.size(); i++) {
+            int curr_time = service_time[i-1] + prev;
+            total_time += curr_time;
+            prev = curr_time;
+        }
+        return total_time;
+    }
+};
+
 //Find the majority element which occurs >= 50%
 class Solution {
 public:
