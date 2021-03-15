@@ -13,7 +13,7 @@ public:
                     q.push(make_pair(i,j));
             }
         }
-        //Find the shortest distance to each empty room from each of the gates
+        //Find the shortest distance to each empty room from closest gate
         while (!q.empty()) {
             int i = q.front().first, j = q.front().second;
             q.pop();
