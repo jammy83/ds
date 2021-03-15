@@ -1,3 +1,43 @@
+//Implement a circular queue
+class MyCircularQueue {
+public:
+    MyCircularQueue(int k) {
+        nums.resize(k);
+        head = tail = -1;
+    }
+    bool enQueue(int value) {
+        if (!isFull()) {
+            if (head == -1)
+                head = 0;
+            tail = ++tail % nums.capacity();
+            nums[tail] = value;
+            return true;
+        }
+        return false;
+    }
+    bool deQueue() {
+        if (!isEmpty()) {
+            head = (head == tail) ? head = tail = -1 : ++head % nums.capacity();
+            return true;
+        }
+        return false;
+    }
+    int Front() {
+        return (!isEmpty()) ? nums[head] : -1;
+    }
+    int Rear() {
+        return (!isEmpty()) ? nums[tail] : -1;
+    }
+    bool isEmpty() {
+        return (head == -1 && tail == -1);
+    }
+    bool isFull() {
+        return (!isEmpty() && ((tail+1) % nums.capacity()) == head);
+    }
+    vector<int> nums;
+    int head, tail;
+};
+
 //Schedule to minimize waiting times given service time
 class Solution {
 public:
