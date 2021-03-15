@@ -1,3 +1,33 @@
+class Solution {
+public:
+    void wallsAndGates(vector<vector<int>>& rooms) {
+        if (rooms.size() == 0)
+            return;
+        int EMPTY = INT_MAX, GATE = 0;
+        int m = rooms.size(), n = rooms[0].size();
+        vector<vector<int>> nb{{0,1}, {0,-1}, {-1,0}, {1,0}}; //neighbors
+        queue<pair<int, int>> q;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (rooms[i][j] == GATE)
+                    q.push(make_pair(i,j));
+            }
+        }
+        //Find the shortest distance to each empty room from each of the gates
+        while (!q.empty()) {
+            int i = q.front().first, j = q.front().second;
+            q.pop();
+            for (int k = 0; k < nb.size(); k++) {
+                int r = i + nb[k][0], c = j + nb[k][1];
+                if (r < 0 || c < 0 || r >= m || c >= n || rooms[r][c] != EMPTY)
+                    continue;
+                rooms[r][c] = rooms[i][j] + 1;
+                q.push(make_pair(r,c));
+            }
+        }
+    }
+};
+
 //Implement a circular queue
 class MyCircularQueue {
 public:
