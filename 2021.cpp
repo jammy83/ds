@@ -1,3 +1,27 @@
+//Max queue
+class MaxQueue {
+public:
+    MaxQueue() {}
+    void push(int x) {
+        q.push(x);
+        while(!maxQ.empty() && maxQ.back() < x)
+            maxQ.pop_back();
+        maxQ.push_back(x);
+    }
+    int pop() {
+        int val = q.front();
+        q.pop();
+        if (maxQ.front() == val)
+            maxQ.pop_front();
+        return val;
+    }
+    int getMax() {
+        return maxQ.front();
+    }
+    queue<int> q;
+    deque<int> maxQ;
+};
+
 //Stack that returns the min element
 class MinStack {
 public:
