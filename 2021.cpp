@@ -1,3 +1,54 @@
+//Implement stack with max retrieval and removal
+class MaxStack {
+public:
+    /** initialize your data structure here. */
+    MaxStack() {}   
+    void push(int x) {
+        s.push(x);
+        maxH.push(x);
+    }
+    int pop() {
+        int ret = s.top();
+        s.pop();
+        if (!maxH.empty() && maxH.top() == ret)
+            maxH.pop();
+        else
+            del.insert(ret);
+        return ret;
+    }
+    int top() {
+        return s.top();
+    }
+    int peekMax() {
+        remove();
+        return maxH.top();
+    }
+    int popMax() {
+        remove();
+        stack<int> s1;
+        int max = maxH.top();
+        while (!s.empty() && s.top() != max) {
+            s1.emplace(s.top()); s.pop();
+        }
+        s.pop();
+        while (!s1.empty()) {
+            s.emplace(s1.top()); s1.pop();
+        }
+        maxH.pop();
+        return max;
+    }
+    void remove() {
+        auto itr = del.find(maxH.top());
+        while (!del.empty() && itr != del.end()) {
+            maxH.pop(); del.erase(itr);
+            itr = del.find(maxH.top());
+        }
+    }
+    stack<int> s;
+    priority_queue<int, vector<int>> maxH; //max-heap
+    unordered_multiset<int> del;
+};
+
 //Implement queue with 2 stacks
 class MyQueue {
 public:
