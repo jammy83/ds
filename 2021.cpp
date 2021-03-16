@@ -1,3 +1,29 @@
+//Evaluate RPN
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> s;
+        for (string str: tokens) {
+            if (str == "+" || str == "-" || str == "*" || str == "/") {
+                int val2 = s.top(); s.pop();
+                int val1 = s.top(); s.pop();
+                int res = 0;
+                if (str == "+")
+                    res = val1 + val2;
+                if (str == "-")
+                    res = val1 - val2;
+                if (str == "*")
+                    res = val1 * val2;
+                if (str == "/")
+                    res = val1 / val2;
+                s.push(res);
+            } else
+                s.push(stoi(str));
+        }
+        return s.top();
+    }
+};
+
 //Daily temperatures - find a warmer climate day closest to today
 class Solution {
 public:
