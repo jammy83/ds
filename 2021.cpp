@@ -1,4 +1,32 @@
+//Stack that returns the min element
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    MinStack() {}  
+    void push(int x) {
+        s.push(x);
+        if (minS.empty() || x <= minS.top())
+            minS.push(x);
+    }
+    void pop() {
+        int val = s.top();
+        s.pop();
+        if (!minS.empty() && minS.top() == val)
+            minS.pop();
+    }
+    int top() {
+        return s.top();
+    }
+    int getMin() {
+        return minS.top();
+    }
+    stack<int> s;
+    stack<int> minS;
+};
+
 //Implement stack with max retrieval and removal
+//Retrieving max element only needs another stack alone but since we need to support popMax(),
+//using priority_queue with hashset (for lazy removal from priority_queue)
 class MaxStack {
 public:
     /** initialize your data structure here. */
