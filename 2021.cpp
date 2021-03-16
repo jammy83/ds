@@ -1,3 +1,38 @@
+//Implement queue with 2 stacks
+class MyQueue {
+public:
+    /** Initialize your data structure here. */
+    MyQueue() {}
+    /** Push element x to the back of queue. */
+    void push(int x) {
+        while (!f.empty()) {
+            b.emplace(f.top()); f.pop();
+        }
+        b.push(x);
+    }
+    /** Removes the element from in front of queue and returns that element. */
+    int pop() {
+        int val = peek();
+        if (!f.empty())
+            f.pop();
+        return val;
+    }
+    /** Get the front element. */
+    int peek() {
+        while (!b.empty()) {
+            f.emplace(b.top()); b.pop();
+        }
+        return f.empty() ? -1 : f.top();
+    }
+    /** Returns whether the queue is empty. */
+    bool empty() {
+        return (f.empty() && b.empty());    
+    }
+    stack<int> f;
+    stack<int> b;
+};
+
+// Wall and gates 
 class Solution {
 public:
     void wallsAndGates(vector<vector<int>>& rooms) {
