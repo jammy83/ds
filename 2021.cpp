@@ -1,3 +1,19 @@
+//Daily temperatures - find a warmer climate day closest to today
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& T) {
+        vector<int> result(T.size());
+        stack<int> s;
+        for (int i = T.size()-1; i >= 0; i--) {
+            while (!s.empty() && T[s.top()] <= T[i])
+                s.pop();
+            result[i] = s.empty() ? 0 : s.top() - i;
+            s.push(i);
+        }
+        return result;
+    }
+};
+
 //valid parentheses
 class Solution {
 public:
