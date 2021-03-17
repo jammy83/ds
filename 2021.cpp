@@ -1,3 +1,57 @@
+//Clone graph - 
+//DFS
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        if (node == nullptr)
+            return nullptr;
+        unordered_map<Node*/*old*/, Node*/*new*/> m; // to track visits and lookup
+        return dfs(node, m);
+    }
+    Node* dfs(Node* node, unordered_map<Node*, Node*>& m) {
+        if (node == nullptr)
+            return nullptr;
+        if (m.find(node) != m.end())
+            return m[node];
+        Node* cloned = new Node(node->val);
+        m[node] = cloned;
+        for (vector<Node*>::iterator itr = node->neighbors.begin();
+            itr != node->neighbors.end(); ++itr) {
+            cloned->neighbors.push_back(dfs(*itr, m));
+        }
+        return cloned;
+    }
+};
+
+//BFS
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        if (node == nullptr)
+            return nullptr;
+        unordered_map<Node*/*old*/, Node*/*new*/> m; // to track visits and lookup
+        queue<Node*> q; //original graph node ptr to traverse
+        Node* root = new Node(node->val);
+        m[node] = root;
+        q.push(node);
+        while (!q.empty()) {
+            Node *curr = q.front(), *parent = m[curr]; q.pop();
+            for (vector<Node*>::iterator itr = curr->neighbors.begin();
+                itr !=curr->neighbors.end(); ++itr) {
+                if (m.find(*itr) == m.end()) {
+                    Node* newN = new Node((*itr)->val);
+                    parent->neighbors.push_back(newN);
+                    m[*itr] = newN;
+                    q.push(*itr);
+                } else {
+                    parent->neighbors.push_back(m[*itr]);
+                }
+            }
+        }
+        return root;
+    }
+};
+
 //Evaluate RPN
 class Solution {
 public:
