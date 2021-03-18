@@ -1,3 +1,25 @@
+//Inorder traversal
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        stack<TreeNode*> s;
+        vector<int> result;
+        TreeNode* curr = root;
+        while (!s.empty() || curr != nullptr) {
+            if (curr != nullptr) {
+                s.push(curr);
+                curr = curr->left;
+                continue;
+            } else {
+                TreeNode *next = s.top();
+                result.push_back(next->val); s.pop();
+                curr = next->right;
+            }
+        }
+        return result;
+    }
+};
+
 //Clone graph - 
 //DFS
 class Solution {
@@ -5,7 +27,7 @@ public:
     Node* cloneGraph(Node* node) {
         if (node == nullptr)
             return nullptr;
-        unordered_map<Node*/*old*/, Node*/*new*/> m; // to track visits and lookup
+        unordered_map<Node*, Node*> m; //to track visits and lookup
         return dfs(node, m);
     }
     Node* dfs(Node* node, unordered_map<Node*, Node*>& m) {
