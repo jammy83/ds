@@ -1,3 +1,30 @@
+//Decode string
+class Solution {
+public:
+    string decodeString(string s) {
+        int index = 0;
+        return decodeString(s, index);
+    }
+    string decodeString(const string& s, int& index) {
+        string result;
+        while (index < s.length() && s[index] != ']') {
+            if (!isdigit(s[index]))
+                result += s[index++];
+            else {
+                int k = 0;
+                while (index < s.length() && isdigit(s[index]))
+                    k = k * 10 + ((int)s[index++] - '0');
+                index++; //skip '['
+                string decode = decodeString(s, index);
+                index++; //skip ']'
+                while (k-- > 0)
+                    result += decode;
+            }
+        }
+        return result;
+    }
+};
+
 //Inorder traversal
 class Solution {
 public:
