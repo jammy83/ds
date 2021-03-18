@@ -1,3 +1,76 @@
+//Level order traversal bottom up
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        if (root == nullptr)
+            return {};
+        vector<vector<int>> result;
+        queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            int size = q.size();
+            vector<int> nodes;
+            for (int i = 0; i < size; i++) {
+                TreeNode *curr = q.front(); q.pop();
+                nodes.push_back(curr->val);
+                if (curr->left)
+                    q.push(curr->left);
+                if (curr->right)
+                    q.push(curr->right);
+            }
+            result.push_back(nodes);
+        }
+        reverse(result.begin(), result.end());
+        return result;
+    }
+};
+
+//max depth of binary tree
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        return dfs(root, 0);
+    }
+    int dfs(TreeNode *curr, int height) {
+        if (curr != nullptr) {
+            ++height;
+            height = max(dfs(curr->left, height), dfs(curr->right, height));
+        }
+        return height;
+    }
+};
+
+//Sort a stack
+class Solution {
+public:
+    void sort(stack<int>* s) {
+        if (!s->empty()) {
+            int val = s->top(); s->pop();
+            sort(s);
+            insert(s, val);
+        }
+    }
+    void insert(stack<int>* s, int val) {
+        stack<int> temp;
+        while (!s->empty() && s->top() > val) {
+            temp.push(s->top()); s->pop();
+        }
+        s->push(val);
+        while (!temp.empty()) {
+            s->push(temp.top()); temp.pop();
+        }
+        /* recursion
+        if (s->empty() || val >= s->top())
+            s->push(val);
+        else {
+            int top = s->top(); s->pop();
+            insert(s, val);
+            s->push(top);
+        }
+        */
+    }
+};
+
 //Level order traversal
 class Solution {
 public:
