@@ -1,3 +1,25 @@
+//Keys and rooms
+class Solution {
+public:
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        if (rooms.empty() || rooms.size() == 1 && rooms[0].empty())
+            return true;
+        unordered_set<int> visited;
+        stack<int> s;
+        s.push(0); visited.insert(0);
+        while (!s.empty()) {
+            int index = s.top(); s.pop();
+            for (int j = 0; j < rooms[index].size(); j++) {
+                int next = rooms[index][j];
+                if (visited.insert(next).second) {
+                    s.push(next);   
+                }
+            }
+        }
+        return (visited.size() == rooms.size());
+    }
+};
+
 //Decode string
 class Solution {
 public:
