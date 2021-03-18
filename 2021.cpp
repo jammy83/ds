@@ -1,3 +1,28 @@
+//Level order traversal
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        if (root == nullptr)
+            return {};
+        vector<vector<int>> result;
+        queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            int size = q.size();
+            vector<int> nodes;
+            for (int i = 0; i < size; i++) {
+                TreeNode *curr = q.front(); q.pop();
+                nodes.push_back(curr->val);
+                if (curr->left)
+                    q.push(curr->left);
+                if (curr->right)
+                    q.push(curr->right);
+            }
+            result.push_back(nodes);
+        }
+        return result;
+    }
+};
 
 //Keys and rooms
 class Solution {
