@@ -1,3 +1,4 @@
+
 //Keys and rooms
 class Solution {
 public:
@@ -47,7 +48,7 @@ public:
     }
 };
 
-//Inorder traversal
+//Inorder traversal - this traversal can be applied to traversing BST in a sorted order of keys.
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
@@ -1087,24 +1088,19 @@ public:
     bool isIsomorphic(string s, string t) {
         if (s.length() != t.length())
             return false;
-        unordered_map<char, int> m1;
-        string s1, s2;
+        return (encodeStr(s) == encodeStr(t));
+    }
+    string encodeStr(string& s) {
+        //Assigning each alphabet/char a unique value and creating an encoded str
+        unordered_map<char, int> m;
+        string encoding;
         for (int i = 0; i < s.length(); i++) {
-            auto itr = m1.find(s[i]);
-            if (itr == m1.end())
-                m1[s[i]] = i;
-            char c = (itr == m1.end()) ? i : itr->second;
-            s1 += c;
+            auto itr = m.find(s[i]);
+            if (itr == m.end())
+                m[s[i]] = i;
+            encoding += (itr == m.end()) ? i : itr->second;
         }
-        m1.clear();
-        for (int i = 0; i < t.length(); i++) {
-            auto itr = m1.find(t[i]);
-            if (itr == m1.end())
-                m1[t[i]] = i;
-            char c = (itr == m1.end()) ? i : itr->second;
-            s2 += c;
-        }
-        return (s1 == s2);
+        return encoding;
     }
 };
 
