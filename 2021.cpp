@@ -1,3 +1,39 @@
+//Merge intervals
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if (intervals.empty())
+            return {};
+        if (intervals.size() == 1)
+            return intervals;
+        //sort the intervals in increasing order of left endpoint
+        std::sort(intervals.begin(), intervals.end(), 
+                  [](const std::vector<int>& a, const std::vector<int>& b) {
+                      return a[0] < b[0];
+                  });
+        stack<pair<int,int>> s;
+        s.push({intervals[0][0], intervals[0][1]});
+        for (int i = 0; i < intervals.size(); i++) {
+            insert(s, make_pair(intervals[i][0], intervals[i][1]));
+        }
+        vector<vector<int>> result;
+        while (!s.empty()) {
+            pair<int, int> top = s.top(); s.pop();
+            result.push_back({top.first, top.second});
+        }
+        return result;
+    }
+    void insert(stack<pair<int,int>>& s, pair<int,int> p) {
+        if (!s.empty()) {
+            pair<int,int>& top = s.top();
+            if (top.second >= p.first)
+                top.second = max(top.second, p.second);
+            else
+                s.push(p);
+        }
+    }
+};
+
 //Jump order
 class Solution {
 public:
