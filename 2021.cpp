@@ -1,3 +1,19 @@
+//Jump order
+class Solution {
+public:
+    void setJumpOrder(JumpListNode* node) {
+        int order = 0;
+        setJumpOrder(node, order);
+    }
+    void setJumpOrder(JumpListNode* node, int& order) {
+        if (node != nullptr && node->order == -1) {
+            node->order = order++;
+            setJumpOrder(node->jump, order);
+            setJumpOrder(node->next, order);
+        }
+    }
+};
+
 //Level order traversal bottom up
 class Solution {
 public:
