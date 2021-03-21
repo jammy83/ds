@@ -1,3 +1,38 @@
+//Insert an interval and make all to be non-overlapping
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        if (intervals.empty())
+            return {{newInterval[0], newInterval[1]}};
+        stack<pair<int,int>> s;
+        int i = 0;
+        for (; i < intervals.size(); i++) { //beginning or middle
+            if (intervals[i][0] > newInterval[0]) {
+                insert(s, {newInterval[0], newInterval[1]});
+                break;
+            }
+            s.push({intervals[i][0], intervals[i][1]});
+        }
+        if (i == intervals.size())
+            insert(s, {newInterval[0], newInterval[1]}); //end
+        for (; i < intervals.size(); i++) // remaining elements
+            insert(s, {intervals[i][0], intervals[i][1]});
+        vector<vector<int>> result; //result processing
+        while (!s.empty()) {
+            result.push_back({s.top().first, s.top().second});
+            s.pop();
+        }
+        reverse(result.begin(), result.end()); //sort the intervals
+        return result;
+    }
+    void insert(stack<pair<int,int>>& s, pair<int,int> p) {
+        if (!s.empty() && s.top().second >= p.first)
+            s.top().second = max(s.top().second, p.second);
+        else
+            s.push(p);
+    }
+};
+
 //Merge intervals
 class Solution {
 public:
