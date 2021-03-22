@@ -1,3 +1,20 @@
+//Validate BST
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        return isValidBST(root, nullptr, nullptr);
+    }
+    bool isValidBST(TreeNode* root, TreeNode* min, TreeNode* max) {
+        if (root == nullptr)
+            return true;
+        if ((min && root->val <= min->val) ||
+            (max && root->val >= max->val))
+            return false;
+        return isValidBST(root->left, min, root) &&
+            isValidBST(root->right, root, max);
+    }
+};
+
 //Meeting rooms
 class Solution {
 public:
