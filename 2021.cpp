@@ -1,3 +1,28 @@
+class BSTIterator {
+public:
+    BSTIterator(TreeNode *root) {
+        pushAll(root);
+    }
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !s.empty();
+    }
+    /** @return the next smallest number */
+    int next() {
+        TreeNode *node = s.top(); s.pop();
+        pushAll(node->right);
+        return node->val;
+    }
+private:
+    void pushAll(TreeNode *node) {
+        while (node != nullptr) {
+            s.push(node);
+            node = node->left;
+        }
+    }
+    stack<TreeNode*> s;
+};
+
 //Inorder successor of BST using parent pointers
 class Solution {
 public:
