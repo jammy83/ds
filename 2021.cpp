@@ -1,3 +1,70 @@
+//Inorder successor of BST using parent pointers
+class Solution {
+public:
+    Node* findMin(Node* node) {
+        while (node->left != nullptr)
+            node = node->left;
+        return node;
+    }
+    Node* inorderSuccessor(Node* node) {
+        if (node == nullptr)
+            return nullptr;
+        if (node->right != nullptr)
+            return findMin(node->right);
+        Node *succ = node->parent;
+        while (succ != nullptr && node == succ->right) {
+            node = succ;
+            succ = succ->parent;
+        }
+        return succ;
+    }
+};
+
+//Inorder successor in a BST
+class Solution {
+public:
+    TreeNode* findMin(TreeNode* root) {
+        if (root == nullptr)
+            return nullptr;
+        while (root->left != nullptr)
+            root = root->left;
+        return root;
+    }
+    TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {    
+        if (p == nullptr || root == nullptr)
+            return nullptr;
+        if (p->right != nullptr)
+            return findMin(p->right);
+        TreeNode *prev = nullptr, *succ = nullptr;
+        //inorderSucc1(root, p, &prev, &succ);
+        inorderSucc2(root, p, &succ);
+        return succ;
+    }
+    //Inorder successor of a binary tree
+    void inorderSucc1(TreeNode* node, TreeNode* p, TreeNode** prev, TreeNode** succ) {
+        if (node == nullptr)
+            return;
+        inorderSucc1(node->left, p, prev, succ);
+        if (*prev == p && *succ == nullptr) {
+            *succ = node;
+            return;
+        }
+        *prev = node;
+        inorderSucc1(node->right, p, prev, succ);
+    }
+    //Inorder successor specifically for a BST using its property
+    void inorderSucc2(TreeNode* node, TreeNode* p, TreeNode** succ) {
+        while (node != nullptr) {
+            if (p->val >= node->val)
+                node = node->right;
+            else {
+                *succ = node;
+                node = node->left;
+            }
+        }
+    }
+};
+
 //Validate BST
 class Solution {
 public:
