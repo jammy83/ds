@@ -386,8 +386,6 @@ public:
 class Solution {
 public:
     Node* cloneGraph(Node* node) {
-        if (node == nullptr)
-            return nullptr;
         unordered_map<Node*, Node*> m; //to track visits and lookup
         return dfs(node, m);
     }
